@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   load_config.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 23:42:57 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/05 23:43:04 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/06 00:35:51 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ static inline int		get_color(int b_color, int f_color, float ratio)
 	return (color);
 }
 
+static int				get_clrs(t_bmp *src, t_coord c_src)
+{
+	int color;
+
+	color = get_color(
+				get_color(
+		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)],
+		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x + 1)],
+		c_src.x - (int)c_src.x),
+				get_color(
+		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)],
+		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)],
+		c_src.x - (int)c_src.x), c_src.y - (int)c_src.y);
+}
+
 void					copy_img(t_bmp *dst, t_bmp *src)
 {
 	t_coord_i c_dst;
@@ -62,17 +77,12 @@ void					copy_img(t_bmp *dst, t_bmp *src)
 		{
 			c_src = (t_coord_f){c_dst.x * (float)src->dim.x / dst->dim.x,
 								c_dst.y * (float)src->dim.y / dst->dim.y};
-			if ((int)c_src.x >= ((src->dim.x - 1)) || ((int)c_src.y >= (src->dim.y - 1)))
-				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
+			if ((int)c_src.x >= ((src->dim.x - 1))
+				|| ((int)c_src.y >= (src->dim.y - 1)))
+				dst->pix[dst->dim.x * c_dst.y + c_dst.x] =
+				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
 			else
-				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = get_color(
-					get_color(src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)],
-								src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x + 1)],
-								c_src.x - (int)c_src.x),
-					get_color(src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)],
-								src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)],
-								c_src.x - (int)c_src.x),
-					c_src.y - (int)c_src.y);
+				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = get_clrs(src, c_src);
 		}
 	}
 }
