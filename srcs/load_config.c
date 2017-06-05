@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 23:42:57 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/06 00:47:28 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/06 00:48:43 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static inline int		get_color(int b_color, int f_color, float ratio)
 	return (color);
 }
 
-static int				get_clrs(t_bmp *src, t_coord_i c_src)
+static int				get_clrs(t_bmp *src, t_coord_f c_src)
 {
 	int color;
 
@@ -62,6 +62,7 @@ static int				get_clrs(t_bmp *src, t_coord_i c_src)
 		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)],
 		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)],
 		c_src.x - (int)c_src.x), c_src.y - (int)c_src.y);
+		return (color);
 }
 
 void					copy_img(t_bmp *dst, t_bmp *src)
