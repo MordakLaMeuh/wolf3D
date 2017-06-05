@@ -84,10 +84,17 @@ struct			s_env
 	int			bpp;
 	int			endian;
 	int			s_l;
+	int			map_x;
+	int			map_y;
 	t_bmp		*pix;
 	int			*img_string;
 	char		keyb[256];
 };
+
+typedef struct		s_tile
+{
+	int	value;
+}					t_tile;
 
 t_bmp			*load_bitmap(char **name, int n);
 void			copy_img(t_bmp *dst, t_bmp *src);
@@ -104,5 +111,7 @@ int				mlx_key_release(int keycode, t_env *e);
 int				mlx_key_press(int keycode, t_env *e);
 int				common_action(t_env *e);
 
+int				ft_secure_atoi_spaces(const char *nptr, int *error);
+t_tile			**get_map(char *file, t_env *env);
 int				modify_sky(t_env *e);
 #endif

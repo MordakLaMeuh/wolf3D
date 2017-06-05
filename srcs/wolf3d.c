@@ -43,12 +43,15 @@ static int	move(t_env *e)
 int			main(int argc, char **argv)
 {
 	t_env		env;
+	t_tile		**map;
 
 	ft_bzero(&env, sizeof(t_env));
 	if (argc != 2)
 		return (err_usage(argv[0]));
 	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH, HEIGHT)))
 		return (err_msg("Error during initialisation"));
+	if (!(map	= get_map(argv[1], &env)))
+		return (err_usage(argv[0]));
 	create_mlx_image(&env);
 	init_sky("images/2157a.bmp");
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);

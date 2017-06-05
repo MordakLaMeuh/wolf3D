@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/06/05 16:52:51 by bmickael         ###   ########.fr        #
+#    Updated: 2017/06/06 00:27:12 by bmickael         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -22,7 +22,7 @@ LIBFT_HEADER = $(LIBDIR)
 
 CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER)
 
-SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save load_config skybox
+SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save load_config skybox get_next_line load ft_secure_atoi_spaces
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))
