@@ -87,6 +87,7 @@ struct			s_env
 	int			map_x;
 	int			map_y;
 	t_bmp		*pix;
+	t_bmp		*sky;
 	int			*img_string;
 	char		keyb[256];
 };
@@ -99,8 +100,8 @@ typedef struct		s_tile
 t_bmp			*load_bitmap(char **name, int n);
 void			copy_img(t_bmp *dst, t_bmp *src);
 
-void			init_sky(char *file_name);
-void			move_sky(int *img_string, int direction);
+void			init_sky(t_env *e, char *file_name);
+void			move_sky(t_env *e, int direction);
 
 int				init_mlx(t_env *env, char *window_name, int width, int height);
 int				create_mlx_image(t_env *e);

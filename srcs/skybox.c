@@ -14,16 +14,17 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-void			init_sky(char *file_name)
+void			init_sky(t_env *e, char *file_name)
 {
 	t_bmp	*sky_bmp;
 
 	sky_bmp = load_bitmap((char*[]){file_name}, 1);
+	(void)e;
 }
 
-void			move_sky(int *img_string, int direction)
+void			move_sky(t_env *e, int direction)
 {
 	ft_printf("New direction = %i\n", direction);
-	(void)img_string;
+	(void)e;
 	(void)direction;
 }

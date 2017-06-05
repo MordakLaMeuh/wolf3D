@@ -35,7 +35,7 @@ int				modify_sky(t_env *e)
 	while (++i < 2)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
-			move_sky(e->img_string, types[i].direction);
+			move_sky(e, types[i].direction);
 			trigger = TRUE;
 		}
 	return (trigger);
