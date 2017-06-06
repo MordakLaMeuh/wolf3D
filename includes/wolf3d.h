@@ -57,18 +57,6 @@
 
 # define N_CONTROL			4
 
-typedef struct			s_line
-{
-	int					x1;
-	int					y1;
-	int					x2;
-	int					y2;
-	int					dx;
-	int					dy;
-	int					b_color;
-	int					f_color;
-}						t_line;
-
 typedef struct			s_coord_i
 {
 	int					x;
@@ -80,6 +68,16 @@ typedef struct			s_coord_f
 	float				x;
 	float				y;
 }						t_coord_f;
+
+typedef struct			s_line
+{
+	t_coord_i			p1;
+	t_coord_i			p2;
+	int					dx;
+	int					dy;
+	int					b_color;
+	int					f_color;
+}						t_line;
 
 typedef struct			s_bmp
 {
@@ -170,4 +168,6 @@ void			modify_minimap(t_env *e, int direction);
 int				modify_sky(t_env *e);
 
 void			draw_line(t_env *env, t_line *p);
+void			draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
+void			fill_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
 #endif

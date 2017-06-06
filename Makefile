@@ -24,7 +24,7 @@ CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
 		load_config skybox get_next_line load ft_secure_atoi_spaces debug minimap \
-		draw_line
+		draw_line draw
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))

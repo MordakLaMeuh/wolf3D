@@ -18,23 +18,10 @@ static void		fill_pixel(t_env *env, int x, int y, int color)
 {
 	int offset;
 
-/*
-	offset = (y * WIDTH * 4) + (x * 4);
-	if (offset >= (WIDTH * HEIGHT * 4) || offset < 0)
-		return ;
-*/
 	offset = (y * WIDTH) + x;
 	if (offset >= (WIDTH * HEIGHT) || offset < 0)
 		return ;
-
 	env->img_string[offset] = color;
-
-/*
-	env->img_string[offset] = color & 0xFF;
-	env->img_string[offset + 1] = (color >> 8) & 0xFF;
-	env->img_string[offset + 2] = (color >> 16) & 0xFF;
-	env->img_string[offset + 3] = (color >> 24) & 0xFF;
-*/
 }
 
 static int		get_color(t_line *p, float x, float x_beg, float x_end)
@@ -63,8 +50,8 @@ static void		horizontal_line(t_env *env, t_line *p, int x_inc, int y_inc)
 	int color;
 
 	cumul = p->dx / 2;
-	x = p->x1;
-	y = p->y1;
+	x = p->p1.x;
+	y = p->p1.y;
 	while (TRUE)
 	{
 		x += x_inc;
@@ -74,9 +61,9 @@ static void		horizontal_line(t_env *env, t_line *p, int x_inc, int y_inc)
 			y += y_inc;
 			cumul -= p->dx;
 		}
-		color = get_color(p, x, p->x1, p->x2);
+		color = get_color(p, x, p->p1.x, p->p2.x);
 		fill_pixel(env, x, y, color);
-		if (x == p->x2)
+		if (x == p->p2.x)
 			break ;
 	}
 }
@@ -89,8 +76,8 @@ static void		vertical_line(t_env *env, t_line *p, int x_inc, int y_inc)
 	int color;
 
 	cumul = p->dy / 2;
-	x = p->x1;
-	y = p->y1;
+	x = p->p1.x;
+	y = p->p1.y;
 	while (TRUE)
 	{
 		y += y_inc;
@@ -100,9 +87,9 @@ static void		vertical_line(t_env *env, t_line *p, int x_inc, int y_inc)
 			x += x_inc;
 			cumul -= p->dy;
 		}
-		color = get_color(p, y, p->y1, p->y2);
+		color = get_color(p, y, p->p1.y, p->p2.y);
 		fill_pixel(env, x, y, color);
-		if (y == p->y2)
+		if (y == p->p2.y)
 			break ;
 	}
 }
@@ -112,13 +99,13 @@ void			draw_line(t_env *env, t_line *p)
 	int x_inc;
 	int y_inc;
 
-	p->dx = p->x2 - p->x1;
-	p->dy = p->y2 - p->y1;
+	p->dx = p->p2.x - p->p1.x;
+	p->dy = p->p2.y - p->p1.y;
 	x_inc = (p->dx < 0) ? -1 : 1;
 	y_inc = (p->dy < 0) ? -1 : 1;
 	p->dx = abs(p->dx);
 	p->dy = abs(p->dy);
-	fill_pixel(env, p->x1, p->y1, p->b_color);
+	fill_pixel(env, p->p1.x, p->p1.y, p->b_color);
 	if (p->dx == 0 && p->dy == 0)
 		return ;
 	if (p->dx > p->dy)
