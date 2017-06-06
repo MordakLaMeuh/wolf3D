@@ -31,5 +31,7 @@ void		modify_minimap(t_env *e, int direction)
 	l2.x = 150;
 	l2.y = 100;
 	fill_box(l1, l2, 0x8800ff00, e);
-	draw_arrow(e, angle);
+	l1.x = W_CENTER;
+	l1.y = H_CENTER;
+	draw_arrow(e, l1, angle);
 }
