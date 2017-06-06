@@ -23,6 +23,9 @@
 # define HEIGHT				1080
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
+# define W_CENTER 			(WIDTH / 2)
+# define H_CENTER 			(HEIGHT / 2)
+
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
 # define X11_DESTROY_NOTIFY		17
@@ -174,6 +177,7 @@ void					view_map(t_tile **map, int width, int height);
 void					modify_minimap(t_env *e, int direction);
 int						modify_sky(t_env *e);
 
+void					draw_arrow(t_env *e, float angle);
 void					draw_line(t_env *env, t_line *p);
 void					draw_box(t_coord_i p1, t_coord_i p2, int color,
 																	t_env *e);
