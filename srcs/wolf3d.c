@@ -55,7 +55,7 @@ int				main(int argc, char **argv)
 		return (err_usage(argv[0]));
 	if (DEBUG_MAP)
 		view_map(map, env.map.size_x, env.map.size_y);
-	env.perso.angle = -M_PI / 2;
+	env.player.angle = -M_PI / 2;
 	create_mlx_image(&env);
 	init_sky(&env, "images/2157a.bmp");
 	init_minimap(&env);

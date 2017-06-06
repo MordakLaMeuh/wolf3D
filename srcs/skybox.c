@@ -114,7 +114,7 @@ static void		move_sky_left(t_env *e)
 }
 
 /*
-** e->sky.pos = e->sky.data->dim.x * (e->perso.angle / 2 * M_PI);
+** e->sky.pos = e->sky.data->dim.x * (e->player.angle / 2 * M_PI);
 */
 
 void			move_sky(t_env *e, int q)

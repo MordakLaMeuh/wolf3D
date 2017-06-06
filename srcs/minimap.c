@@ -38,7 +38,7 @@ void		modify_minimap(t_env *e)
 	l2.x = (X_MAP_CENTER) + MAP_SEMI_LENGTH;
 	l2.y = (Y_MAP_CENTER) + MAP_SEMI_LENGTH;
 	draw_box(l1, l2, 0x00ff00, e);
-	l1.x = (X_MAP_CENTER + e->perso.location.x);
-	l1.y = (Y_MAP_CENTER + e->perso.location.y);
-	draw_arrow(e, l1, e->perso.angle);
+	l1.x = (X_MAP_CENTER + e->player.location.x);
+	l1.y = (Y_MAP_CENTER + e->player.location.y);
+	draw_arrow(e, l1, e->player.angle);
 }

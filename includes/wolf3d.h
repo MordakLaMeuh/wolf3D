@@ -89,11 +89,11 @@ typedef struct			s_bmp
 	int					*pix;
 }						t_bmp;
 
-typedef struct			s_perso
+typedef struct			s_player
 {
 	t_coord_f			location;
 	float				angle;
-}						t_perso;
+}						t_player;
 
 /*
 ** size_x -> longueur de la carte.
@@ -141,7 +141,7 @@ struct					s_env
 	t_bmp				*pix;
 
 	t_sky				sky;
-	t_perso				perso;
+	t_player				player;
 	t_map				map;
 	t_weapon			weapon;
 	int					*img_string;

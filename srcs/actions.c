@@ -31,9 +31,9 @@ int				move_player(t_env *e)
 	while (++i < N_CONTROL)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
-			e->perso.angle += types[i].q * M_PI / 360;
-			e->perso.location.x += ((cos(e->perso.angle)) * types[i].l);
-			e->perso.location.y += ((sin(e->perso.angle)) * types[i].l);
+			e->player.angle += types[i].q * M_PI / 360;
+			e->player.location.x += ((cos(e->player.angle)) * types[i].l);
+			e->player.location.y += ((sin(e->player.angle)) * types[i].l);
 			move_sky(e, types[i].q);
 			modify_minimap(e);
 			trigger = TRUE;
