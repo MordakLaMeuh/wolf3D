@@ -33,6 +33,10 @@ int				move_player(t_env *e)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
 			e->player.angle += types[i].q * M_PI / 360;
+			if (e->player.angle < 0)
+				e->player.angle += 2.f * M_PI;
+			else if (e->player.angle >= 2.f * M_PI)
+				e->player.angle -= 2.f * M_PI;
 			new.x = e->player.location.x + ((cos(e->player.angle)) * types[i].l);
 			new.y = e->player.location.y + ((sin(e->player.angle)) * types[i].l);
 			if (e->map_tiles[(int)floor(new.y)][(int)floor(new.x)].value == 0)

@@ -82,7 +82,7 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 		return (intersection->y - corners[1].y);
 	if (c.y >= origin.y && segment_intersection(segment,
 						(t_coord_f[2]){corners[0], corners[1]}, intersection))
-		return (intersection->x - corners[1].x);
+		return (intersection->x - corners[0].x);
 	segment_intersection(segment, (t_coord_f[2]){corners[3], corners[2]},
 																intersection);
 	return (1. - (intersection->x - corners[3].x));

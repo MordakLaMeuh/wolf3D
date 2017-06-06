@@ -82,7 +82,7 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 	paste_fileheader((t_bitmap *)buff);
 	*width = s->bitmapinfoheader.width;
 	*height = s->bitmapinfoheader.height;
-	if (!(*data = (int *)malloc(sizeof(int) * (*width) * (*height))))
+	if (!(*data = (int *)ft_memalloc(sizeof(int) * (*width) * (*height))))
 		return (0);
 	fill_image((uint8_t *)*data, (uint8_t *)
 			(buff + s->fileheader.fileoffset_to_pixelarray), *width, *height);
