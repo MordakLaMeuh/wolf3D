@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <math.h>
 #include "wolf3d.h"
 #include "bmp.h"
 
@@ -119,6 +120,7 @@ void			move_sky(t_env *e, int q)
 
 	j = 0;
 	e->sky.pos += 16 * q;
+//	e->sky.pos = e->sky.data->dim.x * (e->perso.angle / 2 * M_PI);
 	if (q > 0)
 	{
 		if (e->sky.pos >= WIDTH * e->sky.ratio)

@@ -23,8 +23,9 @@
 # define HEIGHT				1080
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
-# define W_CENTER 			(WIDTH / 2)
-# define H_CENTER 			(HEIGHT / 2)
+# define X_MAP_CENTER			(WIDTH - 220)
+# define Y_MAP_CENTER 			220
+# define MAP_SEMI_LENGTH		200
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -91,7 +92,7 @@ typedef struct			s_bmp
 typedef struct			s_perso
 {
 	t_coord_f			location;
-	t_coord_f			cam;
+	float				angle;
 }						t_perso;
 
 /*
@@ -109,7 +110,6 @@ typedef struct			s_map
 	int					size_x;
 	int					size_y;
 	float				scale;
-	float				angle;
 }						t_map;
 
 typedef struct			s_sky
@@ -141,7 +141,7 @@ struct					s_env
 	t_bmp				*pix;
 
 	t_sky				sky;
-	t_perso				p;
+	t_perso				perso;
 	t_map				map;
 	t_weapon			weapon;
 	int					*img_string;
@@ -153,6 +153,7 @@ typedef struct			s_modify_coord
 	int					keycode_1;
 	int					keycode_2;
 	int					q;
+	int					l;
 }						t_modify_coord;
 
 typedef struct			s_tile
@@ -183,7 +184,7 @@ t_tile					**get_map(char *file, t_env *env);
 void					view_map(t_tile **map, int width, int height);
 
 void					init_minimap(t_env *e);
-void					modify_minimap(t_env *e, int q);
+void					modify_minimap(t_env *e);
 int						modify_sky(t_env *e);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle);

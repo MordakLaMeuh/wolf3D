@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <stdlib.h>
 #include "wolf3d.h"
 #include "bmp.h"
@@ -18,18 +19,24 @@ int				modify_sky(t_env *e)
 {
 	int							trigger;
 	int							i;
-	static t_modify_coord		types[2] = {
-		{KEYB_ARROW_LEFT, KEYB_MMO_A, -6},
-		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +6}
+	static t_modify_coord		types[N_CONTROL] = {
+		{KEYB_ARROW_LEFT, KEYB_MMO_A, -6, 0},
+		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +6, 0},
+		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 4},
+		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -4}
 	};
 
 	trigger = FALSE;
 	i = -1;
-	while (++i < 2)
+	while (++i < N_CONTROL)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
+			e->perso.angle += types[i].q * M_PI / 360;
+			e->perso.location.x += ((cos(e->perso.angle)) * types[i].l);
+			e->perso.location.y += ((sin(e->perso.angle)) * types[i].l);
+
 			move_sky(e, types[i].q);
-			modify_minimap(e, types[i].q);
+			modify_minimap(e);
 			trigger = TRUE;
 		}
 	return (trigger);

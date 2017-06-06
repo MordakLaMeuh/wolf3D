@@ -14,29 +14,40 @@
 #include <math.h>
 #include "wolf3d.h"
 
+#include <stdio.h>
+
+/*
+typedef struct			s_map
+{
+	int					size_x;
+	int					size_y;
+	float				scale;
+	float				angle;
+}						t_map;
+*/
+
 void		init_minimap(t_env *e)
 {
-	e->map.angle = -M_PI / 2;
-	modify_minimap(e, 0);
+	if (e->map.size_x <= 10 && e->map.size_y <= 10)
+	{
+		e->map.scale = (e->map.size_x < e->map.size_y) ? e->map.size_y : e->map.size_x;
+		e->map.scale = (float)10 / e->map.scale;
+	}
+	printf("map scale = %f\n", e->map.scale);
+	modify_minimap(e);
 }
 
-void		modify_minimap(t_env *e, int q)
+void		modify_minimap(t_env *e)
 {
 	t_coord_i		l1;
 	t_coord_i		l2;
 
-	e->map.angle += q * M_PI / 360;
-	l1.x = W_CENTER - 201;
-	l1.y = H_CENTER - 201;
-	l2.x = W_CENTER + 201;
-	l2.y = H_CENTER + 201;
+	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH;
+	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH;
+	l2.x = (X_MAP_CENTER) + MAP_SEMI_LENGTH;
+	l2.y = (Y_MAP_CENTER) + MAP_SEMI_LENGTH;
 	draw_box(l1, l2, 0x00ff00, e);
-	l1.x = 50;
-	l1.y = 50;
-	l2.x = 150;
-	l2.y = 100;
-	fill_box(l1, l2, 0x8800ff00, e);
-	l1.x = W_CENTER;
-	l1.y = H_CENTER;
-	draw_arrow(e, l1, e->map.angle);
+	l1.x = (X_MAP_CENTER + e->perso.location.x);
+	l1.y = (Y_MAP_CENTER + e->perso.location.y);
+	draw_arrow(e, l1, e->perso.angle);
 }
