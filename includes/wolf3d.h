@@ -17,6 +17,7 @@
 # include "libft.h"
 
 # define DEBUG_KEYBOARD		FALSE
+# define DEBUG_MAP			TRUE
 
 # define WIDTH		1920
 # define HEIGHT		1080
@@ -56,6 +57,18 @@
 
 # define N_CONTROL			4
 
+typedef struct			s_line
+{
+	int					x1;
+	int					y1;
+	int					x2;
+	int					y2;
+	int					dx;
+	int					dy;
+	int					b_color;
+	int					f_color;
+}						t_line;
+
 typedef struct			s_coord_i
 {
 	int					x;
@@ -74,28 +87,65 @@ typedef struct			s_bmp
 	int					*pix;
 }						t_bmp;
 
+typedef struct			s_perso
+{
+	t_coord_f			location;
+	t_coord_f			cam;
+}						t_perso;
+
+/*
+** size_x -> longueur de la carte.
+** size_y -> hauteur de la carte.
+** scale -> echelle pour les petites cartes, varie de 1 a 10.
+** Par convention, une map ne peut etre plus petite que 1 * 1 !
+** au mieux, 10 * 10 cases sont affichees.
+** le joueur est centre au millieu sauf s'il va vers un bord.
+** la carte est centree.
+*/
+
+typedef struct			s_map
+{
+	int					size_x;
+	int					size_y;
+	float				scale;
+
+
+}						t_map;
+
+typedef struct			s_sky
+{
+	int					ratio;
+	int					pos;
+	int					first;
+	int					i;
+	int					j;
+	t_bmp				*sky;
+}						t_sky;
+
 typedef struct s_env	t_env;
 
-struct			s_env
+struct					s_env
 {
-	void		*mlx;
-	void		*win;
-	void		*image;
-	int			bpp;
-	int			endian;
-	int			s_l;
-	int			map_x;
-	int			map_y;
-	t_bmp		*pix;
-	t_bmp		*sky;
-	int			*img_string;
-	char		keyb[256];
+	void				*mlx;
+	void				*win;
+	void				*image;
+	int					bpp;
+	int					endian;
+	int					s_l;
+
+	t_bmp				*pix;
+
+	t_sky				sky;							// image 360 du ciel.
+	t_perso				p;								// donnees du bonhomme.
+	t_map				map;							// infos sur la map.
+	int					*img_string;
+	char				keyb[256];
 };
 
-typedef struct		s_tile
+typedef struct			s_tile
 {
 	int	value;
-}					t_tile;
+}						t_tile;
 
 t_bmp			*load_bitmap(char **name, int n);
 void			copy_img(t_bmp *dst, t_bmp *src);
@@ -114,5 +164,10 @@ int				common_action(t_env *e);
 
 int				ft_secure_atoi_spaces(const char *nptr, int *error);
 t_tile			**get_map(char *file, t_env *env);
+void			view_map(t_tile **map, int width, int height);
+
+void			modify_minimap(t_env *e, int direction);
 int				modify_sky(t_env *e);
+
+void			draw_line(t_env *env, t_line *p);
 #endif

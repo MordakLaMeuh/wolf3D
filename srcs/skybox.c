@@ -14,14 +14,6 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-typedef struct	s_sky
-{
-	int		ratio;
-	int		pos;
-	int		first;
-	t_bmp	*sky;
-}				t_sky;
-
 /*
 ** Vue size : ((WIDTH * HEIGHT) * VIEW_ANGLE) / 360
 ** Example : (1080*1920*66)/360 = 380160
@@ -49,7 +41,8 @@ void			init_sky(t_env *e, char *file_name)
 	img_f->dim.y = HEIGHT;
 	img_f->pix = malloc(img_f->dim.x * HEIGHT * 4);
 	copy_img(img_f, sky_bmp);
-	e->sky = img_f;
+	e->sky.sky = img_f;
+	e->sky.ratio = 360 / 60;
 	i = 0;
 	j = 0;
 	h = 0;
@@ -67,36 +60,31 @@ void			init_sky(t_env *e, char *file_name)
 
 void			move_sky(t_env *e, int direction)
 {
-	static t_sky sky = (t_sky){6, 0, 0, NULL};
+//	static t_sky sky = (t_sky){6, 0, 0, NULL};
 	int		i;
 	int		j;
 	int		h;
 
-	if (sky.first == 0)
-	{
-		sky.first = 1;
-		sky.sky = e->sky;
-	}
 	j = 0;
 	h = 0;
-	i = sky.pos;
-	ft_printf("New direction = %i\n", direction);
+	i = e->sky.pos;
+//	ft_printf("New direction = %i\n", direction);
 	if (direction == 0)
 	{
 		while (j < (WIDTH * HEIGHT))
 		{
 			if (j > 0 && j % (WIDTH) == 0)
-				i = (++h * sky.ratio * WIDTH) + sky.pos;
-			e->img_string[j] = sky.sky->pix[i];
+				i = (++h * e->sky.ratio * WIDTH) + e->sky.pos;
+			e->img_string[j] = e->sky.sky->pix[i];
 			1 ? j++, i++ : (0);
-			if (i >= (sky.sky->dim.x * HEIGHT))
+			if (i >= (e->sky.sky->dim.x * HEIGHT))
 				break;
 		}
 	}
 	if (direction == 0)
-		sky.pos += 10;
+		e->sky.pos += 10;
 	if (direction == 1)
-		sky.pos--;
+		e->sky.pos--;
 }
 
 /*

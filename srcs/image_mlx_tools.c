@@ -34,11 +34,11 @@ void		set_mlx_image_bg_color(t_env *e, int color)
 	int		max;
 	int		i;
 
-	max = 4 * WIDTH * HEIGHT;
+	max = WIDTH * HEIGHT;
 	i = 0;
 	while (i < max)
 	{
-		*(int *)(e->img_string + i) = color;
-		i += 4;
+		e->img_string[i] = color;
+		i++;
 	}
 }

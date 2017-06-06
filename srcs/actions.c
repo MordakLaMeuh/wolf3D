@@ -35,7 +35,9 @@ int				modify_sky(t_env *e)
 	while (++i < 2)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
+			set_mlx_image_bg_color(e, 0);
 			move_sky(e, types[i].direction);
+			modify_minimap(e, types[i].direction);
 			trigger = TRUE;
 		}
 	return (trigger);

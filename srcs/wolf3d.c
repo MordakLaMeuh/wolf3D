@@ -34,7 +34,7 @@ static int	move(t_env *e)
 	redraw |= modify_sky(e);
 	if (!redraw)
 		return (0);
-	ft_printf("redrawing\n");
+//	ft_printf("redrawing\n");
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	redraw = FALSE;
 	return (0);
@@ -50,8 +50,10 @@ int			main(int argc, char **argv)
 		return (err_usage(argv[0]));
 	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH, HEIGHT)))
 		return (err_msg("Error during initialisation"));
-	if (!(map	= get_map(argv[1], &env)))
+	if (!(map = get_map(argv[1], &env)))
 		return (err_usage(argv[0]));
+	if (DEBUG_MAP)
+		view_map(map, env.map.size_x, env.map.size_y);
 	create_mlx_image(&env);
 	init_sky(&env, "images/2157a.bmp");
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
