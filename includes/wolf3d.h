@@ -25,7 +25,7 @@
 # define SCREENSIZE			(WIDTH * HEIGHT)
 # define NOSTALGIA_FACTOR	2
 
-# define VIEW_ANGLE			(90.f * M_PI / 180.f)
+# define VIEW_ANGLE			(60.f * M_PI / 180.f)
 
 # define MAP_SEMI_LENGTH		(WIDTH / 10)
 # define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - 10)
@@ -137,6 +137,11 @@ typedef struct			s_weapon
 
 typedef struct s_env	t_env;
 
+typedef struct			s_tile
+{
+	int	value;
+}						t_tile;
+
 struct					s_env
 {
 	void				*mlx;
@@ -150,9 +155,12 @@ struct					s_env
 	t_weapon			weapon;
 	t_pix				*img_string;
 	char				keyb[256];
+	float				wall_height;
+	t_tile				**map_tiles;
 	t_pix				*scene;
 	t_bmp				*sky;
 	t_bmp				*floor;
+	t_bmp				*wall;
 };
 
 typedef struct			s_modify_coord
@@ -163,12 +171,8 @@ typedef struct			s_modify_coord
 	int					l;
 }						t_modify_coord;
 
-typedef struct			s_tile
-{
-	int	value;
-}						t_tile;
-
 t_pix					get_pix(t_bmp *src, t_coord_f c_src);
+float					dist(t_coord_f a, t_coord_f b);
 
 t_bmp					*load_bitmap(char **name, int n);
 void					copy_img(t_bmp *dst, t_bmp *src);
@@ -200,12 +204,16 @@ void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					init_floor(t_env *e, char *file_name);
-void					render_floor(t_env *env, t_coord_i c);
+void					render_floor(t_env *env, t_coord_i c, t_coord_f angle);
 void					init_sky(t_env *e, char *file_name);
-void					render_sky(t_env *env, t_coord_i c);
+void					render_sky(t_env *env, t_coord_i c, t_coord_f angle);
+void					init_walls(t_env *e, char *file_name);
+void					find_wall(t_env *env, float angle_x, t_coord_i *c,
+									t_coord_f *intersect);
+void					render_wall(t_env *env, t_coord_i c, float dist);
 
 void					init_scene(t_env *env);
-void 					render_scene(t_env *env);
+void					render_scene(t_env *env);
 void					scene_to_win(t_env *env);
 
 void					draw_weapon(t_env *e);

@@ -22,9 +22,10 @@ int				move_player(t_env *e)
 	static t_modify_coord		types[N_CONTROL] = {
 		{KEYB_ARROW_LEFT, KEYB_MMO_A, -6, 0},
 		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +6, 0},
-		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 2},
-		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -2}
+		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 1},
+		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -1}
 	};
+	t_coord_f					new;
 
 	trigger = FALSE;
 	i = -1;
@@ -32,8 +33,10 @@ int				move_player(t_env *e)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
 			e->player.angle += types[i].q * M_PI / 360;
-			e->player.location.x += ((cos(e->player.angle)) * types[i].l);
-			e->player.location.y += ((sin(e->player.angle)) * types[i].l);
+			new.x = e->player.location.x + ((cos(e->player.angle)) * types[i].l);
+			new.y = e->player.location.y + ((sin(e->player.angle)) * types[i].l);
+			if (e->map_tiles[(int)floor(new.y)][(int)floor(new.x)].value == 0)
+				e->player.location = new;
 			//move_sky(e, types[i].q);
 			//modify_minimap(e);
 			trigger = TRUE;

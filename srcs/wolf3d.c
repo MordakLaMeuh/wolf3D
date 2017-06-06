@@ -44,10 +44,18 @@ static int		move(t_env *e)
 	return (0);
 }
 
+static void		init_all(t_env *e)
+{
+	init_floor(e, "images/julia.bmp");
+	init_sky(e, "images/2157a.bmp");
+	init_walls(e, "images/img.bmp");
+	init_scene(e);
+	init_minimap(e);
+}
+
 int				main(int argc, char **argv)
 {
 	t_env		env;
-	t_tile		**map;
 
 	ft_bzero(&env, sizeof(t_env));
 	if (argc != 2)
@@ -55,17 +63,16 @@ int				main(int argc, char **argv)
 	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH * NOSTALGIA_FACTOR,
 											HEIGHT * NOSTALGIA_FACTOR)))
 		return (err_msg("Error during initialisation"));
-	if (!(map = get_map(argv[1], &env)))
+	if (!(env.map_tiles = get_map(argv[1], &env)))
 		return (err_usage(argv[0]));
 	if (DEBUG_MAP)
-		view_map(map, env.map.size.x, env.map.size.y);
+		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
+	env.wall_height = 3.f;
 	env.player.angle = -M_PI / 2;
 	env.player.height = 2.f;
+	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	create_mlx_image(&env);
-	init_floor(&env, "images/julia.bmp");
-	init_sky(&env, "images/2157a.bmp");
-	init_scene(&env);
-	init_minimap(&env);
+	init_all(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
 	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);
 	mlx_hook(env.win, X11_DESTROY_NOTIFY, 0xFF, &exit_mlx, &env);

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "wolf3d.h"
 
 static inline unsigned char	interp(unsigned char b, unsigned char f,
@@ -49,4 +50,13 @@ t_pix						get_pix(t_bmp *src, t_coord_f c_src)
 				c_src.x - c_src_i.x),
 			c_src.y - c_src_i.y);
 	return (pix);
+}
+
+float						dist(t_coord_f a, t_coord_f b)
+{
+	t_coord_f	delta;
+
+	delta.x = b.x - a.x;
+	delta.y = b.y - a.y;
+	return (sqrt(delta.x * delta.x + delta.y * delta.y));
 }

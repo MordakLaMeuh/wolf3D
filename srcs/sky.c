@@ -20,16 +20,13 @@ void			init_sky(t_env *env, char *file_name)
 		exit(EXIT_FAILURE);
 }
 
-void			render_sky(t_env *env, t_coord_i c)
+void			render_sky(t_env *env, t_coord_i c, t_coord_f angle)
 {
-	t_coord_f	angle;
 	t_coord_f	c_sky;
 	t_pix		pix;
 
-	angle.x = (c.x - WIDTH / 2) * VIEW_ANGLE / WIDTH + env->player.angle;
-	angle.y = (c.y - HEIGHT / 2) * VIEW_ANGLE / WIDTH;
 	c_sky.x = angle.x * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.x / 2.f;
-	c_sky.y = angle.y * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.y / 2.f;
+	c_sky.y = -angle.y * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.y / 2.f;
 	if (c_sky.x < 0.f)
 		c_sky.x += env->sky->dim.x;
 	if (c_sky.x >= env->sky->dim.x)
