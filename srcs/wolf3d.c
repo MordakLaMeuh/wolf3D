@@ -34,7 +34,7 @@ static int	move(t_env *e)
 	redraw |= modify_sky(e);
 	if (!redraw)
 		return (0);
-//	ft_printf("redrawing\n");
+	draw_weapon(e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	redraw = FALSE;
 	return (0);

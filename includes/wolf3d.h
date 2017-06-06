@@ -114,11 +114,16 @@ typedef struct			s_sky
 {
 	int					ratio;
 	int					pos;
-	int					first;
+	t_bmp				*data;
+}						t_sky;
+
+typedef struct			s_weapon
+{
 	int					i;
 	int					j;
 	t_bmp				*data;
-}						t_sky;
+	t_bmp				*data_2;
+}						t_weapon;
 
 typedef struct s_env	t_env;
 
@@ -136,6 +141,7 @@ struct					s_env
 	t_sky				sky;							// image 360 du ciel.
 	t_perso				p;								// donnees du bonhomme.
 	t_map				map;							// infos sur la map.
+	t_weapon			weapon;
 	int					*img_string;
 	char				keyb[256];
 };
@@ -144,6 +150,8 @@ typedef struct			s_tile
 {
 	int	value;
 }						t_tile;
+
+int				get_clrs(t_bmp *src, t_coord_f c_src);
 
 t_bmp			*load_bitmap(char **name, int n);
 void			copy_img(t_bmp *dst, t_bmp *src);
@@ -170,4 +178,6 @@ int				modify_sky(t_env *e);
 void			draw_line(t_env *env, t_line *p);
 void			draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
 void			fill_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
+
+void			draw_weapon(t_env *e);
 #endif

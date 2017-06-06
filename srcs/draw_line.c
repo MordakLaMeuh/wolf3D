@@ -24,7 +24,7 @@ static void		fill_pixel(t_env *env, int x, int y, int color)
 	env->img_string[offset] = color;
 }
 
-static int		get_color(t_line *p, float x, float x_beg, float x_end)
+static int		get_color_line(t_line *p, float x, float x_beg, float x_end)
 {
 	int		color;
 	float	r_diff;
@@ -61,7 +61,7 @@ static void		horizontal_line(t_env *env, t_line *p, int x_inc, int y_inc)
 			y += y_inc;
 			cumul -= p->dx;
 		}
-		color = get_color(p, x, p->p1.x, p->p2.x);
+		color = get_color_line(p, x, p->p1.x, p->p2.x);
 		fill_pixel(env, x, y, color);
 		if (x == p->p2.x)
 			break ;
@@ -87,7 +87,7 @@ static void		vertical_line(t_env *env, t_line *p, int x_inc, int y_inc)
 			x += x_inc;
 			cumul -= p->dy;
 		}
-		color = get_color(p, y, p->p1.y, p->p2.y);
+		color = get_color_line(p, y, p->p1.y, p->p2.y);
 		fill_pixel(env, x, y, color);
 		if (y == p->p2.y)
 			break ;
