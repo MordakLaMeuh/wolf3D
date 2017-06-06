@@ -21,12 +21,12 @@ void	draw_arrow(t_env *e, t_coord_i c, float angle)
 	t_coord_i	l2;
 	t_coord_i	l3;
 
-	l1.y = c.y + (int)((round)((sin(angle + M_PI * 3 / 4)) * 20));
-	l1.x = c.x + (int)((round)((cos(angle + M_PI * 3 / 4)) * 20));
-	l2.y = c.y + (int)((round)((sin(angle - M_PI * 3 / 4)) * 20));
-	l2.x = c.x + (int)((round)((cos(angle - M_PI * 3 / 4)) * 20));
-	l3.y = c.y + (int)((round)((sin(angle)) * 40));
-	l3.x = c.x + (int)((round)((cos(angle)) * 40));
+	l1.y = c.y + (int)(((sin(angle + M_PI * 3 / 4)) * 20));
+	l1.x = c.x + (int)(((cos(angle + M_PI * 3 / 4)) * 20));
+	l2.y = c.y + (int)(((sin(angle - M_PI * 3 / 4)) * 20));
+	l2.x = c.x + (int)(((cos(angle - M_PI * 3 / 4)) * 20));
+	l3.y = c.y + (int)(((sin(angle)) * 40));
+	l3.x = c.x + (int)(((cos(angle)) * 40));
 	line.p1 = l1;
 	line.p2 = l2;
 	line.b_color = 0x0000FF;

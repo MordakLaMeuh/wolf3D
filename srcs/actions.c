@@ -34,7 +34,6 @@ int				modify_sky(t_env *e)
 			e->perso.angle += types[i].q * M_PI / 360;
 			e->perso.location.x += ((cos(e->perso.angle)) * types[i].l);
 			e->perso.location.y += ((sin(e->perso.angle)) * types[i].l);
-
 			move_sky(e, types[i].q);
 			modify_minimap(e);
 			trigger = TRUE;
