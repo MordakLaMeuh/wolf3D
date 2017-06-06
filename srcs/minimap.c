@@ -16,21 +16,12 @@
 
 #include <stdio.h>
 
-/*
-typedef struct			s_map
-{
-	int					size_x;
-	int					size_y;
-	float				scale;
-	float				angle;
-}						t_map;
-*/
-
 void		init_minimap(t_env *e)
 {
 	if (e->map.size_x <= 10 && e->map.size_y <= 10)
 	{
-		e->map.scale = (e->map.size_x < e->map.size_y) ? e->map.size_y : e->map.size_x;
+		e->map.scale = (e->map.size_x < e->map.size_y) ?
+												e->map.size_y : e->map.size_x;
 		e->map.scale = (float)10 / e->map.scale;
 	}
 	printf("map scale = %f\n", e->map.scale);
