@@ -25,10 +25,10 @@ static inline t_pix			interp_pix(t_pix b_pix, t_pix f_pix, float ratio)
 {
 	t_pix	new_pix;
 
-	new_pix.c.r = interp(b_pix.c.r, f_pix.c.r, ratio);
-	new_pix.c.g = interp(b_pix.c.g, f_pix.c.g, ratio);
-	new_pix.c.b = interp(b_pix.c.b, f_pix.c.b, ratio);
 	new_pix.c.a = interp(b_pix.c.a, f_pix.c.a, ratio);
+	new_pix.c.b = interp(b_pix.c.b, f_pix.c.b, ratio);
+	new_pix.c.g = interp(b_pix.c.g, f_pix.c.g, ratio);
+	new_pix.c.r = interp(b_pix.c.r, f_pix.c.r, ratio);
 	return (new_pix);
 }
 

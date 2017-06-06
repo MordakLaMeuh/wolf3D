@@ -25,10 +25,10 @@ void		init_minimap(t_env *e)
 		e->map.scale = (float)10 / e->map.scale;
 	}
 	printf("map scale = %f\n", e->map.scale);
-	modify_minimap(e);
+	draw_minimap(e);
 }
 
-void		modify_minimap(t_env *e)
+void		draw_minimap(t_env *e)
 {
 	t_coord_i		l1;
 	t_coord_i		l2;
@@ -42,5 +42,5 @@ void		modify_minimap(t_env *e)
 	draw_box(l1, l2, pix, e);
 	l1.x = (X_MAP_CENTER + e->player.location.x);
 	l1.y = (Y_MAP_CENTER + e->player.location.y);
-	draw_arrow(e, l1, e->player.angle);
+	draw_arrow(e, l1, e->player.angle, WIDTH / 1980.f);
 }

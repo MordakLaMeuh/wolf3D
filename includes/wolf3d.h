@@ -13,19 +13,23 @@
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
+# include <math.h>
 # include "mlx.h"
 # include "libft.h"
 
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
 
-# define WIDTH				1920
-# define HEIGHT				1080
+# define WIDTH				(960)
+# define HEIGHT				(540)
 # define SCREENSIZE			(WIDTH * HEIGHT)
+# define NOSTALGIA_FACTOR	2
 
-# define X_MAP_CENTER			(WIDTH - 220)
-# define Y_MAP_CENTER 			220
-# define MAP_SEMI_LENGTH		200
+# define VIEW_ANGLE			(90.f * M_PI / 180.f)
+
+# define MAP_SEMI_LENGTH		(WIDTH / 10)
+# define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - 10)
+# define Y_MAP_CENTER 			(MAP_SEMI_LENGTH + 10)
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -104,6 +108,7 @@ typedef struct			s_player
 {
 	t_coord_f			location;
 	float				angle;
+	float				height;
 }						t_player;
 
 /*
@@ -121,13 +126,6 @@ typedef struct			s_map
 	t_coord_i			size;
 	float				scale;
 }						t_map;
-
-typedef struct			s_sky
-{
-	int					ratio;
-	int					pos;
-	t_bmp				*data;
-}						t_sky;
 
 typedef struct			s_weapon
 {
@@ -147,15 +145,13 @@ struct					s_env
 	int					bpp;
 	int					endian;
 	int					s_l;
-
-	t_bmp				*pix;
-
-	t_sky				sky;
 	t_player			player;
 	t_map				map;
 	t_weapon			weapon;
 	t_pix				*img_string;
 	char				keyb[256];
+	t_pix				*scene;
+	t_bmp				*sky;
 };
 
 typedef struct			s_modify_coord
@@ -194,16 +190,22 @@ t_tile					**get_map(char *file, t_env *env);
 void					view_map(t_tile **map, int width, int height);
 
 void					init_minimap(t_env *e);
-void					modify_minimap(t_env *e);
+void					draw_minimap(t_env *e);
 
 int						move_player(t_env *e);
 
-void					draw_arrow(t_env *e, t_coord_i c, float angle);
+void					draw_arrow(t_env *e, t_coord_i c, float angle,
+																float factor);
 void					draw_line(t_env *env, t_line *p);
 void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
+void					render_sky(t_env *env, t_coord_i c);
+
+void					init_scene(t_env *env);
+void 					render_scene(t_env *env);
+void					scene_to_win(t_env *env);
 
 void					draw_weapon(t_env *e);
 #endif

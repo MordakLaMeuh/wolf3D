@@ -1,141 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   skybox.c                                           :+:      :+:    :+:   */
+/*   skybox2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
+/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/05 23:43:10 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/06 04:30:56 by erucquoy         ###   ########.fr       */
+/*   Created: 2017/06/06 11:51:00 by stoupin           #+#    #+#             */
+/*   Updated: 2017/06/06 11:51:02 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include "wolf3d.h"
-#include "bmp.h"
 
-/*
-** Vue size : ((WIDTH * HEIGHT) * VIEW_ANGLE) / 360
-** Example : (1080*1920*66)/360 = 380160
-** Total size : (1080 * 1920 * 360) / 66 = 11310545
-** Total HEIGHT = 1080
-** Total WIDTH = (1920 * 360) / 66 = 10472
-*/
-
-static void		copy_img_bis(t_bmp *dst, t_bmp *src, int new_dim_x)
+void			init_sky(t_env *env, char *file_name)
 {
-	t_coord_i c_dst;
-	t_coord_f c_src;
-
-	c_dst.y = -1;
-	while (++c_dst.y < dst->dim.y)
-	{
-		c_dst.x = -1;
-		while (++c_dst.x < dst->dim.x)
-		{
-			c_src = (t_coord_f){c_dst.x * (float)src->dim.x / dst->dim.x,
-								c_dst.y * (float)src->dim.y / dst->dim.y};
-			if ((int)c_src.x >= ((src->dim.x - 1))
-				|| ((int)c_src.y >= (src->dim.y - 1)))
-				dst->pix[new_dim_x * c_dst.y + c_dst.x] =
-				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
-			else
-				dst->pix[new_dim_x * c_dst.y + c_dst.x] = get_pix(src, c_src);
-		}
-	}
-}
-
-static void		paste_chunk(t_pix *data)
-{
-	int y;
-	int x;
-
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 6 * WIDTH;
-		while (x < (7 * WIDTH))
-		{
-			data[y * (WIDTH * 7) + x] = data[y * (WIDTH * 7) +
-															(x - (6 * WIDTH))];
-			x++;
-		}
-		y++;
-	}
-}
-
-void			init_sky(t_env *e, char *file_name)
-{
-	t_bmp	*sky_bmp;
-	int		i;
-	int		j;
-
-	if (!(e->sky.data = malloc(sizeof(t_bmp))))
+	env->sky = load_bitmap((char*[]){file_name}, 1);
+	if (!env->sky)
 		exit(EXIT_FAILURE);
-	sky_bmp = load_bitmap((char*[]){file_name}, 1);
-	sky_bmp = &sky_bmp[0];
-	e->sky.ratio = 360 / 60;
-	e->sky.data->dim = (t_coord_i){WIDTH * e->sky.ratio, HEIGHT};
-	if (!(e->sky.data->pix =
-		(t_pix*)ft_memalloc(WIDTH * (e->sky.ratio + 1)
-							* HEIGHT * sizeof(t_pix))))
-		exit(EXIT_FAILURE);
-	copy_img_bis(e->sky.data, sky_bmp, WIDTH * (e->sky.ratio + 1));
-	paste_chunk(e->sky.data->pix);
-	free(sky_bmp->pix);
-	free(sky_bmp);
-	i = 0;
-	j = 0;
-	while (j < SCREENSIZE)
-	{
-		e->img_string[j++] = e->sky.data->pix[i];
-		i += (j % WIDTH == 0) ? WIDTH * e->sky.ratio + 1 : 1;
-	}
 }
 
-static void		move_sky_left(t_env *e)
+void			render_sky(t_env *env, t_coord_i c)
 {
-	int		i;
-	int		j;
+	t_coord_f	angle;
+	t_coord_f	c_sky;
+	t_pix		pix;
 
-	j = 0;
-	if (e->sky.pos < 0)
-		e->sky.pos = WIDTH * e->sky.ratio;
-	i = e->sky.pos;
-	while (j < SCREENSIZE)
-	{
-		while (i < 0)
-			i += HEIGHT * e->sky.data->dim.x;
-		e->img_string[j++] = e->sky.data->pix[i++];
-		if (j % WIDTH == 0)
-			i += WIDTH * e->sky.ratio;
-	}
-}
-
-/*
-** e->sky.pos = e->sky.data->dim.x * (e->player.angle / 2 * M_PI);
-*/
-
-void			move_sky(t_env *e, int q)
-{
-	int		i;
-	int		j;
-
-	j = 0;
-	e->sky.pos += 16 * q;
-	if (q > 0)
-	{
-		if (e->sky.pos >= WIDTH * e->sky.ratio)
-			e->sky.pos = 0;
-		i = e->sky.pos;
-		while (j < SCREENSIZE)
-		{
-			e->img_string[j++] = e->sky.data->pix[i++];
-			if (j % WIDTH == 0)
-				i += WIDTH * e->sky.ratio;
-		}
-	}
-	else
-		move_sky_left(e);
+	angle.x = (c.x - WIDTH / 2) * VIEW_ANGLE / WIDTH + env->player.angle;
+	angle.y = (c.y - HEIGHT / 2) * VIEW_ANGLE / WIDTH;
+	c_sky.x = angle.x * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.x / 2.f;
+	c_sky.y = angle.y * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.y / 2.f;
+	if (c_sky.x < 0.f)
+		c_sky.x += env->sky->dim.x;
+	if (c_sky.x >= env->sky->dim.x)
+		c_sky.x -= env->sky->dim.x;
+	if (c_sky.y < 0.f)
+		c_sky.y += env->sky->dim.y;
+	if (c_sky.y >= env->sky->dim.y)
+		c_sky.y -= env->sky->dim.y;
+	pix = get_pix(env->sky, c_sky);
+	env->scene[c.y * WIDTH + c.x] = pix;
 }

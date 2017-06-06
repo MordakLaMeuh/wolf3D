@@ -35,7 +35,10 @@ static int		move(t_env *e)
 	redraw |= move_player(e);
 	if (!redraw)
 		return (0);
+	render_scene(e);
+	draw_minimap(e);
 	draw_weapon(e);
+	scene_to_win(e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	redraw = FALSE;
 	return (0);
@@ -49,15 +52,18 @@ int				main(int argc, char **argv)
 	ft_bzero(&env, sizeof(t_env));
 	if (argc != 2)
 		return (err_usage(argv[0]));
-	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH, HEIGHT)))
+	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH * NOSTALGIA_FACTOR,
+											HEIGHT * NOSTALGIA_FACTOR)))
 		return (err_msg("Error during initialisation"));
 	if (!(map = get_map(argv[1], &env)))
 		return (err_usage(argv[0]));
 	if (DEBUG_MAP)
 		view_map(map, env.map.size.x, env.map.size.y);
 	env.player.angle = -M_PI / 2;
+	env.player.height = 2.f;
 	create_mlx_image(&env);
 	init_sky(&env, "images/2157a.bmp");
+	init_scene(&env);
 	init_minimap(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
 	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);

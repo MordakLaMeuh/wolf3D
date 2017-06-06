@@ -34,8 +34,8 @@ int				move_player(t_env *e)
 			e->player.angle += types[i].q * M_PI / 360;
 			e->player.location.x += ((cos(e->player.angle)) * types[i].l);
 			e->player.location.y += ((sin(e->player.angle)) * types[i].l);
-			move_sky(e, types[i].q);
-			modify_minimap(e);
+			//move_sky(e, types[i].q);
+			//modify_minimap(e);
 			trigger = TRUE;
 		}
 	return (trigger);

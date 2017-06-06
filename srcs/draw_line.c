@@ -21,7 +21,7 @@ static inline void			fill_pixel(t_env *env, t_coord_i c, t_pix pix)
 	offset = (c.y * WIDTH) + c.x;
 	if (offset >= (WIDTH * HEIGHT) || offset < 0)
 		return ;
-	env->img_string[offset] = pix;
+	env->scene[offset] = pix;
 }
 
 static inline t_pix			get_pix_line(t_line *p, float x,
