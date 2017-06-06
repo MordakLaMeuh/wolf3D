@@ -185,7 +185,8 @@ void					view_map(t_tile **map, int width, int height);
 
 void					init_minimap(t_env *e);
 void					modify_minimap(t_env *e);
-int						modify_sky(t_env *e);
+
+int						move_player(t_env *e);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle);
 void					draw_line(t_env *env, t_line *p);

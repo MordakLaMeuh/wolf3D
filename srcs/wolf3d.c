@@ -32,7 +32,7 @@ static int		move(t_env *e)
 	static int		redraw = TRUE;
 
 	redraw |= common_action(e);
-	redraw |= modify_sky(e);
+	redraw |= move_player(e);
 	if (!redraw)
 		return (0);
 	draw_weapon(e);

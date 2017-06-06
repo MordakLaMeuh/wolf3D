@@ -15,7 +15,7 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-int				modify_sky(t_env *e)
+int				move_player(t_env *e)
 {
 	int							trigger;
 	int							i;
