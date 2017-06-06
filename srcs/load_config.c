@@ -16,7 +16,7 @@
 
 t_bmp					*load_bitmap(char **name, int n)
 {
-	t_bmp 	*array;
+	t_bmp	*array;
 	t_bmp	*bmp;
 	int		i;
 

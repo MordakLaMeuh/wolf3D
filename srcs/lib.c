@@ -41,5 +41,5 @@ int					get_clrs(t_bmp *src, t_coord_f c_src)
 		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)],
 		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)],
 		c_src.x - (int)c_src.x), c_src.y - (int)c_src.y);
-		return (color);
+	return (color);
 }

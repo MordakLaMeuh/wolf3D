@@ -33,7 +33,8 @@ static void		paste_fileheader(t_bitmap *s)
 										s->bitmapinfoheader.numcolorspallette);
 }
 
-static void		fill_image(uint8_t *data, uint8_t *pixelbuffer, int width, int height)
+static void		fill_image(uint8_t *data, uint8_t *pixelbuffer, int width,
+																int height)
 {
 	size_t	i;
 	int		p;
@@ -68,14 +69,14 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 	t_bitmap		*s;
 
 	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	if ((lstat(file_name, stat)) == -1 || (!(file = fopen(file_name, "rb"))))
 	{
 		ft_eprintf("%s\n", strerror(errno));
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	if (!(buff = (char *)malloc(stat->st_size)))
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	res = fread(buff, stat->st_size, 1, file);
 	s = (t_bitmap *)buff;
 	paste_fileheader((t_bitmap *)buff);

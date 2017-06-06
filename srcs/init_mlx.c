@@ -24,8 +24,6 @@ int				init_mlx(t_env *env, char *window_name, int width, int height)
 
 int				exit_mlx(t_env *e)
 {
-//	if (e->cl)
-//		end_opencl(e->cl);
 	mlx_destroy_image(e->mlx, e->image);
 	mlx_destroy_window(e->mlx, e->win);
 	exit(EXIT_SUCCESS);

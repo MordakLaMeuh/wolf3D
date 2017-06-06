@@ -20,7 +20,6 @@ void	draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
 
 	line.b_color = color;
 	line.f_color = color;
-
 	line.p1 = p1;
 	line.p2.y = p1.y;
 	line.p2.x = p2.x;
@@ -36,7 +35,7 @@ void	draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
 
 void	fill_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
 {
-	t_line 	line;
+	t_line	line;
 	int		i;
 
 	line.b_color = color;

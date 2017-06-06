@@ -109,8 +109,9 @@ t_tile			**get_map(char *file, t_env *env)
 	t_tile	**tile;
 	int		old_size_x;
 
-	if (!(input = extract_input(file, &env->map.size_y)) || env->map.size_y <= 0 ||
-			(!(tile = (t_tile **)malloc(env->map.size_y * sizeof(t_tile *)))))
+	if (!(input = extract_input(file, &env->map.size_y)) ||
+		env->map.size_y <= 0 ||
+		(!(tile = (t_tile **)malloc(env->map.size_y * sizeof(t_tile *)))))
 		return (NULL);
 	i = 0;
 	old_size_x = -1;

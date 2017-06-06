@@ -26,7 +26,7 @@ static int		err_msg(char *msg)
 	return (EXIT_FAILURE);
 }
 
-static int	move(t_env *e)
+static int		move(t_env *e)
 {
 	static int		redraw = TRUE;
 
@@ -40,7 +40,7 @@ static int	move(t_env *e)
 	return (0);
 }
 
-int			main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	t_env		env;
 	t_tile		**map;

@@ -19,8 +19,8 @@
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
 
-# define WIDTH		1920
-# define HEIGHT		1080
+# define WIDTH				1920
+# define HEIGHT				1080
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define X11_KEY_RELEASE		3
@@ -106,8 +106,6 @@ typedef struct			s_map
 	int					size_x;
 	int					size_y;
 	float				scale;
-
-
 }						t_map;
 
 typedef struct			s_sky
@@ -138,9 +136,9 @@ struct					s_env
 
 	t_bmp				*pix;
 
-	t_sky				sky;							// image 360 du ciel.
-	t_perso				p;								// donnees du bonhomme.
-	t_map				map;							// infos sur la map.
+	t_sky				sky;
+	t_perso				p;
+	t_map				map;
 	t_weapon			weapon;
 	int					*img_string;
 	char				keyb[256];
@@ -151,33 +149,36 @@ typedef struct			s_tile
 	int	value;
 }						t_tile;
 
-int				get_clrs(t_bmp *src, t_coord_f c_src);
+int						get_clrs(t_bmp *src, t_coord_f c_src);
 
-t_bmp			*load_bitmap(char **name, int n);
-void			copy_img(t_bmp *dst, t_bmp *src);
+t_bmp					*load_bitmap(char **name, int n);
+void					copy_img(t_bmp *dst, t_bmp *src);
 
-void			init_sky(t_env *e, char *file_name);
-void			move_sky(t_env *e, int direction);
+void					init_sky(t_env *e, char *file_name);
+void					move_sky(t_env *e, int direction);
 
-int				init_mlx(t_env *env, char *window_name, int width, int height);
-int				create_mlx_image(t_env *e);
-void			set_mlx_image_bg_color(t_env *e, int color);
-int				exit_mlx(t_env *e);
+int						init_mlx(t_env *env, char *window_name, int width,
+																	int height);
+int						create_mlx_image(t_env *e);
+void					set_mlx_image_bg_color(t_env *e, int color);
+int						exit_mlx(t_env *e);
 
-int				mlx_key_release(int keycode, t_env *e);
-int				mlx_key_press(int keycode, t_env *e);
-int				common_action(t_env *e);
+int						mlx_key_release(int keycode, t_env *e);
+int						mlx_key_press(int keycode, t_env *e);
+int						common_action(t_env *e);
 
-int				ft_secure_atoi_spaces(const char *nptr, int *error);
-t_tile			**get_map(char *file, t_env *env);
-void			view_map(t_tile **map, int width, int height);
+int						ft_secure_atoi_spaces(const char *nptr, int *error);
+t_tile					**get_map(char *file, t_env *env);
+void					view_map(t_tile **map, int width, int height);
 
-void			modify_minimap(t_env *e, int direction);
-int				modify_sky(t_env *e);
+void					modify_minimap(t_env *e, int direction);
+int						modify_sky(t_env *e);
 
-void			draw_line(t_env *env, t_line *p);
-void			draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
-void			fill_box(t_coord_i p1, t_coord_i p2, int color, t_env *e);
+void					draw_line(t_env *env, t_line *p);
+void					draw_box(t_coord_i p1, t_coord_i p2, int color,
+																	t_env *e);
+void					fill_box(t_coord_i p1, t_coord_i p2, int color,
+																	t_env *e);
 
-void			draw_weapon(t_env *e);
+void					draw_weapon(t_env *e);
 #endif

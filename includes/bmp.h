@@ -58,8 +58,10 @@ typedef struct				s_bitmap
 
 # pragma pack(pop)
 
-int							bmp_load(char *file_name, int *width, int *height, int **data);
+int							bmp_load(char *file_name, int *width, int *height,
+																	int **data);
 
-int							bmp_save(char *filename, int width, int height, int *data);
+int							bmp_save(char *filename, int width, int height,
+																	int *data);
 
 #endif
