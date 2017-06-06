@@ -99,7 +99,6 @@ static void		move_sky_left(t_env *e)
 	int		j;
 
 	j = 0;
-	e->sky.pos -= 30;
 	if (e->sky.pos < 0)
 		e->sky.pos = WIDTH * e->sky.ratio;
 	i = e->sky.pos;
@@ -113,15 +112,15 @@ static void		move_sky_left(t_env *e)
 	}
 }
 
-void			move_sky(t_env *e, int direction)
+void			move_sky(t_env *e, int q)
 {
 	int		i;
 	int		j;
 
 	j = 0;
-	if (direction == 0)
+	e->sky.pos += 16 * q;
+	if (q > 0)
 	{
-		e->sky.pos += 30;
 		if (e->sky.pos >= WIDTH * e->sky.ratio)
 			e->sky.pos = 0;
 		i = e->sky.pos;

@@ -56,6 +56,7 @@ int				main(int argc, char **argv)
 		view_map(map, env.map.size_x, env.map.size_y);
 	create_mlx_image(&env);
 	init_sky(&env, "images/2157a.bmp");
+	init_minimap(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
 	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);
 	mlx_hook(env.win, X11_DESTROY_NOTIFY, 0xFF, &exit_mlx, &env);

@@ -109,6 +109,7 @@ typedef struct			s_map
 	int					size_x;
 	int					size_y;
 	float				scale;
+	float				angle;
 }						t_map;
 
 typedef struct			s_sky
@@ -147,6 +148,13 @@ struct					s_env
 	char				keyb[256];
 };
 
+typedef struct			s_modify_coord
+{
+	int					keycode_1;
+	int					keycode_2;
+	int					q;
+}						t_modify_coord;
+
 typedef struct			s_tile
 {
 	int	value;
@@ -158,7 +166,7 @@ t_bmp					*load_bitmap(char **name, int n);
 void					copy_img(t_bmp *dst, t_bmp *src);
 
 void					init_sky(t_env *e, char *file_name);
-void					move_sky(t_env *e, int direction);
+void					move_sky(t_env *e, int q);
 
 int						init_mlx(t_env *env, char *window_name, int width,
 																	int height);
@@ -174,7 +182,8 @@ int						ft_secure_atoi_spaces(const char *nptr, int *error);
 t_tile					**get_map(char *file, t_env *env);
 void					view_map(t_tile **map, int width, int height);
 
-void					modify_minimap(t_env *e, int direction);
+void					init_minimap(t_env *e);
+void					modify_minimap(t_env *e, int q);
 int						modify_sky(t_env *e);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle);

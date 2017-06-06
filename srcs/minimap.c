@@ -14,13 +14,18 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void		modify_minimap(t_env *e, int direction)
+void		init_minimap(t_env *e)
 {
-	static float	angle = 0;
+	e->map.angle = -M_PI / 2;
+	modify_minimap(e, 0);
+}
+
+void		modify_minimap(t_env *e, int q)
+{
 	t_coord_i		l1;
 	t_coord_i		l2;
 
-	angle += (direction) ? 6 * M_PI / 360 : -6 * M_PI / 360;
+	e->map.angle += q * M_PI / 360;
 	l1.x = W_CENTER - 201;
 	l1.y = H_CENTER - 201;
 	l2.x = W_CENTER + 201;
@@ -33,5 +38,5 @@ void		modify_minimap(t_env *e, int direction)
 	fill_box(l1, l2, 0x8800ff00, e);
 	l1.x = W_CENTER;
 	l1.y = H_CENTER;
-	draw_arrow(e, l1, angle);
+	draw_arrow(e, l1, e->map.angle);
 }

@@ -14,20 +14,13 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-typedef struct	s_modify_coord
-{
-	int			keycode_1;
-	int			keycode_2;
-	int			direction;
-}				t_modify_coord;
-
 int				modify_sky(t_env *e)
 {
 	int							trigger;
 	int							i;
 	static t_modify_coord		types[2] = {
-		{KEYB_ARROW_LEFT, KEYB_MMO_A, 1},
-		{KEYB_ARROW_RIGHT, KEYB_MMO_D, 0}
+		{KEYB_ARROW_LEFT, KEYB_MMO_A, -6},
+		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +6}
 	};
 
 	trigger = FALSE;
@@ -35,8 +28,8 @@ int				modify_sky(t_env *e)
 	while (++i < 2)
 		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
 		{
-			move_sky(e, types[i].direction);
-			modify_minimap(e, types[i].direction);
+			move_sky(e, types[i].q);
+			modify_minimap(e, types[i].q);
 			trigger = TRUE;
 		}
 	return (trigger);
