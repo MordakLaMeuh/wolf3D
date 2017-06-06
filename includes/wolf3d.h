@@ -152,6 +152,7 @@ struct					s_env
 	char				keyb[256];
 	t_pix				*scene;
 	t_bmp				*sky;
+	t_bmp				*floor;
 };
 
 typedef struct			s_modify_coord
@@ -171,9 +172,6 @@ t_pix					get_pix(t_bmp *src, t_coord_f c_src);
 
 t_bmp					*load_bitmap(char **name, int n);
 void					copy_img(t_bmp *dst, t_bmp *src);
-
-void					init_sky(t_env *e, char *file_name);
-void					move_sky(t_env *e, int q);
 
 int						init_mlx(t_env *env, char *window_name, int width,
 																	int height);
@@ -201,6 +199,9 @@ void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
+void					init_floor(t_env *e, char *file_name);
+void					render_floor(t_env *env, t_coord_i c);
+void					init_sky(t_env *e, char *file_name);
 void					render_sky(t_env *env, t_coord_i c);
 
 void					init_scene(t_env *env);

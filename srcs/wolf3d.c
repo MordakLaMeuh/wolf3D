@@ -62,6 +62,7 @@ int				main(int argc, char **argv)
 	env.player.angle = -M_PI / 2;
 	env.player.height = 2.f;
 	create_mlx_image(&env);
+	init_floor(&env, "images/julia.bmp");
 	init_sky(&env, "images/2157a.bmp");
 	init_scene(&env);
 	init_minimap(&env);

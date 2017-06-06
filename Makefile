@@ -24,8 +24,8 @@ LIBFT_HEADER = $(LIBDIR)
 CFLAGS = -Wall -Werror -Wextra -O2 -I $(INCDIR) -I $(LIBFT_HEADER)
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
-		load_config skybox scene get_next_line load ft_secure_atoi_spaces \
-		debug minimap draw_line draw lib weapon
+		load_config floor sky scene get_next_line load \
+		ft_secure_atoi_spaces debug minimap draw_line draw lib weapon
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))

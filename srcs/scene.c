@@ -28,9 +28,13 @@ void	render_scene(t_env *env)
 	while (++c.x < WIDTH)
 	{
 		c.y = -1;
-		while (++c.y < HEIGHT)
+		while (++c.y <= HEIGHT / 2)
 		{
 			render_sky(env, c);
+		}
+		while (++c.y < HEIGHT)
+		{
+			render_floor(env, c);
 		}
 	}
 }
