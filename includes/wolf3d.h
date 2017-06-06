@@ -117,7 +117,7 @@ typedef struct			s_sky
 	int					first;
 	int					i;
 	int					j;
-	t_bmp				*sky;
+	t_bmp				*data;
 }						t_sky;
 
 typedef struct s_env	t_env;
