@@ -20,10 +20,10 @@
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
 
-# define WIDTH				(960)
-# define HEIGHT				(540)
-# define SCREENSIZE			(WIDTH * HEIGHT)
 # define NOSTALGIA_FACTOR	2
+# define WIDTH				(1920 / NOSTALGIA_FACTOR)
+# define HEIGHT				(1080 / NOSTALGIA_FACTOR)
+# define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define VIEW_ANGLE			(60.f * M_PI / 180.f)
 
@@ -208,9 +208,9 @@ void					render_floor(t_env *env, t_coord_i c, t_coord_f angle);
 void					init_sky(t_env *e, char *file_name);
 void					render_sky(t_env *env, t_coord_i c, t_coord_f angle);
 void					init_walls(t_env *e, char *file_name);
-void					find_wall(t_env *env, float angle_x, t_coord_i *c,
-									t_coord_f *intersect);
-void					render_wall(t_env *env, t_coord_i c, float dist);
+void					find_wall(t_env *env, float angle_x,
+											t_coord_f *intersect, float *x_tex);
+void					render_wall(t_env *env, t_coord_i c, float dist, t_coord_f c_tex);
 
 void					init_scene(t_env *env);
 void					render_scene(t_env *env);

@@ -62,9 +62,9 @@ static int			segment_intersection(t_coord_f a[2], t_coord_f b[2],
 **   north side.
 */
 
-static t_coord_f	square_intersection(t_coord_f origin, t_coord_f c)
+static float	square_intersection(t_coord_f origin, t_coord_f c,
+														t_coord_f *intersection)
 {
-	t_coord_f	intersection;
 	t_coord_f	corners[4];
 	t_coord_f	segment[2];
 
@@ -75,25 +75,26 @@ static t_coord_f	square_intersection(t_coord_f origin, t_coord_f c)
 	segment[0] = origin;
 	segment[1] = c;
 	if (c.x >= origin.x && segment_intersection(segment,
-						(t_coord_f[2]){corners[0], corners[3]}, &intersection))
-		return (intersection);
+						(t_coord_f[2]){corners[0], corners[3]}, intersection))
+		return(1.f - (intersection->y - corners[0].y));
 	if (c.x < origin.x && segment_intersection(segment,
-						(t_coord_f[2]){corners[1], corners[2]}, &intersection))
-		return (intersection);
+						(t_coord_f[2]){corners[1], corners[2]}, intersection))
+		return (intersection->y - corners[1].y);
 	if (c.y >= origin.y && segment_intersection(segment,
-						(t_coord_f[2]){corners[0], corners[1]}, &intersection))
-		return (intersection);
+						(t_coord_f[2]){corners[0], corners[1]}, intersection))
+		return (intersection->x - corners[1].x);
 	segment_intersection(segment, (t_coord_f[2]){corners[3], corners[2]},
-																&intersection);
-	return (intersection);
+																intersection);
+	return (1. - (intersection->x - corners[3].x));
 }
 
-void				find_wall(t_env *env, float angle_x, t_coord_i *c_i,
-														t_coord_f *intersect)
+void				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
+																float *x_tex)
 {
 	int			d;
 	t_coord_f	inc;
 	t_coord_f	c;
+	t_coord_i	c_i;
 
 	inc = (t_coord_f){cos(angle_x) / 20.f, sin(angle_x) / 20.f};
 	d = 0;
@@ -101,23 +102,28 @@ void				find_wall(t_env *env, float angle_x, t_coord_i *c_i,
 	{
 		c = (t_coord_f){env->player.location.x + inc.x * d,
 						env->player.location.y + inc.y * d};
-		*c_i = (t_coord_i){floor(c.x), floor(c.y)};
-		if (env->map_tiles[c_i->y][c_i->x].value > 0)
+		c_i = (t_coord_i){floor(c.x), floor(c.y)};
+		if (env->map_tiles[c_i.y][c_i.x].value > 0)
 		{
-			*intersect = square_intersection(env->player.location, c);
+			*x_tex = square_intersection(env->player.location, c, intersect);
 			break ;
 		}
 		d++;
 	}
 }
 
-void				render_wall(t_env *env, t_coord_i c, float dist)
+void				render_wall(t_env *env, t_coord_i c, float h_dist, t_coord_f c_tex)
 {
 	t_pix		pix;
 
-	pix.i = 0;
-	pix.c.r = 255.;
-	if (dist > 5)
-		pix.c.r /= (dist / 5.);
+	c_tex.x *= (env->wall->dim.x - 2);
+	c_tex.y *= (env->wall->dim.y - 2);
+	pix = get_pix(env->wall, c_tex);
+	if (h_dist > 5.)
+	{
+		pix.c.r /= (h_dist / 5.);
+		pix.c.g /= (h_dist / 5.);
+		pix.c.b /= (h_dist / 5.);
+	}
 	env->scene[c.y * WIDTH + c.x] = pix;
 }

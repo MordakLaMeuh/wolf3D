@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <math.h>
 #include "wolf3d.h"
 
 void	init_scene(t_env *env)
@@ -20,32 +21,40 @@ void	init_scene(t_env *env)
 		exit(EXIT_FAILURE);
 }
 
+static	float	angle_on_screen(int x)
+{
+	return (atan((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atan(1.f)));
+}
+
 void	render_scene(t_env *env)
 {
 	t_coord_i	c;
 	t_coord_f	angle;
-	t_coord_i	c_wall;
 	t_coord_f	c_intersect;
 	float		h_dist;
 	float		min_angle;
 	float		max_angle;
+	t_coord_f	c_tex;
 
 	c.x = -1;
 	while (++c.x < WIDTH)
 	{
-		angle.x = (c.x - WIDTH / 2) * VIEW_ANGLE / WIDTH + env->player.angle;
+		angle.x = angle_on_screen(c.x - (WIDTH / 2)) + env->player.angle;
 		c.y = -1;
-		find_wall(env, angle.x, &c_wall, &c_intersect);
+		find_wall(env, angle.x, &c_intersect, &c_tex.x);
 		h_dist = dist(env->player.location, c_intersect);
 		min_angle = atan(-env->player.height / h_dist);
 		max_angle = atan((env->wall_height - env->player.height) / h_dist);
 		while (++c.y < HEIGHT)
 		{
-			angle.y = (HEIGHT / 2 - c.y) * VIEW_ANGLE / WIDTH;
+			angle.y = angle_on_screen((HEIGHT / 2) - c.y);
 			if (angle.y >= max_angle)
 				render_sky(env, c, angle);
 			else if (angle.y >= min_angle)
-				render_wall(env, c, h_dist);
+			{
+				c_tex.y = (env->player.height + h_dist * tan(angle.y)) / env->wall_height;
+				render_wall(env, c, h_dist, c_tex);
+			}
 			else
 				render_floor(env, c, angle);
 		}

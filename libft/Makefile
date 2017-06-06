@@ -7,8 +7,8 @@ INCDIR	= includes
 OBJDIR	= objs
 HEADER	= libft.h
 
-#CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I./$(INCDIR)
-CFLAGS = -Wall -Werror -Wextra -O2 -I./$(INCDIR)
+CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I./$(INCDIR)
+#CFLAGS = -Wall -Werror -Wextra -O2 -I./$(INCDIR)
 
 SRC_USUALS	= ft_memset ft_bzero ft_memcpy ft_memccpy ft_memmove ft_memchr ft_memcmp \
 	ft_strlen ft_strdup ft_strcpy ft_strncpy ft_strcat ft_strncat ft_strlcat \
