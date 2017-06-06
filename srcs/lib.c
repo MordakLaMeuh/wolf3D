@@ -12,34 +12,41 @@
 
 #include "wolf3d.h"
 
-static inline int	get_color(int b_color, int f_color, float ratio)
+static inline unsigned char	interp(unsigned char b, unsigned char f,
+									float ratio)
 {
-	int		color;
-	float	r_diff;
-	float	g_diff;
-	float	b_diff;
+	unsigned char	result;
 
-	r_diff = (f_color >> 16) - (b_color >> 16);
-	g_diff = ((f_color >> 8) & 0xFF) - ((b_color >> 8) & 0xFF);
-	b_diff = (f_color & 0xFF) - (b_color & 0xFF);
-	color = ((((b_color >> 16) + ((int)(ratio * r_diff))) << 16) |
-			((((b_color >> 8) & 0xFF) + (int)(ratio * g_diff)) << 8) |
-			((b_color & 0xFF) + (int)(ratio * b_diff)));
-	return (color);
+	result = (unsigned char)((1.f - ratio) * b + ratio * f);
+	return (result);
 }
 
-int					get_clrs(t_bmp *src, t_coord_f c_src)
+static inline t_pix			interp_pix(t_pix b_pix, t_pix f_pix, float ratio)
 {
-	int color;
+	t_pix	new_pix;
 
-	color = get_color(
-				get_color(
-		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)],
-		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x + 1)],
-		c_src.x - (int)c_src.x),
-				get_color(
-		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)],
-		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)],
-		c_src.x - (int)c_src.x), c_src.y - (int)c_src.y);
-	return (color);
+	new_pix.c.r = interp(b_pix.c.r, f_pix.c.r, ratio);
+	new_pix.c.g = interp(b_pix.c.g, f_pix.c.g, ratio);
+	new_pix.c.b = interp(b_pix.c.b, f_pix.c.b, ratio);
+	new_pix.c.a = interp(b_pix.c.a, f_pix.c.a, ratio);
+	return (new_pix);
+}
+
+t_pix						get_pix(t_bmp *src, t_coord_f c_src)
+{
+	t_pix		pix;
+	t_coord_i	c_src_i;
+
+	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
+	pix = interp_pix(
+			interp_pix(
+				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x)],
+				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x + 1)],
+				c_src.x - c_src_i.x),
+			interp_pix(
+				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x)],
+				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x + 1)],
+				c_src.x - c_src_i.x),
+			c_src.y - c_src_i.y);
+	return (pix);
 }

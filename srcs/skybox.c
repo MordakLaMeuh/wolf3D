@@ -41,12 +41,12 @@ static void		copy_img_bis(t_bmp *dst, t_bmp *src, int new_dim_x)
 				dst->pix[new_dim_x * c_dst.y + c_dst.x] =
 				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
 			else
-				dst->pix[new_dim_x * c_dst.y + c_dst.x] = get_clrs(src, c_src);
+				dst->pix[new_dim_x * c_dst.y + c_dst.x] = get_pix(src, c_src);
 		}
 	}
 }
 
-static void		paste_bout(int *data)
+static void		paste_chunk(t_pix *data)
 {
 	int y;
 	int x;
@@ -76,13 +76,13 @@ void			init_sky(t_env *e, char *file_name)
 	sky_bmp = load_bitmap((char*[]){file_name}, 1);
 	sky_bmp = &sky_bmp[0];
 	e->sky.ratio = 360 / 60;
-	e->sky.data->dim.x = WIDTH * e->sky.ratio;
-	e->sky.data->dim.y = HEIGHT;
+	e->sky.data->dim = (t_coord_i){WIDTH * e->sky.ratio, HEIGHT};
 	if (!(e->sky.data->pix =
-		(int *)ft_memalloc(WIDTH * (e->sky.ratio + 1) * HEIGHT * sizeof(int))))
+		(t_pix*)ft_memalloc(WIDTH * (e->sky.ratio + 1)
+							* HEIGHT * sizeof(t_pix))))
 		exit(EXIT_FAILURE);
 	copy_img_bis(e->sky.data, sky_bmp, WIDTH * (e->sky.ratio + 1));
-	paste_bout(e->sky.data->pix);
+	paste_chunk(e->sky.data->pix);
 	free(sky_bmp->pix);
 	free(sky_bmp);
 	i = 0;

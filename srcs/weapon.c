@@ -16,7 +16,8 @@
 
 /*
 ** README !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-** L'interpolation rends l'image plutot degeux. On va donc faire des images "gun/weapon" de taille parfaites (genre du 100*100 300*300 on verra)
+** L'interpolation rends l'image plutot degeux. On va donc faire des images
+** "gun/weapon" de taille parfaites (genre du 100*100 300*300 on verra)
 ** Et on va load direct l'image sans interpol #appelle la police
 */
 
@@ -35,7 +36,8 @@ void		load_weapon(t_env *e)
 		temp = &temp[0];
 		e->weapon.data->dim.x = 100;
 		e->weapon.data->dim.y = 100;
-		if (!(e->weapon.data->pix = ft_memalloc(e->weapon.data->dim.x * e->weapon.data->dim.y * sizeof(int))))
+		if (!(e->weapon.data->pix = ft_memalloc(e->weapon.data->dim.x
+										* e->weapon.data->dim.y * sizeof(int))))
 			exit(EXIT_FAILURE);
 		copy_img(e->weapon.data, temp);
 		free(temp->pix);
@@ -51,10 +53,8 @@ void		draw_weapon(t_env *e)
 	int j;
 
 	load_weapon(e);
-
 	i = 0; //((SCREENSIZE) - (HEIGHT / 2)) - (e->weapon.data->dim.y / 2) - (e->weapon.data->dim.y * WIDTH));
 	j = 0;
-
 	while (j < (e->weapon.data->dim.y * e->weapon.data->dim.x))
 	{
 		e->img_string[i] = e->weapon.data->pix[j];

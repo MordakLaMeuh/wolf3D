@@ -26,7 +26,8 @@ t_bmp					*load_bitmap(char **name, int n)
 	while (i < n)
 	{
 		bmp = array + i;
-		if (!(bmp_load(name[i], &(bmp->dim.x), &(bmp->dim.y), &(bmp->pix))))
+		if (!(bmp_load(name[i], &(bmp->dim.x), &(bmp->dim.y),
+						(int**)&(bmp->pix))))
 			return (NULL);
 		i++;
 	}
@@ -51,7 +52,7 @@ void					copy_img(t_bmp *dst, t_bmp *src)
 				dst->pix[dst->dim.x * c_dst.y + c_dst.x] =
 				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
 			else
-				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = get_clrs(src, c_src);
+				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = get_pix(src, c_src);
 		}
 	}
 }

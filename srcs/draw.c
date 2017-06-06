@@ -29,25 +29,25 @@ void	draw_arrow(t_env *e, t_coord_i c, float angle)
 	l3.x = c.x + (int)(((cos(angle)) * 40));
 	line.p1 = l1;
 	line.p2 = l2;
-	line.b_color = 0x0000FF;
-	line.f_color = 0x00FF00;
+	line.b_pix.i = 0x0000FF;
+	line.f_pix.i = 0x00FF00;
 	draw_line(e, &line);
 	line.p1 = l2;
 	line.p2 = l3;
-	line.b_color = 0x00FF00;
-	line.f_color = 0xFF0000;
+	line.b_pix.i = 0x00FF00;
+	line.f_pix.i = 0xFF0000;
 	draw_line(e, &line);
 	line.p1 = l1;
-	line.b_color = 0x0000FF;
+	line.b_pix.i = 0x0000FF;
 	draw_line(e, &line);
 }
 
-void	draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
+void	draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 {
 	t_line line;
 
-	line.b_color = color;
-	line.f_color = color;
+	line.b_pix = pix;
+	line.f_pix = pix;
 	line.p1 = p1;
 	line.p2.y = p1.y;
 	line.p2.x = p2.x;
@@ -61,13 +61,13 @@ void	draw_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
 	draw_line(e, &line);
 }
 
-void	fill_box(t_coord_i p1, t_coord_i p2, int color, t_env *e)
+void	fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 {
 	t_line	line;
 	int		i;
 
-	line.b_color = color;
-	line.f_color = color;
+	line.b_pix = pix;
+	line.f_pix = pix;
 	line.p1.x = p1.x;
 	line.p2.x = p2.x;
 	i = p1.y;

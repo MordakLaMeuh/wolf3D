@@ -23,13 +23,13 @@ int			create_mlx_image(t_env *e)
 {
 	if (!(e->image = mlx_new_image(e->mlx, WIDTH, HEIGHT)))
 		return (1);
-	if (!(e->img_string = (int *)mlx_get_data_addr(e->image, &e->bpp, &e->s_l,
+	if (!(e->img_string = (t_pix*)mlx_get_data_addr(e->image, &e->bpp, &e->s_l,
 																&e->endian)))
 		return (1);
 	return (0);
 }
 
-void		set_mlx_image_bg_color(t_env *e, int color)
+void		set_mlx_image_bg_color(t_env *e, t_pix color)
 {
 	int		max;
 	int		i;

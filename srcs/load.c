@@ -109,20 +109,20 @@ t_tile			**get_map(char *file, t_env *env)
 	t_tile	**tile;
 	int		old_size_x;
 
-	if (!(input = extract_input(file, &env->map.size_y)) ||
-		env->map.size_y <= 0 ||
-		(!(tile = (t_tile **)malloc(env->map.size_y * sizeof(t_tile *)))))
+	if (!(input = extract_input(file, &env->map.size.y)) ||
+		env->map.size.y <= 0 ||
+		(!(tile = (t_tile **)malloc(env->map.size.y * sizeof(t_tile *)))))
 		return (NULL);
 	i = 0;
 	old_size_x = -1;
 	ptr = input;
 	while (input)
 	{
-		if (!(tile[i++] = create_tab(input->content, &env->map.size_x)))
+		if (!(tile[i++] = create_tab(input->content, &env->map.size.x)))
 			return (NULL);
 		if (old_size_x < 0)
-			old_size_x = env->map.size_x;
-		else if (old_size_x != env->map.size_x)
+			old_size_x = env->map.size.x;
+		else if (old_size_x != env->map.size.x)
 			return (NULL);
 		input = input->next;
 	}

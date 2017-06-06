@@ -73,20 +73,31 @@ typedef struct			s_coord_f
 	float				y;
 }						t_coord_f;
 
+typedef union			u_pix
+{
+	unsigned int		i;
+	struct				s_c
+	{
+		unsigned char	b;
+		unsigned char	g;
+		unsigned char	r;
+		unsigned char	a;
+	}					c;
+}						t_pix;
+
 typedef struct			s_line
 {
 	t_coord_i			p1;
 	t_coord_i			p2;
-	int					dx;
-	int					dy;
-	int					b_color;
-	int					f_color;
+	t_coord_i			d;
+	t_pix				b_pix;
+	t_pix				f_pix;
 }						t_line;
 
 typedef struct			s_bmp
 {
 	t_coord_i			dim;
-	int					*pix;
+	t_pix				*pix;
 }						t_bmp;
 
 typedef struct			s_player
@@ -107,8 +118,7 @@ typedef struct			s_player
 
 typedef struct			s_map
 {
-	int					size_x;
-	int					size_y;
+	t_coord_i			size;
 	float				scale;
 }						t_map;
 
@@ -141,10 +151,10 @@ struct					s_env
 	t_bmp				*pix;
 
 	t_sky				sky;
-	t_player				player;
+	t_player			player;
 	t_map				map;
 	t_weapon			weapon;
-	int					*img_string;
+	t_pix				*img_string;
 	char				keyb[256];
 };
 
@@ -161,7 +171,7 @@ typedef struct			s_tile
 	int	value;
 }						t_tile;
 
-int						get_clrs(t_bmp *src, t_coord_f c_src);
+t_pix					get_pix(t_bmp *src, t_coord_f c_src);
 
 t_bmp					*load_bitmap(char **name, int n);
 void					copy_img(t_bmp *dst, t_bmp *src);
@@ -172,7 +182,7 @@ void					move_sky(t_env *e, int q);
 int						init_mlx(t_env *env, char *window_name, int width,
 																	int height);
 int						create_mlx_image(t_env *e);
-void					set_mlx_image_bg_color(t_env *e, int color);
+void					set_mlx_image_bg_color(t_env *e, t_pix color);
 int						exit_mlx(t_env *e);
 
 int						mlx_key_release(int keycode, t_env *e);
@@ -190,9 +200,9 @@ int						move_player(t_env *e);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle);
 void					draw_line(t_env *env, t_line *p);
-void					draw_box(t_coord_i p1, t_coord_i p2, int color,
+void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
-void					fill_box(t_coord_i p1, t_coord_i p2, int color,
+void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 
 void					draw_weapon(t_env *e);
