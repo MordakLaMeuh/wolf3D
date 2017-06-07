@@ -33,27 +33,3 @@ t_bmp					*load_bitmap(char **name, int n)
 	}
 	return (array);
 }
-
-/*void					copy_img(t_bmp *dst, t_bmp *src)
-{
-	t_coord_i c_dst;
-	t_coord_f c_src;
-
-	c_dst.y = -1;
-	while (++c_dst.y < dst->dim.y)
-	{
-		c_dst.x = -1;
-		while (++c_dst.x < dst->dim.x)
-		{
-			c_src = (t_coord_f){c_dst.x * (float)src->dim.x / dst->dim.x,
-								c_dst.y * (float)src->dim.y / dst->dim.y};
-			if ((int)c_src.x >= ((src->dim.x - 1))
-				|| ((int)c_src.y >= (src->dim.y - 1)))
-				dst->pix[dst->dim.x * c_dst.y + c_dst.x] =
-				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
-			else
-				dst->pix[dst->dim.x * c_dst.y + c_dst.x] = get_pix(src, c_src);
-		}
-	}
-}
-*/

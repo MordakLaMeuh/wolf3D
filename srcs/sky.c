@@ -15,48 +15,7 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-static inline unsigned char	interp(unsigned char b, unsigned char f,
-									float ratio)
-{
-	unsigned char	result;
-
-	result = (unsigned char)((1.f - ratio) * b + ratio * f);
-	return (result);
-}
-
-static inline t_pix			interp_pix(t_pix b_pix, t_pix f_pix, float ratio)
-{
-	t_pix	new_pix;
-
-	new_pix.c.a = interp(b_pix.c.a, f_pix.c.a, ratio);
-//	new_pix.c.a = 0;
-
-	new_pix.c.b = interp(b_pix.c.b, f_pix.c.b, ratio);
-	new_pix.c.g = interp(b_pix.c.g, f_pix.c.g, ratio);
-	new_pix.c.r = interp(b_pix.c.r, f_pix.c.r, ratio);
-	return (new_pix);
-}
-
-static inline t_pix				get_pix(t_bmp *src, t_coord_f c_src)
-{
-	t_pix		pix;
-	t_coord_i	c_src_i;
-
-	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
-	pix = interp_pix(
-			interp_pix(
-				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x)],
-				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x + 1)],
-				c_src.x - c_src_i.x),
-			interp_pix(
-				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x)],
-				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x + 1)],
-				c_src.x - c_src_i.x),
-			c_src.y - c_src_i.y);
-	return (pix);
-}
-
-static void		copy_img_bis(t_bmp *dst, t_bmp *src, int new_dim_x)
+static void		copy_img(t_bmp *dst, t_bmp *src, int new_dim_x)
 {
 	t_coord_i c_dst;
 	t_coord_f c_src;
@@ -74,7 +33,8 @@ static void		copy_img_bis(t_bmp *dst, t_bmp *src, int new_dim_x)
 				dst->pix[new_dim_x * c_dst.y + c_dst.x] =
 				src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)];
 			else
-				dst->pix[new_dim_x * c_dst.y + c_dst.x] = get_pix(src, c_src);
+				dst->pix[new_dim_x * c_dst.y + c_dst.x] =
+														get_pix_sp(src, c_src);
 		}
 	}
 }
@@ -114,7 +74,7 @@ void			init_sky(t_env *e, char *file_name)
 	if (!(e->sky->data->pix =
 	(t_pix *)ft_memalloc(WIDTH * (e->sky->ratio + 1) * HEIGHT * sizeof(t_pix))))
 		exit(EXIT_FAILURE);
-	copy_img_bis(e->sky->data, sky_bmp, WIDTH * (e->sky->ratio + 1));
+	copy_img(e->sky->data, sky_bmp, WIDTH * (e->sky->ratio + 1));
 	paste_bout(e->sky->data->pix);
 	free(sky_bmp->pix);
 	free(sky_bmp);
@@ -135,60 +95,3 @@ void			render_sky(t_env *e, float angle)
 			i += e->sky->ratio * WIDTH;
 	}
 }
-
-/*
-#include <math.h>
-#include <stdlib.h>
-#include "wolf3d.h"
-
-void				init_sky(t_env *env, char *file_name)
-{
-	rendering_layer_init(&(env->scene.sky), file_name);
-}
-
-static t_coord_f	calc_tex_coord(t_coord_f angle)
-{
-	t_coord_f	c_sky;
-
-	c_sky.x = angle.x / (2.f * M_PI);
-	c_sky.y = angle.y / M_PI;
-	if (c_sky.x < 0.f)
-		c_sky.x += 1.f;
-	if (c_sky.x >= 1.f)
-		c_sky.x -= 1.f;
-	return (c_sky);
-}
-
-static inline float	angle_on_screen(int x)
-{
-	return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
-}
-
-void				render_sky(t_env *env, t_rendering_layer *layer)
-{
-	t_coord_i	c;
-	t_coord_f	angle;
-
-	layer->n = 0;
-	c.y = -1;
-	while (++c.y < HEIGHT)
-	{
-		angle.y = angle_on_screen(HEIGHT / 2 - c.y);
-		c.x = -1;
-		while (++c.x < WIDTH)
-		{
-			if (angle.y >= env->scene.columns[c.x].wall_max_angle)
-			{
-				angle.x = env->scene.columns[c.x].angle_x;
-				layer->ij[layer->n] = c;
-				layer->uv[layer->n] = calc_tex_coord(angle);
-				layer->uv[layer->n].x *= layer->bmp->dim.x - 1;
-				layer->uv[layer->n].y *= layer->bmp->dim.y - 1;
-				layer->dist[layer->n] = 0.f;
-				layer->n++;
-			}
-		}
-	}
-	rendering_layer_render(layer);
-}
-*/

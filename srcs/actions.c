@@ -41,8 +41,6 @@ int				move_player(t_env *e)
 			new.y = e->player.location.y + ((sinf(e->player.angle)) * types[i].l);
 			if (e->map_tiles[(int)floorf(new.y)][(int)floorf(new.x)].value == 0)
 				e->player.location = new;
-			//move_sky(e, types[i].q);
-			//modify_minimap(e);
 			trigger = TRUE;
 		}
 	return (trigger);

@@ -204,11 +204,10 @@ typedef struct			s_modify_coord
 	int					l;
 }						t_modify_coord;
 
-//t_pix					get_pix(t_bmp *src, t_coord_f c_src);
+t_pix					get_pix_sp(t_bmp *src, t_coord_f c_src);
 float					dist(t_coord_f a, t_coord_f b);
 
 t_bmp					*load_bitmap(char **name, int n);
-void					copy_img(t_bmp *dst, t_bmp *src);
 
 int						init_mlx(t_env *env, char *window_name, int width,
 																	int height);
@@ -222,7 +221,9 @@ int						common_action(t_env *e);
 
 int						ft_secure_atoi_spaces(const char *nptr, int *error);
 t_tile					**get_map(char *file, t_env *env);
+
 void					view_map(t_tile **map, int width, int height);
+void					eval_fps(t_env *e);
 
 void					init_minimap(t_env *e);
 void					draw_minimap(t_env *e);
@@ -240,7 +241,6 @@ void					init_floor(t_env *e, char *file_name);
 void					render_floor(t_env *env, t_rendering_layer *layer);
 void					init_sky(t_env *e, char *file_name);
 
-//void					render_sky(t_env *env, t_rendering_layer *layer);
 void					render_sky(t_env *env, float angle);
 
 void					init_walls(t_env *e, char *file_name);
