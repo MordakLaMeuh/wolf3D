@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/06/07 00:03:23 by bmickael         ###   ########.fr        #
+#    Updated: 2017/06/07 09:59:23 by stoupin          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,11 +20,14 @@ INCDIR = includes
 LIBDIR = libft/includes
 LIBFT_HEADER = $(LIBDIR)
 
-//CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER)
-CFLAGS = -Wall -Werror -Wextra -O2 -march=native -I $(INCDIR) -I $(LIBFT_HEADER)
+ifeq ($(DEBUG),yes)
+	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
+else
+	CFLAGS = -Wall -Werror -Wextra -O2 -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
+endif
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
-		load_config floor sky walls scene get_next_line load \
+		load_config rendering_layer floor sky walls scene get_next_line load \
 		ft_secure_atoi_spaces debug minimap draw_line draw lib weapon
 
 TMP = $(basename $(notdir $(SRC)))
@@ -35,13 +38,15 @@ OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
-	make -C libft/ all
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit -lmlx
+	make -C minilibx_sierra/ all
+	make -C libft/ all DEBUG=$(DEBUG)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./minilibx_sierra/libmlx.a
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
+	make -C minilibx_sierra/ clean
 	make -C libft/ clean
 	rm -vf $(OBJ)
 

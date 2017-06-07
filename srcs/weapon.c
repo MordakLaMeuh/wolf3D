@@ -21,7 +21,7 @@
 ** Et on va load direct l'image sans interpol #appelle la police
 */
 
-void		load_weapon(t_env *e)
+/*void		load_weapon(t_env *e)
 {
 	static int	loaded = 0;
 	t_bmp		*temp;
@@ -45,9 +45,9 @@ void		load_weapon(t_env *e)
 		loaded = 1;
 		ft_printf("{green}[ LOADED ]{eoc} Weapon\n");
 	}
-}
+}*/
 
-void		draw_weapon(t_env *e)
+/*void		draw_weapon(t_env *e)
 {
 	int i;
 	int j;
@@ -66,3 +66,4 @@ void		draw_weapon(t_env *e)
 		}
 	}
 }
+*/

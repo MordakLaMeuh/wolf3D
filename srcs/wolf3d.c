@@ -59,7 +59,6 @@ static void		eval_fps(t_env *e)
 		mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, s);
 }
 
-
 static int		move(t_env *e)
 {
 	static int		redraw = TRUE;
@@ -74,7 +73,6 @@ static int		move(t_env *e)
 	draw_minimap(e);
 	//draw_weapon(e);
 	scene_to_win(e);
-
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	eval_fps(e);
 	redraw = FALSE;
@@ -105,7 +103,7 @@ int				main(int argc, char **argv)
 	if (DEBUG_MAP)
 		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
-	env.player.angle = 3 * M_PI / 2;
+	env.player.angle = -M_PI / 2;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	create_mlx_image(&env);

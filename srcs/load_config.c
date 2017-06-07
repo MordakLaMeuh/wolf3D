@@ -34,7 +34,7 @@ t_bmp					*load_bitmap(char **name, int n)
 	return (array);
 }
 
-void					copy_img(t_bmp *dst, t_bmp *src)
+/*void					copy_img(t_bmp *dst, t_bmp *src)
 {
 	t_coord_i c_dst;
 	t_coord_f c_src;
@@ -56,3 +56,4 @@ void					copy_img(t_bmp *dst, t_bmp *src)
 		}
 	}
 }
+*/

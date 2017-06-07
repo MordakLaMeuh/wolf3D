@@ -14,34 +14,53 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void			init_floor(t_env *env, char *file_name)
+void				init_floor(t_env *env, char *file_name)
 {
-	env->floor = load_bitmap((char*[]){file_name}, 1);
-	if (!env->floor)
-		exit(EXIT_FAILURE);
+	rendering_layer_init(&(env->scene.floor), file_name);
 }
 
-void			render_floor(t_env *env, t_coord_i c, t_coord_f angle)
+static t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
+												float dist, t_coord_i bmp_dim)
 {
 	t_coord_f	c_floor;
-	t_pix		pix;
-	float		h_dist;
 
-	h_dist = env->player.height / tan(-angle.y);
-	c_floor.x = (env->player.location.x + h_dist * cos(angle.x)) / 4.;
-	c_floor.y = (env->player.location.y + h_dist * sin(angle.x)) / 4.;
-	c_floor.x = (c_floor.x - floor(c_floor.x)) * (env->floor->dim.x - 1);
-	c_floor.y = (c_floor.y - floor(c_floor.y)) * (env->floor->dim.y - 1);
+	c_floor.x = (location.x + dist * cosf(angle_x)) / 4.f;
+	c_floor.y = (location.y + dist * sinf(angle_x)) / 4.f;
+	c_floor.x = (c_floor.x - floorf(c_floor.x)) * (bmp_dim.x - 1);
+	c_floor.y = (c_floor.y - floorf(c_floor.y)) * (bmp_dim.y - 1);
+	return (c_floor);
+}
 
-	pix = get_pix(env->floor, c_floor);
-//	pix.i = 0x00ff00;
+static inline float	angle_on_screen(int x)
+{
+	return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
+}
 
-	if (h_dist > 5.)
+void				render_floor(t_env *env, t_rendering_layer *layer)
+{
+	t_coord_i	c;
+	t_coord_f	angle;
+	float		dist;
+
+	layer->n = 0;
+	c.y = -1;
+	while (++c.y < HEIGHT)
 	{
-		pix.c.r /= (h_dist / 5.);
-		pix.c.g /= (h_dist / 5.);
-		pix.c.b /= (h_dist / 5.);
+		angle.y = angle_on_screen(HEIGHT / 2 - c.y);
+		c.x = -1;
+		while (++c.x < WIDTH)
+		{
+			if (angle.y <= env->scene.columns[c.x].wall_min_angle)
+			{
+				angle.x = env->scene.columns[c.x].angle_x;
+				dist = env->player.height / tanf(-angle.y);
+				layer->ij[layer->n] = c;
+				layer->uv[layer->n] = calc_tex_coord(env->player.location,
+												angle.x, dist, layer->bmp->dim);
+				layer->dist[layer->n++] = dist;
+				layer->n++;
+			}
+		}
 	}
-	env->scene[c.y * WIDTH + c.x] = pix;
-//	env->img_string[c.y * WIDTH + c.x] = pix;
+	rendering_layer_render(layer);
 }

@@ -14,11 +14,9 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void				init_walls(t_env *env, char *file_name)
+void			init_walls(t_env *env, char *file_name)
 {
-	env->wall = load_bitmap((char*[]){file_name}, 1);
-	if (!env->wall)
-		exit(EXIT_FAILURE);
+	rendering_layer_init(&(env->scene.wall), file_name);
 }
 
 /*
@@ -28,7 +26,7 @@ void				init_walls(t_env *env, char *file_name)
 ** If there is no intersection, it returns 0.
 */
 
-static int			segment_intersection(t_coord_f a[2], t_coord_f b[2],
+static int		segment_intersection(t_coord_f a[2], t_coord_f b[2],
 																t_coord_f *i)
 {
 	t_coord_f	sa;
@@ -68,7 +66,7 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 	t_coord_f	corners[4];
 	t_coord_f	segment[2];
 
-	corners[0] = (t_coord_f){floor(c.x), floor(c.y)};
+	corners[0] = (t_coord_f){floorf(c.x), floorf(c.y)};
 	corners[1] = (t_coord_f){corners[0].x + 1.f, corners[0].y};
 	corners[2] = (t_coord_f){corners[0].x + 1.f, corners[0].y + 1.f};
 	corners[3] = (t_coord_f){corners[0].x, corners[0].y + 1.f};
@@ -76,7 +74,7 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 	segment[1] = c;
 	if (c.x >= origin.x && segment_intersection(segment,
 						(t_coord_f[2]){corners[0], corners[3]}, intersection))
-		return(1.f - (intersection->y - corners[0].y));
+		return (1.f - (intersection->y - corners[0].y));
 	if (c.x < origin.x && segment_intersection(segment,
 						(t_coord_f[2]){corners[1], corners[2]}, intersection))
 		return (intersection->y - corners[1].y);
@@ -88,7 +86,7 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 	return (1. - (intersection->x - corners[3].x));
 }
 
-void				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
+void			find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 																float *x_tex)
 {
 	int			d;
@@ -96,13 +94,13 @@ void				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 	t_coord_f	c;
 	t_coord_i	c_i;
 
-	inc = (t_coord_f){cos(angle_x) / 20.f, sin(angle_x) / 20.f};
+	inc = (t_coord_f){cosf(angle_x) / 20.f, sinf(angle_x) / 20.f};
 	d = 0;
 	while (1)
 	{
 		c = (t_coord_f){env->player.location.x + inc.x * d,
 						env->player.location.y + inc.y * d};
-		c_i = (t_coord_i){floor(c.x), floor(c.y)};
+		c_i = (t_coord_i){floorf(c.x), floorf(c.y)};
 		if (env->map_tiles[c_i.y][c_i.x].value > 0)
 		{
 			*x_tex = square_intersection(env->player.location, c, intersect);
@@ -112,21 +110,31 @@ void				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 	}
 }
 
-void				render_wall(t_env *env, t_coord_i c, float h_dist, t_coord_f c_tex)
+void			render_wall(t_env *env, t_rendering_layer *layer)
 {
-	t_pix		pix;
+	t_coord_i	c;
+	float		angle_y;
+	float		wall_y_tex;
+	t_column	*cl;
 
-	c_tex.x *= (env->wall->dim.x - 2);
-	c_tex.y *= (env->wall->dim.y - 2);
-
-	pix = get_pix(env->wall, c_tex);
-	//pix.i = 0xff;
-
-	if (h_dist > 5.)
+	layer->n = 0;
+	c.y = -1;
+	while (++c.y < HEIGHT)
 	{
-		pix.c.r /= (h_dist / 5.);
-		pix.c.g /= (h_dist / 5.);
-		pix.c.b /= (h_dist / 5.);
+		angle_y = (atanf((float)((HEIGHT / 2) - c.y) / (WIDTH / 2))
+					* (VIEW_ANGLE / 2.f / atanf(1.f)));
+		c.x = -1;
+		while (++c.x < WIDTH)
+			if ((cl = &(env->scene.columns[c.x])) &&
+				angle_y > cl->wall_min_angle && angle_y < cl->wall_max_angle)
+			{
+				wall_y_tex = (env->player.height + cl->wall_h_dist
+											* tanf(angle_y)) / env->wall_height;
+				layer->ij[layer->n] = c;
+				layer->uv[layer->n] = (t_coord_f){cl->wall_x_tex
+			* (layer->bmp->dim.x - 1), wall_y_tex * (layer->bmp->dim.y - 1)};
+				layer->dist[layer->n++] = cl->wall_h_dist;
+			}
 	}
-	env->scene[c.y * WIDTH + c.x] = pix;
+	rendering_layer_render(layer);
 }

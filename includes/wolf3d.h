@@ -6,7 +6,7 @@
 /*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:43:32 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 15:46:33 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/07 10:00:48 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,12 @@
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
 
-# define NOSTALGIA_FACTOR	4
+# define NOSTALGIA_FACTOR	1
 # define WIDTH				(1920 / NOSTALGIA_FACTOR)
 # define HEIGHT				(1080 / NOSTALGIA_FACTOR)
-
-//# define WIDTH				(1024 / NOSTALGIA_FACTOR)
-//# define HEIGHT				(768 / NOSTALGIA_FACTOR)
-
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
-# define VIEW_ANGLE			(60.f * M_PI / 180.f)
+# define VIEW_ANGLE			(45.f * M_PI / 180.f)
 
 # define MAP_SEMI_LENGTH		(WIDTH / 10)
 # define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - 10)
@@ -146,6 +142,34 @@ typedef struct			s_tile
 	int	value;
 }						t_tile;
 
+typedef struct			s_column
+{
+	float angle_x;
+	float wall_h_dist;
+	float wall_x_tex;
+	float wall_min_angle;
+	float wall_max_angle;
+}						t_column;
+
+typedef struct			s_rendering_layer
+{
+	t_bmp		*bmp;
+	int			n;
+	t_coord_i	*ij;
+	t_coord_f	*uv;
+	float		*dist;
+	t_pix		*result;
+}						t_rendering_layer;
+
+typedef struct			s_scene
+{
+	t_column			*columns;
+	t_rendering_layer	sky;
+	t_rendering_layer	wall;
+	t_rendering_layer	floor;
+	t_pix				*scene;
+}						t_scene;
+
 typedef struct			s_sky
 {
 	int					pos;
@@ -164,15 +188,12 @@ struct					s_env
 	t_player			player;
 	t_map				map;
 	t_weapon			weapon;
+	t_sky				*sky;
 	t_pix				*img_string;
 	char				keyb[256];
 	float				wall_height;
 	t_tile				**map_tiles;
-	t_pix				*scene;
-//	t_bmp				*sky;
-	t_sky				*sky;
-	t_bmp				*floor;
-	t_bmp				*wall;
+	t_scene				scene;
 };
 
 typedef struct			s_modify_coord
@@ -183,7 +204,7 @@ typedef struct			s_modify_coord
 	int					l;
 }						t_modify_coord;
 
-t_pix					get_pix(t_bmp *src, t_coord_f c_src);
+//t_pix					get_pix(t_bmp *src, t_coord_f c_src);
 float					dist(t_coord_f a, t_coord_f b);
 
 t_bmp					*load_bitmap(char **name, int n);
@@ -216,17 +237,26 @@ void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					init_floor(t_env *e, char *file_name);
-void					render_floor(t_env *env, t_coord_i c, t_coord_f angle);
+void					render_floor(t_env *env, t_rendering_layer *layer);
 void					init_sky(t_env *e, char *file_name);
+
+//void					render_sky(t_env *env, t_rendering_layer *layer);
 void					render_sky(t_env *env, float angle);
+
 void					init_walls(t_env *e, char *file_name);
 void					find_wall(t_env *env, float angle_x,
 											t_coord_f *intersect, float *x_tex);
-void					render_wall(t_env *env, t_coord_i c, float dist, t_coord_f c_tex);
+void					render_wall(t_env *env, t_rendering_layer *layer);
 
 void					init_scene(t_env *env);
 void					render_scene(t_env *env);
 void					scene_to_win(t_env *env);
 
 void					draw_weapon(t_env *e);
+
+void					rendering_layer_init(t_rendering_layer *layer,
+															char *file_name);
+void					rendering_layer_render(t_rendering_layer *layer);
+void					rendering_layer_put(t_pix *pix,
+													t_rendering_layer *layer);
 #endif

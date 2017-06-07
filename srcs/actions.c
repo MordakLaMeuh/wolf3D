@@ -15,8 +15,6 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-#include <stdio.h>
-
 int				move_player(t_env *e)
 {
 	int							trigger;
@@ -39,10 +37,12 @@ int				move_player(t_env *e)
 				e->player.angle += 2.f * M_PI;
 			else if (e->player.angle >= 2.f * M_PI)
 				e->player.angle -= 2.f * M_PI;
-			new.x = e->player.location.x + ((cos(e->player.angle)) * types[i].l);
-			new.y = e->player.location.y + ((sin(e->player.angle)) * types[i].l);
-			if (e->map_tiles[(int)floor(new.y)][(int)floor(new.x)].value == 0)
+			new.x = e->player.location.x + ((cosf(e->player.angle)) * types[i].l);
+			new.y = e->player.location.y + ((sinf(e->player.angle)) * types[i].l);
+			if (e->map_tiles[(int)floorf(new.y)][(int)floorf(new.x)].value == 0)
 				e->player.location = new;
+			//move_sky(e, types[i].q);
+			//modify_minimap(e);
 			trigger = TRUE;
 		}
 	return (trigger);

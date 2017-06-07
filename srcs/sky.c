@@ -15,13 +15,46 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-/*
-** Vue size : ((WIDTH * HEIGHT) * VIEW_ANGLE) / 360
-** Example : (1080*1920*66)/360 = 380160
-** Total size : (1080 * 1920 * 360) / 66 = 11310545
-** Total HEIGHT = 1080
-** Total WIDTH = (1920 * 360) / 66 = 10472
-*/
+static inline unsigned char	interp(unsigned char b, unsigned char f,
+									float ratio)
+{
+	unsigned char	result;
+
+	result = (unsigned char)((1.f - ratio) * b + ratio * f);
+	return (result);
+}
+
+static inline t_pix			interp_pix(t_pix b_pix, t_pix f_pix, float ratio)
+{
+	t_pix	new_pix;
+
+	new_pix.c.a = interp(b_pix.c.a, f_pix.c.a, ratio);
+//	new_pix.c.a = 0;
+
+	new_pix.c.b = interp(b_pix.c.b, f_pix.c.b, ratio);
+	new_pix.c.g = interp(b_pix.c.g, f_pix.c.g, ratio);
+	new_pix.c.r = interp(b_pix.c.r, f_pix.c.r, ratio);
+	return (new_pix);
+}
+
+static inline t_pix				get_pix(t_bmp *src, t_coord_f c_src)
+{
+	t_pix		pix;
+	t_coord_i	c_src_i;
+
+	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
+	pix = interp_pix(
+			interp_pix(
+				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x)],
+				src->pix[(int)(src->dim.x * c_src_i.y + c_src_i.x + 1)],
+				c_src.x - c_src_i.x),
+			interp_pix(
+				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x)],
+				src->pix[(int)(src->dim.x * (c_src_i.y + 1) + c_src_i.x + 1)],
+				c_src.x - c_src_i.x),
+			c_src.y - c_src_i.y);
+	return (pix);
+}
 
 static void		copy_img_bis(t_bmp *dst, t_bmp *src, int new_dim_x)
 {
@@ -95,72 +128,67 @@ void			render_sky(t_env *e, float angle)
 	e->sky->pos = (int)((e->sky->ratio * WIDTH) * (angle / (2.f * M_PI)));
 	j = 0;
 	i = e->sky->pos;
-	while (j < SCREENSIZE)
+	while (j < (SCREENSIZE >> 1))
 	{
-		e->scene[j++] = e->sky->data->pix[i++];
+		e->scene.scene[j++] = e->sky->data->pix[i++];
 		if (j % WIDTH == 0)
 			i += e->sky->ratio * WIDTH;
 	}
 }
 
 /*
-void			init_sky(t_env *env, char *file_name)
+#include <math.h>
+#include <stdlib.h>
+#include "wolf3d.h"
+
+void				init_sky(t_env *env, char *file_name)
 {
-	env->sky = load_bitmap((char*[]){file_name}, 1);
-	if (!env->sky)
-		exit(EXIT_FAILURE);
+	rendering_layer_init(&(env->scene.sky), file_name);
 }
 
-void			render_sky(t_env *env, t_coord_i c, t_coord_f angle)
+static t_coord_f	calc_tex_coord(t_coord_f angle)
 {
 	t_coord_f	c_sky;
-	t_pix		pix;
 
-	c_sky.x = angle.x * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.x / 2.f;
-	c_sky.y = -angle.y * env->sky->dim.x / (2.f * M_PI) + env->sky->dim.y / 2.f;
+	c_sky.x = angle.x / (2.f * M_PI);
+	c_sky.y = angle.y / M_PI;
 	if (c_sky.x < 0.f)
-		c_sky.x += env->sky->dim.x;
-	if (c_sky.x >= env->sky->dim.x)
-		c_sky.x -= env->sky->dim.x;
-	if (c_sky.y < 0.f)
-		c_sky.y += env->sky->dim.y;
-	if (c_sky.y >= env->sky->dim.y)
-		c_sky.y -= env->sky->dim.y;
-	pix = get_pix(env->sky, c_sky);
-	env->scene[c.y * WIDTH + c.x] = pix;
-}
-*/
-
-/*
-static inline int	get_color(int b_color, int f_color, float ratio)
-{
-	int		color;
-	float	r_diff;
-	float	g_diff;
-	float	b_diff;
-
-	r_diff = (f_color >> 16) - (b_color >> 16);
-	g_diff = ((f_color >> 8) & 0xFF) - ((b_color >> 8) & 0xFF);
-	b_diff = (f_color & 0xFF) - (b_color & 0xFF);
-	color = ((((b_color >> 16) + ((int)(ratio * r_diff))) << 16) |
-			((((b_color >> 8) & 0xFF) + (int)(ratio * g_diff)) << 8) |
-			((b_color & 0xFF) + (int)(ratio * b_diff)));
-	return (color);
+		c_sky.x += 1.f;
+	if (c_sky.x >= 1.f)
+		c_sky.x -= 1.f;
+	return (c_sky);
 }
 
-int					get_clrs(t_bmp *src, t_coord_f c_src)
+static inline float	angle_on_screen(int x)
 {
-	int color;
+	return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
+}
 
-	color = get_color(
-				get_color(
-		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x)].i,
-		src->pix[(int)(src->dim.x * (int)c_src.y + (int)c_src.x + 1)].i,
-		c_src.x - (int)c_src.x),
-				get_color(
-		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x)].i,
-		src->pix[(int)(src->dim.x * ((int)c_src.y + 1) + (int)c_src.x + 1)].i,
-		c_src.x - (int)c_src.x), c_src.y - (int)c_src.y);
-	return (color);
+void				render_sky(t_env *env, t_rendering_layer *layer)
+{
+	t_coord_i	c;
+	t_coord_f	angle;
+
+	layer->n = 0;
+	c.y = -1;
+	while (++c.y < HEIGHT)
+	{
+		angle.y = angle_on_screen(HEIGHT / 2 - c.y);
+		c.x = -1;
+		while (++c.x < WIDTH)
+		{
+			if (angle.y >= env->scene.columns[c.x].wall_max_angle)
+			{
+				angle.x = env->scene.columns[c.x].angle_x;
+				layer->ij[layer->n] = c;
+				layer->uv[layer->n] = calc_tex_coord(angle);
+				layer->uv[layer->n].x *= layer->bmp->dim.x - 1;
+				layer->uv[layer->n].y *= layer->bmp->dim.y - 1;
+				layer->dist[layer->n] = 0.f;
+				layer->n++;
+			}
+		}
+	}
+	rendering_layer_render(layer);
 }
 */
