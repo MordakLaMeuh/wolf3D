@@ -26,6 +26,27 @@ static	float	angle_on_screen(int x)
 	return (atan((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atan(1.f)));
 }
 
+#include <stdio.h>
+
+
+/*
+void	render_scene(t_env *env)
+{
+	t_coord_f	d;
+	int 		i;
+
+	render_sky(env, env->player.angle);
+	printf("location_x = %f, location_y = %f\n", env->player.location.x, env->player.location.y);
+	i = 0;
+	while (i < WIDTH)
+	{
+		i++;
+	}
+	(void)i;
+	(void)d;
+}
+*/
+
 void	render_scene(t_env *env)
 {
 	t_coord_i	c;
@@ -49,19 +70,13 @@ void	render_scene(t_env *env)
 		while (++c.y < HEIGHT)
 		{
 			angle.y = angle_on_screen((HEIGHT / 2) - c.y);
-			if (angle.y >= max_angle)
-			{
-				// pris en charge ailleurs XD
-			}
-			else if (angle.y >= min_angle)
+			if (angle.y >= min_angle)
 			{
 				c_tex.y = (env->player.height + h_dist * tan(angle.y)) / env->wall_height;
 				render_wall(env, c, h_dist, c_tex);
 			}
 			else
-			{
 				render_floor(env, c, angle);
-			}
 		}
 	}
 }
