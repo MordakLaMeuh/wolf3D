@@ -36,6 +36,7 @@ void	render_scene(t_env *env)
 	float		max_angle;
 	t_coord_f	c_tex;
 
+	render_sky(env, env->player.angle);
 	c.x = -1;
 	while (++c.x < WIDTH)
 	{
@@ -49,14 +50,18 @@ void	render_scene(t_env *env)
 		{
 			angle.y = angle_on_screen((HEIGHT / 2) - c.y);
 			if (angle.y >= max_angle)
-				render_sky(env, c, angle);
+			{
+				// pris en charge ailleurs XD
+			}
 			else if (angle.y >= min_angle)
 			{
 				c_tex.y = (env->player.height + h_dist * tan(angle.y)) / env->wall_height;
 				render_wall(env, c, h_dist, c_tex);
 			}
 			else
+			{
 				render_floor(env, c, angle);
+			}
 		}
 	}
 }

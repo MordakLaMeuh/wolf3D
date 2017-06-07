@@ -27,19 +27,56 @@ static int		err_msg(char *msg)
 	return (EXIT_FAILURE);
 }
 
+#include <sys/time.h>
+
+static void		eval_fps(t_env *e)
+{
+	static int 				count = 0;
+	static struct timeval 	start;
+	struct timeval			stop;
+	static char 			*s = NULL;
+
+	if (count == 0)
+	{
+		gettimeofday(&start, NULL);
+		count++;
+	}
+	else
+	{
+		gettimeofday(&stop, NULL);
+		if ((stop.tv_sec - start.tv_sec) == 0)
+			count++;
+		else
+		{
+			if (s)
+				free(s);
+			s = ft_itoa(count);
+			count = 0;
+		}
+	}
+	mlx_string_put(e->mlx, e->win, 20, 20, 0x00FFFFFF, "FPS:");
+	if (s)
+		mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, s);
+}
+
+
 static int		move(t_env *e)
 {
 	static int		redraw = TRUE;
 
 	redraw |= common_action(e);
 	redraw |= move_player(e);
-	if (!redraw)
-		return (0);
+
+//	if (!redraw)
+//		return (0);
+
 	render_scene(e);
 	draw_minimap(e);
-	draw_weapon(e);
+	//draw_weapon(e);
 	scene_to_win(e);
+
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
+	eval_fps(e);
 	redraw = FALSE;
 	return (0);
 }
@@ -68,7 +105,7 @@ int				main(int argc, char **argv)
 	if (DEBUG_MAP)
 		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
-	env.player.angle = -M_PI / 2;
+	env.player.angle = 3 * M_PI / 2;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	create_mlx_image(&env);

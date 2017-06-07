@@ -20,9 +20,13 @@
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
 
-# define NOSTALGIA_FACTOR	2
+# define NOSTALGIA_FACTOR	1
 # define WIDTH				(1920 / NOSTALGIA_FACTOR)
 # define HEIGHT				(1080 / NOSTALGIA_FACTOR)
+
+//# define WIDTH				(1024 / NOSTALGIA_FACTOR)
+//# define HEIGHT				(768 / NOSTALGIA_FACTOR)
+
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define VIEW_ANGLE			(60.f * M_PI / 180.f)
@@ -142,6 +146,13 @@ typedef struct			s_tile
 	int	value;
 }						t_tile;
 
+typedef struct			s_sky
+{
+	int					pos;
+	float				ratio;
+	t_bmp				*data;
+}						t_sky;
+
 struct					s_env
 {
 	void				*mlx;
@@ -158,7 +169,8 @@ struct					s_env
 	float				wall_height;
 	t_tile				**map_tiles;
 	t_pix				*scene;
-	t_bmp				*sky;
+//	t_bmp				*sky;
+	t_sky				*sky;
 	t_bmp				*floor;
 	t_bmp				*wall;
 };
@@ -206,7 +218,7 @@ void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 void					init_floor(t_env *e, char *file_name);
 void					render_floor(t_env *env, t_coord_i c, t_coord_f angle);
 void					init_sky(t_env *e, char *file_name);
-void					render_sky(t_env *env, t_coord_i c, t_coord_f angle);
+void					render_sky(t_env *env, float angle);
 void					init_walls(t_env *e, char *file_name);
 void					find_wall(t_env *env, float angle_x,
 											t_coord_f *intersect, float *x_tex);

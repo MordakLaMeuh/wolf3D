@@ -32,7 +32,10 @@ void			render_floor(t_env *env, t_coord_i c, t_coord_f angle)
 	c_floor.y = (env->player.location.y + h_dist * sin(angle.x)) / 4.;
 	c_floor.x = (c_floor.x - floor(c_floor.x)) * (env->floor->dim.x - 1);
 	c_floor.y = (c_floor.y - floor(c_floor.y)) * (env->floor->dim.y - 1);
+
 	pix = get_pix(env->floor, c_floor);
+//	pix.i = 0x00ff00;
+
 	if (h_dist > 5.)
 	{
 		pix.c.r /= (h_dist / 5.);
@@ -40,4 +43,5 @@ void			render_floor(t_env *env, t_coord_i c, t_coord_f angle)
 		pix.c.b /= (h_dist / 5.);
 	}
 	env->scene[c.y * WIDTH + c.x] = pix;
+//	env->img_string[c.y * WIDTH + c.x] = pix;
 }

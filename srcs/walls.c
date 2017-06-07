@@ -118,7 +118,10 @@ void				render_wall(t_env *env, t_coord_i c, float h_dist, t_coord_f c_tex)
 
 	c_tex.x *= (env->wall->dim.x - 2);
 	c_tex.y *= (env->wall->dim.y - 2);
+
 	pix = get_pix(env->wall, c_tex);
+	//pix.i = 0xff;
+
 	if (h_dist > 5.)
 	{
 		pix.c.r /= (h_dist / 5.);
