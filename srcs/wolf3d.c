@@ -51,7 +51,7 @@ static void		init_all(t_env *e)
 	init_sky(e, "images/astro.bmp");
 	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
-								"images/panic.bmp", "images/brique.bmp"}, 4);
+								"images/panic.bmp", "images/brique2.bmp"}, 4);
 	init_scene(e);
 	init_minimap(e);
 	i = 0;
