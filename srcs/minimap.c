@@ -33,19 +33,62 @@ void		draw_minimap(t_env *e)
 	t_coord_i		l1;
 	t_coord_i		l2;
 	t_pix			pix;
-	t_coord_f		offset;
+//	t_coord_f		offset;
 
-	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH;
-	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH;
-	l2.x = (X_MAP_CENTER) + MAP_SEMI_LENGTH;
-	l2.y = (Y_MAP_CENTER) + MAP_SEMI_LENGTH;
+	l1.x = MAP_ORIGIN_X;
+	l1.y = MAP_ORIGIN_Y;
+	l2.x = MAP_ORIGIN_X + MAP_GLOBAL_SIZE;
+	l2.y = MAP_ORIGIN_Y + MAP_GLOBAL_SIZE;
 	pix.i = 0x00ff00;
 	draw_box(l1, l2, pix, e);
+
+	t_line line;
+	float tmp;
+	int i;
+	i = 0;
+	line.b_pix.i = 0xff;
+	line.f_pix.i = 0xff;
+	line.p1.x = MAP_ORIGIN_X;
+	line.p1.y = MAP_ORIGIN_Y;
+	line.p2.x = MAP_ORIGIN_X;
+	line.p2.y = MAP_ORIGIN_Y + MAP_GLOBAL_SIZE;
+	tmp = MAP_ORIGIN_X;
+	while (i < MAP_TILE_N)
+	{
+		tmp += (float)MAP_TILE_SIZE;
+		line.p1.x = tmp;
+		line.p2.x = tmp;
+		draw_line(e, &line);
+		i++;
+	}
+
+	i = 0;
+	line.p1.x = MAP_ORIGIN_X;
+	line.p1.y = MAP_ORIGIN_Y;
+	line.p2.x = MAP_ORIGIN_X + MAP_GLOBAL_SIZE;
+	line.p2.y = MAP_ORIGIN_Y;
+	tmp = MAP_ORIGIN_Y;
+	while (i < MAP_TILE_N)
+	{
+		tmp += (float)MAP_TILE_SIZE;
+		line.p1.y = tmp;
+		line.p2.y = tmp;
+		draw_line(e, &line);
+		i++;
+	}
+
+	l1.x = MAP_ORIGIN_X + (MAP_GLOBAL_SIZE / 2);
+	l1.y = MAP_ORIGIN_Y + (MAP_GLOBAL_SIZE / 2);
+
+	draw_arrow(e, l1, e->player.angle, WIDTH / 1980.f);
+
+	
+
+/*
 	offset.x = (e->player.location.x / e->map.size.x);
 	offset.y = (e->player.location.y / e->map.size.y);
-	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH + 20 +
-										(int)(offset.x * (MAP_LENGTH - 40));
-	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH + 20 +
-										(int)(offset.y * (MAP_LENGTH - 40));
+	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH + 20 + (int)(offset.x * MAP_LENGTH) - 40;
+	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH + 20 + (int)(offset.y * MAP_LENGTH) - 40;
 	draw_arrow(e, l1, e->player.angle, WIDTH / 1980.f);
+*/
 }

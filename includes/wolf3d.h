@@ -29,12 +29,20 @@
 # define VIEW_ANGLE			(2.f * M_PI / RATIO)
 # define SHADOW_LIMIT		7
 
+/*
 # define MAP_LENGTH				(WIDTH / 5)
 # define MAP_SEMI_LENGTH		(MAP_LENGTH / 2)
-# define MAP_MARGIN_X			10
-# define MAP_MARGIN_Y			10
+# define MAP_MARGIN_X			0
+# define MAP_MARGIN_Y			0
 # define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - MAP_MARGIN_X)
 # define Y_MAP_CENTER 			(MAP_SEMI_LENGTH + MAP_MARGIN_Y)
+*/
+
+# define MAP_ORIGIN_X			((4.f / 5 * WIDTH) - 1)
+# define MAP_ORIGIN_Y			0
+# define MAP_TILE_N				19
+# define MAP_GLOBAL_SIZE		(1.f / 5 * WIDTH)
+# define MAP_TILE_SIZE			(MAP_GLOBAL_SIZE / MAP_TILE_N)
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
