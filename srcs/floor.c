@@ -14,9 +14,9 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void				init_floor(t_env *env, char *file_name)
+void				init_floor(t_env *env, char **textures, int n)
 {
-	rendering_layer_init(&(env->scene.floor), file_name);
+	rendering_layer_init(&(env->scene.floor), textures, n);
 }
 
 static t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,

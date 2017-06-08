@@ -27,32 +27,33 @@ static int		err_msg(char *msg)
 	return (EXIT_FAILURE);
 }
 
+/*
+** draw_weapon(e);
+*/
+
 static int		move(t_env *e)
 {
-	static int		redraw = TRUE;
-
-	redraw |= common_action(e);
-	redraw |= move_player(e);
-//	if (!redraw)
-//		return (0);
+	common_action(e);
+	move_player(e);
 	render_scene(e);
-	draw_minimap(e);
-//	draw_weapon(e);
+	if (e->display_minimap)
+		draw_minimap(e);
 	scene_to_win(e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	eval_fps(e);
-	redraw = FALSE;
 	return (0);
 }
 
 static void		init_all(t_env *e)
 {
-	init_floor(e, "images/parquet.bmp");
+	int i;
+
 	init_sky(e, "images/astro.bmp");
-	init_walls(e, "images/mur.bmp");
+	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
+	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
+														"images/panic.bmp"}, 3);
 	init_scene(e);
 	init_minimap(e);
-	int i;
 	i = 0;
 	while (i < HEIGHT)
 	{
@@ -82,6 +83,7 @@ int				main(int argc, char **argv)
 	env.player.angle = 3 * M_PI / 2;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
+	env.display_minimap = TRUE;
 	create_mlx_image(&env);
 	init_all(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);

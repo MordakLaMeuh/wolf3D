@@ -14,14 +14,16 @@
 #include "wolf3d.h"
 
 void				rendering_layer_init(t_rendering_layer *layer,
-																char *file_name)
+													char **file_names, int n)
 {
 	layer->n = 0;
-	if (!(layer->bmp = load_bitmap((char*[]){file_name, "images/pig.bmp", "images/panic.bmp"}, 3)))
+	if (!(layer->bmp = load_bitmap(file_names, n)))
 		exit(EXIT_FAILURE);
-	if (!(layer->ij = (t_coord_i*)ft_memalloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
+	if (!(layer->ij = (t_coord_i*)
+							ft_memalloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
-	if (!(layer->uv = (t_coord_f*)ft_memalloc(sizeof(t_coord_f) * WIDTH * HEIGHT)))
+	if (!(layer->uv = (t_coord_f*)
+							ft_memalloc(sizeof(t_coord_f) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
 	if (!(layer->dist = (float*)ft_memalloc(sizeof(float) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
@@ -73,21 +75,14 @@ void				rendering_layer_render(t_rendering_layer *layer)
 	result = layer->result;
 	i = -1;
 	while (++i < layer->n)
-	{
-		if (layer->type[i] == 1 || layer->type[i] == 0)
-			result[i] = get_pix(layer->bmp, layer->uv[i]);
-		else if (layer->type[i] == 2)
-			result[i] = get_pix(&layer->bmp[1], layer->uv[i]);
-		else
-			result[i] = get_pix(&layer->bmp[2], layer->uv[i]);
-	}
+		result[i] = get_pix(&layer->bmp[layer->type[i]], layer->uv[i]);
 	i = -1;
 	while (++i < layer->n)
 	{
 		dist = layer->dist[i];
-		if (dist > 5.f)
+		if (dist > SHADOW_LIMIT)
 		{
-			fact = 5.f / dist;
+			fact = SHADOW_LIMIT / dist;
 			result[i].c.b *= fact;
 			result[i].c.g *= fact;
 			result[i].c.r *= fact;

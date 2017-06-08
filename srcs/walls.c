@@ -14,9 +14,9 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void			init_walls(t_env *env, char *file_name)
+void			init_walls(t_env *env, char **textures, int n)
 {
-	rendering_layer_init(&(env->scene.wall), file_name);
+	rendering_layer_init(&(env->scene.wall), textures, n);
 }
 
 /*
@@ -104,7 +104,7 @@ int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 		if (env->map_tiles[c_i.y][c_i.x].value > 0)
 		{
 			*x_tex = square_intersection(env->player.location, c, intersect);
-			return (env->map_tiles[c_i.y][c_i.x].value);
+			return (env->map_tiles[c_i.y][c_i.x].value - 1);
 		}
 		d++;
 	}
@@ -128,7 +128,7 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 				angle_y > cl->wall_min_angle && angle_y < cl->wall_max_angle)
 			{
 				wall_y_tex = (env->player.height + cl->wall_h_dist
-											* env->atan_list[c.y]) / env->wall_height;
+									* env->atan_list[c.y]) / env->wall_height;
 				layer->ij[layer->n] = c;
 				layer->uv[layer->n] = (t_coord_f){cl->wall_x_tex
 			* (layer->bmp->dim.x - 1), wall_y_tex * (layer->bmp->dim.y - 1)};

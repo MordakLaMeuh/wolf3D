@@ -20,12 +20,9 @@ void				init_scene(t_env *env)
 		exit(EXIT_FAILURE);
 	if (NOSTALGIA_FACTOR == 1)
 		env->scene.scene = env->img_string;
-	else
-	{
-		if (!(env->scene.scene = (t_pix*)malloc(sizeof(t_pix)
-													* WIDTH * HEIGHT)))
-			exit(EXIT_FAILURE);
-	}
+	else if (!(env->scene.scene = (t_pix*)malloc(sizeof(t_pix)
+															* WIDTH * HEIGHT)))
+		exit(EXIT_FAILURE);
 }
 
 static inline float	angle_on_screen(int x)
@@ -35,14 +32,9 @@ static inline float	angle_on_screen(int x)
 
 static void			merge_layers(t_env *env)
 {
-	int		i;
 	t_pix	*scene;
 
 	scene = env->scene.scene;
-	i = -1;
-	while (++i < WIDTH * HEIGHT)
-		scene[i].i = 0;
-
 	render_sky(env, env->player.angle);
 	rendering_layer_put(scene, &(env->scene.wall));
 	rendering_layer_put(scene, &(env->scene.floor));

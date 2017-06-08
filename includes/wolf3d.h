@@ -26,6 +26,7 @@
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define VIEW_ANGLE			(45.f * M_PI / 180.f)
+# define SHADOW_LIMIT		7
 
 # define MAP_SEMI_LENGTH		(WIDTH / 10)
 # define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - 10)
@@ -187,6 +188,7 @@ struct					s_env
 	int					bpp;
 	int					endian;
 	int					s_l;
+	int					display_minimap;
 	t_player			player;
 	t_map				map;
 	t_weapon			weapon;
@@ -242,13 +244,13 @@ void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
-void					init_floor(t_env *e, char *file_name);
+void					init_floor(t_env *e, char **textures, int n);
 void					render_floor(t_env *env, t_rendering_layer *layer);
 void					init_sky(t_env *e, char *file_name);
 
 void					render_sky(t_env *env, float angle);
 
-void					init_walls(t_env *e, char *file_name);
+void					init_walls(t_env *e, char **textures, int n);
 int						find_wall(t_env *env, float angle_x,
 											t_coord_f *intersect, float *x_tex);
 void					render_wall(t_env *env, t_rendering_layer *layer);
@@ -260,7 +262,8 @@ void					scene_to_win(t_env *env);
 void					draw_weapon(t_env *e);
 
 void					rendering_layer_init(t_rendering_layer *layer,
-															char *file_name);
+													char **file_names, int n);
+
 void					rendering_layer_render(t_rendering_layer *layer);
 void					rendering_layer_put(t_pix *pix,
 													t_rendering_layer *layer);
