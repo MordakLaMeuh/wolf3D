@@ -58,7 +58,7 @@ static void		init_all(t_env *e)
 	{
 		e->angle_y[i] = (atanf((float)((HEIGHT / 2) - i) / (WIDTH / 2))
 										* (VIEW_ANGLE / 2.f / atanf(1.f)));
-		e->dist_floor[i] = e->player.height / tanf(e->angle_y[i]);
+		e->dist_floor[i] = e->player.height / tanf(-e->angle_y[i]);
 		e->atan_list[i] = tanf(e->angle_y[i]);
 		i++;
 	}
