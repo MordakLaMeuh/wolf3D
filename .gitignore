@@ -1,0 +1,7 @@
+/wolf3d
+/*.o
+/objs/*.o
+/minilibx_sierra/libmlx.a
+/minilibx_sierra/*.o
+/libft/libft.a
+/libft/objs/*.o
