@@ -33,12 +33,17 @@ static int		err_msg(char *msg)
 
 static int		move(t_env *e)
 {
+	t_pix pix;
+
 	common_action(e);
 	move_player(e);
 	render_scene(e);
 	if (e->display_minimap)
 		draw_minimap(e);
 	scene_to_win(e);
+	pix.i = 0xff0000;
+	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
+	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	eval_fps(e);
 	return (0);
@@ -47,6 +52,7 @@ static int		move(t_env *e)
 static inline float	angle_on_screen(int x)
 {
 	float angle;
+
 	angle = atanf((float)x / (WIDTH / 2) * tanf((float)VIEW_ANGLE / 2.f));
 	return (angle);
 }
@@ -93,7 +99,7 @@ int				main(int argc, char **argv)
 	if (DEBUG_MAP)
 		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
-	env.player.angle = 3 * M_PI / 2;
+	env.player.angle = 6.f / 4 * M_PI;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	env.display_minimap = TRUE;
