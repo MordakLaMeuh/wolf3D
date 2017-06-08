@@ -17,15 +17,17 @@ void				rendering_layer_init(t_rendering_layer *layer,
 																char *file_name)
 {
 	layer->n = 0;
-	if (!(layer->bmp = load_bitmap((char*[]){file_name}, 1)))
+	if (!(layer->bmp = load_bitmap((char*[]){file_name, "images/cochon2.bmp", "images/panic.bmp"}, 3)))
 		exit(EXIT_FAILURE);
-	if (!(layer->ij = (t_coord_i*)malloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
+	if (!(layer->ij = (t_coord_i*)ft_memalloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
-	if (!(layer->uv = (t_coord_f*)malloc(sizeof(t_coord_f) * WIDTH * HEIGHT)))
+	if (!(layer->uv = (t_coord_f*)ft_memalloc(sizeof(t_coord_f) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
-	if (!(layer->dist = (float*)malloc(sizeof(float) * WIDTH * HEIGHT)))
+	if (!(layer->dist = (float*)ft_memalloc(sizeof(float) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
-	if (!(layer->result = (t_pix*)malloc(sizeof(t_pix) * WIDTH * HEIGHT)))
+	if (!(layer->type = (int*)ft_memalloc(sizeof(int) * WIDTH * HEIGHT)))
+		exit(EXIT_FAILURE);
+	if (!(layer->result = (t_pix*)ft_memalloc(sizeof(t_pix) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);
 }
 
@@ -71,7 +73,14 @@ void				rendering_layer_render(t_rendering_layer *layer)
 	result = layer->result;
 	i = -1;
 	while (++i < layer->n)
-		result[i] = get_pix(layer->bmp, layer->uv[i]);
+	{
+		if (layer->type[i] == 1 || layer->type[i] == 0)
+			result[i] = get_pix(layer->bmp, layer->uv[i]);
+		else if (layer->type[i] == 2)
+			result[i] = get_pix(&layer->bmp[1], layer->uv[i]);
+		else
+			result[i] = get_pix(&layer->bmp[2], layer->uv[i]);
+	}
 	i = -1;
 	while (++i < layer->n)
 	{

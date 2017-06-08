@@ -144,17 +144,19 @@ typedef struct			s_tile
 
 typedef struct			s_column
 {
-	float angle_x;
-	float wall_h_dist;
-	float wall_x_tex;
-	float wall_min_angle;
-	float wall_max_angle;
+	float	angle_x;
+	float	wall_h_dist;
+	float	wall_x_tex;
+	float	wall_min_angle;
+	float	wall_max_angle;
+	int		type;
 }						t_column;
 
 typedef struct			s_rendering_layer
 {
 	t_bmp		*bmp;
 	int			n;
+	int			*type;
 	t_coord_i	*ij;
 	t_coord_f	*uv;
 	float		*dist;
@@ -193,6 +195,9 @@ struct					s_env
 	char				keyb[256];
 	float				wall_height;
 	t_tile				**map_tiles;
+	float				angle_y[HEIGHT];
+	float				dist_floor[HEIGHT];
+	float				atan_list[HEIGHT];
 	t_scene				scene;
 };
 
@@ -244,7 +249,7 @@ void					init_sky(t_env *e, char *file_name);
 void					render_sky(t_env *env, float angle);
 
 void					init_walls(t_env *e, char *file_name);
-void					find_wall(t_env *env, float angle_x,
+int						find_wall(t_env *env, float angle_x,
 											t_coord_f *intersect, float *x_tex);
 void					render_wall(t_env *env, t_rendering_layer *layer);
 

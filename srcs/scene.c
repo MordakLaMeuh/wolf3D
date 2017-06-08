@@ -35,9 +35,14 @@ static inline float	angle_on_screen(int x)
 
 static void			merge_layers(t_env *env)
 {
+	int		i;
 	t_pix	*scene;
 
 	scene = env->scene.scene;
+	i = -1;
+	while (++i < WIDTH * HEIGHT)
+		scene[i].i = 0;
+
 	render_sky(env, env->player.angle);
 	rendering_layer_put(scene, &(env->scene.wall));
 	rendering_layer_put(scene, &(env->scene.floor));
@@ -54,7 +59,7 @@ void				render_scene(t_env *env)
 	{
 		c = &(env->scene.columns[x]);
 		c->angle_x = angle_on_screen(x - (WIDTH / 2)) + env->player.angle;
-		find_wall(env, c->angle_x, &c_intersect, &(c->wall_x_tex));
+		c->type = find_wall(env, c->angle_x, &c_intersect, &(c->wall_x_tex));
 		c->wall_h_dist = dist(env->player.location, c_intersect);
 		c->wall_min_angle = atanf(-env->player.height / c->wall_h_dist);
 		c->wall_max_angle = atanf((env->wall_height - env->player.height)

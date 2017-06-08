@@ -52,6 +52,16 @@ static void		init_all(t_env *e)
 	init_walls(e, "images/mur.bmp");
 	init_scene(e);
 	init_minimap(e);
+	int i;
+	i = 0;
+	while (i < HEIGHT)
+	{
+		e->angle_y[i] = (atanf((float)((HEIGHT / 2) - i) / (WIDTH / 2))
+										* (VIEW_ANGLE / 2.f / atanf(1.f)));
+		e->dist_floor[i] = e->player.height / tanf(e->angle_y[i]);
+		e->atan_list[i] = tanf(e->angle_y[i]);
+		i++;
+	}
 }
 
 int				main(int argc, char **argv)
@@ -69,7 +79,7 @@ int				main(int argc, char **argv)
 	if (DEBUG_MAP)
 		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
-	env.player.angle = -M_PI / 2;
+	env.player.angle = 3 * M_PI / 2;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	create_mlx_image(&env);

@@ -86,7 +86,7 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 	return (1. - (intersection->x - corners[3].x));
 }
 
-void			find_wall(t_env *env, float angle_x, t_coord_f *intersect,
+int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 																float *x_tex)
 {
 	int			d;
@@ -104,7 +104,7 @@ void			find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 		if (env->map_tiles[c_i.y][c_i.x].value > 0)
 		{
 			*x_tex = square_intersection(env->player.location, c, intersect);
-			break ;
+			return (env->map_tiles[c_i.y][c_i.x].value);
 		}
 		d++;
 	}
@@ -121,18 +121,18 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 	c.y = -1;
 	while (++c.y < HEIGHT)
 	{
-		angle_y = (atanf((float)((HEIGHT / 2) - c.y) / (WIDTH / 2))
-					* (VIEW_ANGLE / 2.f / atanf(1.f)));
+		angle_y = env->angle_y[c.y];
 		c.x = -1;
 		while (++c.x < WIDTH)
 			if ((cl = &(env->scene.columns[c.x])) &&
 				angle_y > cl->wall_min_angle && angle_y < cl->wall_max_angle)
 			{
 				wall_y_tex = (env->player.height + cl->wall_h_dist
-											* tanf(angle_y)) / env->wall_height;
+											* env->atan_list[c.y]) / env->wall_height;
 				layer->ij[layer->n] = c;
 				layer->uv[layer->n] = (t_coord_f){cl->wall_x_tex
 			* (layer->bmp->dim.x - 1), wall_y_tex * (layer->bmp->dim.y - 1)};
+				layer->type[layer->n] = cl->type;
 				layer->dist[layer->n++] = cl->wall_h_dist;
 			}
 	}

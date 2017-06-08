@@ -31,34 +31,26 @@ static t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
 	return (c_floor);
 }
 
-static inline float	angle_on_screen(int x)
-{
-	return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
-}
-
 void				render_floor(t_env *env, t_rendering_layer *layer)
 {
 	t_coord_i	c;
 	t_coord_f	angle;
-	float		dist;
 
 	layer->n = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
 	{
-		angle.y = angle_on_screen(HEIGHT / 2 - c.y);
+		angle.y = env->angle_y[c.y];
 		c.x = -1;
 		while (++c.x < WIDTH)
 		{
 			if (angle.y <= env->scene.columns[c.x].wall_min_angle)
 			{
 				angle.x = env->scene.columns[c.x].angle_x;
-				dist = env->player.height / tanf(-angle.y);
 				layer->ij[layer->n] = c;
 				layer->uv[layer->n] = calc_tex_coord(env->player.location,
-												angle.x, dist, layer->bmp->dim);
-				layer->dist[layer->n++] = dist;
-				layer->n++;
+								angle.x, env->dist_floor[c.y], layer->bmp->dim);
+				layer->dist[layer->n++] = env->dist_floor[c.y];
 			}
 		}
 	}
