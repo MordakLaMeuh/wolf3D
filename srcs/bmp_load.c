@@ -14,8 +14,9 @@
 #include <errno.h>
 #include "bmp.h"
 
-static void		paste_fileheader(t_bitmap *s)
+static void		paste_fileheader(t_bitmap *s, char *file_name)
 {
+	ft_printf("{green}Chargement de l'image %s:{eoc}\n", file_name);
 	ft_printf("%s %c%c\n", "signature", s->fileheader.signature[0],
 												s->fileheader.signature[1]);
 	ft_printf("%s: %i\n", "filesize", s->fileheader.filesize);
@@ -79,7 +80,7 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 		exit(EXIT_FAILURE);
 	res = fread(buff, stat->st_size, 1, file);
 	s = (t_bitmap *)buff;
-	paste_fileheader((t_bitmap *)buff);
+	paste_fileheader((t_bitmap *)buff, file_name);
 	*width = s->bitmapinfoheader.width;
 	*height = s->bitmapinfoheader.height;
 	if (!(*data = (int *)ft_memalloc(sizeof(int) * (*width) * (*height))))

@@ -28,9 +28,12 @@
 # define VIEW_ANGLE			(45.f * M_PI / 180.f)
 # define SHADOW_LIMIT		7
 
-# define MAP_SEMI_LENGTH		(WIDTH / 10)
-# define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - 10)
-# define Y_MAP_CENTER 			(MAP_SEMI_LENGTH + 10)
+# define MAP_LENGTH				(WIDTH / 5)
+# define MAP_SEMI_LENGTH		(MAP_LENGTH / 2)
+# define MAP_MARGIN_X			10
+# define MAP_MARGIN_Y			10
+# define X_MAP_CENTER			(WIDTH - MAP_SEMI_LENGTH - MAP_MARGIN_X)
+# define Y_MAP_CENTER 			(MAP_SEMI_LENGTH + MAP_MARGIN_Y)
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2

@@ -33,6 +33,7 @@ void		draw_minimap(t_env *e)
 	t_coord_i		l1;
 	t_coord_i		l2;
 	t_pix			pix;
+	t_coord_f		offset;
 
 	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH;
 	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH;
@@ -40,7 +41,11 @@ void		draw_minimap(t_env *e)
 	l2.y = (Y_MAP_CENTER) + MAP_SEMI_LENGTH;
 	pix.i = 0x00ff00;
 	draw_box(l1, l2, pix, e);
-	l1.x = (X_MAP_CENTER + e->player.location.x);
-	l1.y = (Y_MAP_CENTER + e->player.location.y);
+	offset.x = (e->player.location.x / e->map.size.x);
+	offset.y = (e->player.location.y / e->map.size.y);
+	l1.x = (X_MAP_CENTER) - MAP_SEMI_LENGTH + 20 +
+										(int)(offset.x * (MAP_LENGTH - 40));
+	l1.y = (Y_MAP_CENTER) - MAP_SEMI_LENGTH + 20 +
+										(int)(offset.y * (MAP_LENGTH - 40));
 	draw_arrow(e, l1, e->player.angle, WIDTH / 1980.f);
 }
