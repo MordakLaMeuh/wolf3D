@@ -17,7 +17,7 @@ void				rendering_layer_init(t_rendering_layer *layer,
 																char *file_name)
 {
 	layer->n = 0;
-	if (!(layer->bmp = load_bitmap((char*[]){file_name, "images/cochon2.bmp", "images/panic.bmp"}, 3)))
+	if (!(layer->bmp = load_bitmap((char*[]){file_name, "images/pig.bmp", "images/panic.bmp"}, 3)))
 		exit(EXIT_FAILURE);
 	if (!(layer->ij = (t_coord_i*)ft_memalloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
 		exit(EXIT_FAILURE);

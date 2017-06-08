@@ -48,7 +48,7 @@ static int		move(t_env *e)
 static void		init_all(t_env *e)
 {
 	init_floor(e, "images/parquet.bmp");
-	init_sky(e, "images/astro2.bmp");
+	init_sky(e, "images/astro.bmp");
 	init_walls(e, "images/mur.bmp");
 	init_scene(e);
 	init_minimap(e);
