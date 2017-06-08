@@ -25,7 +25,8 @@
 # define HEIGHT				(1080 / NOSTALGIA_FACTOR)
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
-# define VIEW_ANGLE			(45.f * M_PI / 180.f)
+# define RATIO				4
+# define VIEW_ANGLE			(2.f * M_PI / RATIO)
 # define SHADOW_LIMIT		7
 
 # define MAP_LENGTH				(WIDTH / 5)
@@ -148,7 +149,7 @@ typedef struct			s_tile
 
 typedef struct			s_column
 {
-	float	angle_x;
+//	float	angle_x;
 	float	wall_h_dist;
 	float	wall_x_tex;
 	float	wall_min_angle;
@@ -179,7 +180,7 @@ typedef struct			s_scene
 typedef struct			s_sky
 {
 	int					pos;
-	float				ratio;
+//	float				ratio;
 	t_bmp				*data;
 }						t_sky;
 
@@ -200,6 +201,7 @@ struct					s_env
 	char				keyb[256];
 	float				wall_height;
 	t_tile				**map_tiles;
+	float				angle_x[WIDTH];
 	float				angle_y[HEIGHT];
 	float				dist_floor[HEIGHT];
 	float				atan_list[HEIGHT];

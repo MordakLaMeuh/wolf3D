@@ -58,5 +58,5 @@ float						dist(t_coord_f a, t_coord_f b)
 
 	delta.x = b.x - a.x;
 	delta.y = b.y - a.y;
-	return (sqrt(delta.x * delta.x + delta.y * delta.y));
+	return (sqrtf(delta.x * delta.x + delta.y * delta.y));
 }

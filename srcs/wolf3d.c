@@ -44,6 +44,13 @@ static int		move(t_env *e)
 	return (0);
 }
 
+static inline float	angle_on_screen(int x)
+{
+	//return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
+	return (atanf((float)x / (WIDTH / 2) * tanf((float)VIEW_ANGLE / 2.f)));
+	//return (2. * M_PI * ((float)x / WIDTH) / RATIO);
+}
+
 static void		init_all(t_env *e)
 {
 	int i;
@@ -57,10 +64,15 @@ static void		init_all(t_env *e)
 	i = 0;
 	while (i < HEIGHT)
 	{
-		e->angle_y[i] = (atanf((float)((HEIGHT / 2) - i) / (WIDTH / 2))
-										* (VIEW_ANGLE / 2.f / atanf(1.f)));
+		e->angle_y[i] = angle_on_screen((HEIGHT / 2) - i);
 		e->dist_floor[i] = e->player.height / tanf(-e->angle_y[i]);
 		e->atan_list[i] = tanf(e->angle_y[i]);
+		i++;
+	}
+	i = 0;
+	while (i < WIDTH)
+	{
+		e->angle_x[i] = angle_on_screen(i - (WIDTH / 2));
 		i++;
 	}
 }
