@@ -46,9 +46,9 @@ static int		move(t_env *e)
 
 static inline float	angle_on_screen(int x)
 {
-	//return (atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
-	return (atanf((float)x / (WIDTH / 2) * tanf((float)VIEW_ANGLE / 2.f)));
-	//return (2. * M_PI * ((float)x / WIDTH) / RATIO);
+	float angle;
+	angle = atanf((float)x / (WIDTH / 2) * tanf((float)VIEW_ANGLE / 2.f));
+	return (angle);
 }
 
 static void		init_all(t_env *e)
@@ -73,6 +73,7 @@ static void		init_all(t_env *e)
 	while (i < WIDTH)
 	{
 		e->angle_x[i] = angle_on_screen(i - (WIDTH / 2));
+		e->cos_list[i] = cosf(e->angle_x[i]);
 		i++;
 	}
 }

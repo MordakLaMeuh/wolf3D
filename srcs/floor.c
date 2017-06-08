@@ -31,8 +31,6 @@ static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
 	return (c_floor);
 }
 
-//cosf(env->angle_x[c.x])
-
 void				render_floor(t_env *env, t_rendering_layer *layer)
 {
 	t_coord_i	c;
@@ -51,7 +49,7 @@ void				render_floor(t_env *env, t_rendering_layer *layer)
 				angle.x = env->angle_x[c.x] + env->player.angle;
 				layer->ij[layer->n] = c;
 				layer->uv[layer->n] = calc_tex_coord(env->player.location,
-								angle.x, env->dist_floor[c.y], layer->bmp->dim);
+								angle.x, env->dist_floor[c.y] / env->cos_list[c.x], layer->bmp->dim);
 				layer->dist[layer->n++] = env->dist_floor[c.y];
 			}
 		}

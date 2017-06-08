@@ -6,7 +6,7 @@
 /*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 11:48:10 by stoupin           #+#    #+#             */
-/*   Updated: 2017/06/06 11:48:12 by stoupin          ###   ########.fr       */
+/*   Updated: 2017/06/08 13:46:47 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void				render_scene(t_env *env)
 		angle_x = env->angle_x[x] + env->player.angle;
 		c->type = find_wall(env, angle_x, &c_intersect, &(c->wall_x_tex));
 
-		c->wall_h_dist = dist(env->player.location, c_intersect) * cosf(env->angle_x[x]);
+		c->wall_h_dist = dist(env->player.location, c_intersect) * env->cos_list[x];
 		c->wall_min_angle = atanf(-env->player.height / c->wall_h_dist);
 		c->wall_max_angle = atanf((env->wall_height - env->player.height)
 									/ c->wall_h_dist);

@@ -180,7 +180,6 @@ typedef struct			s_scene
 typedef struct			s_sky
 {
 	int					pos;
-//	float				ratio;
 	t_bmp				*data;
 }						t_sky;
 
@@ -205,6 +204,7 @@ struct					s_env
 	float				angle_y[HEIGHT];
 	float				dist_floor[HEIGHT];
 	float				atan_list[HEIGHT];
+	float				cos_list[WIDTH];
 	t_scene				scene;
 };
 
