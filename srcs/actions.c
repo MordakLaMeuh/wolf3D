@@ -15,15 +15,18 @@
 #include "wolf3d.h"
 #include "bmp.h"
 
-//float				search_wall(t_env *e, t_player *p, t_coord_f *normale,
-//																int direction)
-
 typedef struct	s_vector_2
 {
 	float		dx;
 	float		dy;
 	float		module;
 }				t_vector_2;
+
+typedef struct	s_wall_vector
+{
+	t_vector_2	v;
+	t_coord_f 	norm;
+}				t_wall_vector;
 
 t_vector_2		create_vector(float angle, float dist)
 {
@@ -35,8 +38,8 @@ t_vector_2		create_vector(float angle, float dist)
 	return (s);
 }
 
-t_vector_2		search_wall(t_env *e, t_player *p, t_coord_f *normale,
-																int direction)
+t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
+
 {
 	t_coord_f ray_pos;
 	t_coord_f ray_dir;
@@ -45,30 +48,29 @@ t_vector_2		search_wall(t_env *e, t_player *p, t_coord_f *normale,
 	t_coord_f delta_dist;
 	t_coord_f side_dist;
 
-	ray_pos = (t_coord_f){p->location.x, p->location.y};
+	t_wall_vector	w;
 
-	if (direction)
-		ray_dir = (t_coord_f){cosf(p->angle), sinf(p->angle)};
-	else
-		ray_dir = (t_coord_f){cosf(-p->angle), sinf(-p->angle)};
-
+	ray_pos = (t_coord_f){location.x, location.y};
+	ray_dir = (t_coord_f){cosf(angle), sinf(angle)};
 
 	map = (t_coord_i){(int)ray_pos.x, (int)ray_pos.y};
 	if (ray_dir.y == 0.)
 	{
 		step.x = (ray_dir.x > 0) ? 1 : -1;
-		while (e->map_tiles[map.y][map.x].value == 0)
+		while (tiles[map.y][map.x].value == 0)
 			map.x += step.x;
-		*normale = (t_coord_f){(ray_dir.x > 0) ? -1 : 1, 0};
-		return (create_vector(p->angle, fabs((float)map.x - ray_pos.x)));
+		w.norm = (t_coord_f){(ray_dir.x > 0) ? -1 : 1, 0};
+		w.v = create_vector(angle, fabs((float)map.x - ray_pos.x));
+		return (w);
 	}
 	if (ray_dir.x == 0.)
 	{
 		step.y = (ray_dir.y > 0) ? 1 : -1;
-		while (e->map_tiles[map.y][map.x].value == 0)
+		while (tiles[map.y][map.x].value == 0)
 			map.y += step.y;
-		*normale = (t_coord_f){0, (ray_dir.y > 0) ? -1 : 1};
-		return (create_vector(p->angle, fabs((float)map.y - ray_pos.y)));
+		w.norm = (t_coord_f){0, (ray_dir.y > 0) ? -1 : 1};
+		w.v = create_vector(angle, fabs((float)map.y - ray_pos.y));
+		return (w);
 	}
 
 	delta_dist.x = sqrt(1. + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
@@ -109,7 +111,7 @@ t_vector_2		search_wall(t_env *e, t_player *p, t_coord_f *normale,
 */
 	int side;
 
-	while (!e->map_tiles[map.y][map.x].value)
+	while (!(tiles[map.y][map.x].value))
 		if (side_dist.x < side_dist.y)
 		{
 			side_dist.x += delta_dist.x;
@@ -122,22 +124,22 @@ t_vector_2		search_wall(t_env *e, t_player *p, t_coord_f *normale,
 			map.y += step.y;
 			side = 1;
 		}
-	*normale = (side == 1) ? (t_coord_f){0, -step.y} : (t_coord_f){-step.x, 0};
+	w.norm = (side == 1) ? (t_coord_f){0, -step.y} : (t_coord_f){-step.x, 0};
 	if (side == 1)
-		return (create_vector(p->angle,
-				((float)map.y - ray_pos.y + (1. - step.y) / 2.) / ray_dir.y));
+		w.v = create_vector(angle,
+			((float)map.y - ray_pos.y + (1. - step.y) / 2.) / ray_dir.y);
 	else
-		return (create_vector(p->angle,
-				((float)map.x - ray_pos.x + (1. - step.x) / 2.) / ray_dir.x));
+		w.v = create_vector(angle,
+			((float)map.x - ray_pos.x + (1. - step.x) / 2.) / ray_dir.x);
+	return (w);
 }
 
 #include <stdio.h>
 
 static void		set_player_data(t_env *e, t_modify_coord type)
 {
-	t_coord_f	normale;
-	t_coord_f	new;
-	t_vector_2	v;
+	t_coord_f		new;
+	t_wall_vector	w;
 
 	e->player.angle += type.q * M_PI / 360;
 	if (e->player.angle < 0)
@@ -148,9 +150,8 @@ static void		set_player_data(t_env *e, t_modify_coord type)
 	new.x = (cosf(e->player.angle)) * type.l;
 	new.y = (sinf(e->player.angle)) * type.l;
 
-	v = search_wall(e, &e->player, &normale, TRUE);
-
-	printf("dist: %f, normale: [%f:%f], dx: %f, dy: %f\n", v.module, normale.x, normale.y, v.dx, v.dy);
+	w = get_wall_info(e->map_tiles, e->player.angle, e->player.location);
+	printf("dist: %f, normale: [%f:%f], dx: %f, dy: %f\n", w.v.module, w.norm.x, w.norm.y, w.v.dx, w.v.dy);
 
 	new.x += e->player.location.x;
 	new.y += e->player.location.y;
