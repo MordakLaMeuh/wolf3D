@@ -90,6 +90,33 @@ void				rendering_layer_render(t_rendering_layer *layer)
 	}
 }
 
+void				rendering_layer_render_sprite(t_rendering_layer *layer)
+{
+	int		i;
+	float	fact;
+	float	dist;
+	t_pix	*result;
+
+	result = layer->result;
+	i = -1;
+	while (++i < layer->n)
+		result[i] = get_pix(&layer->bmp[layer->type[i]], layer->uv[i]);
+	i = -1;
+	while (++i < layer->n)
+	{
+		dist = layer->dist[i];
+		if (result[i].i == 0xff00ff)
+			result[i].c.a = 0xff;
+		if (dist > SHADOW_LIMIT)
+		{
+			fact = SHADOW_LIMIT / dist;
+			result[i].c.b *= fact;
+			result[i].c.g *= fact;
+			result[i].c.r *= fact;
+		}
+	}
+}
+
 void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer)
 {
 	int			i;
@@ -102,6 +129,24 @@ void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer)
 	while (++i < layer->n)
 	{
 		pix[WIDTH * ij->y + ij->x] = *p;
+		ij++;
+		p++;
+	}
+}
+
+void				rendering_layer_put_sprite(t_pix *pix, t_rendering_layer *layer)
+{
+	int			i;
+	t_coord_i	*ij;
+	t_pix		*p;
+
+	ij = layer->ij;
+	p = layer->result;
+	i = -1;
+	while (++i < layer->n)
+	{
+		if (p->c.a != 0xff)
+			pix[WIDTH * ij->y + ij->x] = *p;
 		ij++;
 		p++;
 	}

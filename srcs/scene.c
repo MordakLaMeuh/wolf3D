@@ -33,9 +33,8 @@ static void			merge_layers(t_env *env)
 	render_sky(env, env->player.angle);
 	rendering_layer_put(scene, &(env->scene.wall));
 	rendering_layer_put(scene, &(env->scene.floor));
+	rendering_layer_put_sprite(scene, &(env->scene.sprites));
 }
-
-//(atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
 
 void				render_scene(t_env *env)
 {
@@ -60,6 +59,7 @@ void				render_scene(t_env *env)
 	}
 	render_wall(env, &(env->scene.wall));
 	render_floor(env, &(env->scene.floor));
+	render_sprites(env, &(env->scene.sprites));
 	merge_layers(env);
 }
 

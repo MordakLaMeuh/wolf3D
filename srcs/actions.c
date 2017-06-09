@@ -57,7 +57,7 @@ t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
 	if (ray_dir.y == 0.)
 	{
 		step.x = (ray_dir.x > 0) ? 1 : -1;
-		while (tiles[map.y][map.x].value == 0)
+		while (tiles[map.y][map.x].value <= 0)
 			map.x += step.x;
 		w.norm = (t_coord_f){(ray_dir.x > 0) ? -1 : 1, 0};
 		w.v = create_vector(angle, fabs((float)map.x - ray_pos.x));
@@ -66,7 +66,7 @@ t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
 	if (ray_dir.x == 0.)
 	{
 		step.y = (ray_dir.y > 0) ? 1 : -1;
-		while (tiles[map.y][map.x].value == 0)
+		while (tiles[map.y][map.x].value <= 0)
 			map.y += step.y;
 		w.norm = (t_coord_f){0, (ray_dir.y > 0) ? -1 : 1};
 		w.v = create_vector(angle, fabs((float)map.y - ray_pos.y));

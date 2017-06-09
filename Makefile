@@ -27,8 +27,9 @@ else
 endif
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
-		load_config rendering_layer floor sky walls scene get_next_line load \
-		ft_secure_atoi_spaces debug minimap draw_line draw lib weapon
+		load_config rendering_layer floor sky walls sprites scene \
+		get_next_line load ft_secure_atoi_spaces debug minimap draw_line draw \
+		lib weapon
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))

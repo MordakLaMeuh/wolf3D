@@ -131,7 +131,7 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 									* env->atan_list[c.y]) / env->wall_height;
 				layer->ij[layer->n] = c;
 				layer->uv[layer->n] = (t_coord_f){cl->wall_x_tex
-			* (layer->bmp->dim.x - 1), wall_y_tex * (layer->bmp->dim.y - 1)};
+			* (layer->bmp->dim.x - 2), wall_y_tex * (layer->bmp->dim.y - 2)};
 				layer->type[layer->n] = cl->type;
 				layer->dist[layer->n++] = cl->wall_h_dist;
 			}

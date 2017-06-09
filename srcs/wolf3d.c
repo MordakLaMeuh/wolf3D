@@ -65,6 +65,7 @@ static void		init_all(t_env *e)
 	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
 								"images/panic.bmp", "images/brique2.bmp"}, 4);
+	init_sprites(e, (char*[]){"images/sprite_pig.bmp"}, 1);
 	init_scene(e);
 	init_minimap(e);
 	i = 0;
@@ -99,6 +100,7 @@ int				main(int argc, char **argv)
 	if (DEBUG_MAP)
 		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
+	env.sprite_height = 2.5f;
 	env.player.angle = 6.f / 4 * M_PI;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};

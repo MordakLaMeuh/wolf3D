@@ -167,12 +167,19 @@ typedef struct			s_rendering_layer
 	t_pix		*result;
 }						t_rendering_layer;
 
+typedef struct			s_sprite
+{
+	int			type;
+	t_coord_f	location;
+}						t_sprite;
+
 typedef struct			s_scene
 {
 	t_column			*columns;
 	t_rendering_layer	sky;
 	t_rendering_layer	wall;
 	t_rendering_layer	floor;
+	t_rendering_layer	sprites;
 	t_pix				*scene;
 }						t_scene;
 
@@ -198,6 +205,7 @@ struct					s_env
 	t_pix				*img_string;
 	char				keyb[256];
 	float				wall_height;
+	float				sprite_height;
 	t_tile				**map_tiles;
 	float				angle_x[WIDTH];
 	float				angle_y[HEIGHT];
@@ -205,6 +213,8 @@ struct					s_env
 	float				atan_list[HEIGHT];
 	float				cos_list[WIDTH];
 	t_scene				scene;
+	int					n_sprites;
+	t_sprite			*sprites;
 };
 
 typedef struct			s_modify_coord
@@ -250,14 +260,17 @@ void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					init_floor(t_env *e, char **textures, int n);
 void					render_floor(t_env *env, t_rendering_layer *layer);
-void					init_sky(t_env *e, char *file_name);
 
+void					init_sky(t_env *e, char *file_name);
 void					render_sky(t_env *env, float angle);
 
 void					init_walls(t_env *e, char **textures, int n);
 int						find_wall(t_env *env, float angle_x,
 											t_coord_f *intersect, float *x_tex);
 void					render_wall(t_env *env, t_rendering_layer *layer);
+
+void					init_sprites(t_env *e, char **textures, int n);
+void					render_sprites(t_env *env, t_rendering_layer *layer);
 
 void					init_scene(t_env *env);
 void					render_scene(t_env *env);
@@ -270,5 +283,8 @@ void					rendering_layer_init(t_rendering_layer *layer,
 
 void					rendering_layer_render(t_rendering_layer *layer);
 void					rendering_layer_put(t_pix *pix,
+													t_rendering_layer *layer);
+void					rendering_layer_render_sprite(t_rendering_layer *layer);
+void					rendering_layer_put_sprite(t_pix *pix,
 													t_rendering_layer *layer);
 #endif
