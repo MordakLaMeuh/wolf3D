@@ -55,7 +55,7 @@ void		draw_minimap(t_env *e)
 	tmp = MAP_ORIGIN_X;
 	while (i < MAP_TILE_N)
 	{
-		tmp += (float)MAP_TILE_SIZE;
+		tmp += (float)TILE_SIZE;
 		line.p1.x = tmp;
 		line.p2.x = tmp;
 		draw_line(e, &line);
@@ -70,7 +70,7 @@ void		draw_minimap(t_env *e)
 	tmp = MAP_ORIGIN_Y;
 	while (i < MAP_TILE_N)
 	{
-		tmp += (float)MAP_TILE_SIZE;
+		tmp += (float)TILE_SIZE;
 		line.p1.y = tmp;
 		line.p2.y = tmp;
 		draw_line(e, &line);
@@ -82,7 +82,7 @@ void		draw_minimap(t_env *e)
 
 	draw_arrow(e, l1, e->player.angle, WIDTH / 1980.f);
 
-	
+
 
 /*
 	offset.x = (e->player.location.x / e->map.size.x);

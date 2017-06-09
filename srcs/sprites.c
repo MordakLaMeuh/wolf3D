@@ -43,7 +43,7 @@ void			init_sprites(t_env *env, char **textures, int n)
 				env->sprites[env->n_sprites].type = -env->map_tiles[c.y][c.x].value - 1;
 				env->n_sprites++;
 			}
-	}	
+	}
 }
 
 static inline int	angle_to_pix(float angle)
@@ -110,5 +110,5 @@ void	render_sprites(t_env *env, t_rendering_layer *layer)
 			}
 		}
 	}
-	rendering_layer_render_sprite(layer);
+	rendering_layer_render_sprite(layer, env->interpolate_state);
 }

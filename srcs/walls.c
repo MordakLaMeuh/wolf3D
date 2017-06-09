@@ -136,5 +136,5 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 				layer->dist[layer->n++] = cl->wall_h_dist;
 			}
 	}
-	rendering_layer_render(layer);
+	rendering_layer_render(layer, env->interpolate_state);
 }

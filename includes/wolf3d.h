@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/03 15:43:32 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/07 10:00:48 by stoupin          ###   ########.fr       */
+/*   Created: 2017/06/10 01:46:12 by bmickael          #+#    #+#             */
+/*   Updated: 2017/06/10 01:46:37 by bmickael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define MAP_ORIGIN_Y			0
 # define MAP_TILE_N				19
 # define MAP_GLOBAL_SIZE		(1.f / 5 * WIDTH)
-# define MAP_TILE_SIZE			(MAP_GLOBAL_SIZE / MAP_TILE_N)
+# define TILE_SIZE				(MAP_GLOBAL_SIZE / MAP_TILE_N)
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -148,7 +148,6 @@ typedef struct			s_tile
 
 typedef struct			s_column
 {
-//	float	angle_x;
 	float	wall_h_dist;
 	float	wall_x_tex;
 	float	wall_min_angle;
@@ -213,6 +212,7 @@ struct					s_env
 	float				atan_list[HEIGHT];
 	float				cos_list[WIDTH];
 	t_scene				scene;
+	int					interpolate_state;
 	int					n_sprites;
 	t_sprite			*sprites;
 };
@@ -281,10 +281,12 @@ void					draw_weapon(t_env *e);
 void					rendering_layer_init(t_rendering_layer *layer,
 													char **file_names, int n);
 
-void					rendering_layer_render(t_rendering_layer *layer);
+void					rendering_layer_render(t_rendering_layer *layer,
+															int interpolate);
 void					rendering_layer_put(t_pix *pix,
 													t_rendering_layer *layer);
-void					rendering_layer_render_sprite(t_rendering_layer *layer);
+void					rendering_layer_render_sprite(t_rendering_layer *layer,
+															int interpolate);
 void					rendering_layer_put_sprite(t_pix *pix,
 													t_rendering_layer *layer);
 #endif

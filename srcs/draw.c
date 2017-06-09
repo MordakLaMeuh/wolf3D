@@ -21,12 +21,12 @@ void	draw_arrow(t_env *e, t_coord_i c, float angle, float factor)
 	t_coord_i	l2;
 	t_coord_i	l3;
 
-	l1.y = c.y + (int)(((sinf(angle + M_PI * 3 / 4)) * MAP_TILE_SIZE / 4 * factor));
-	l1.x = c.x + (int)(((cosf(angle + M_PI * 3 / 4)) * MAP_TILE_SIZE / 4 * factor));
-	l2.y = c.y + (int)(((sinf(angle - M_PI * 3 / 4)) * MAP_TILE_SIZE / 4 * factor));
-	l2.x = c.x + (int)(((cosf(angle - M_PI * 3 / 4)) * MAP_TILE_SIZE / 4 * factor));
-	l3.y = c.y + (int)(((sinf(angle)) * MAP_TILE_SIZE / 2 * factor));
-	l3.x = c.x + (int)(((cosf(angle)) * MAP_TILE_SIZE / 2 * factor));
+	l1.y = c.y + (int)(((sinf(angle + M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
+	l1.x = c.x + (int)(((cosf(angle + M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
+	l2.y = c.y + (int)(((sinf(angle - M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
+	l2.x = c.x + (int)(((cosf(angle - M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
+	l3.y = c.y + (int)(((sinf(angle)) * TILE_SIZE / 2 * factor));
+	l3.x = c.x + (int)(((cosf(angle)) * TILE_SIZE / 2 * factor));
 	line.p1 = l1;
 	line.p2 = l2;
 	line.b_pix.i = 0x0000FF;

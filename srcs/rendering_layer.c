@@ -44,7 +44,7 @@ static inline t_pix	interp_pix(t_pix b, t_pix f, float ratio)
 	return (new_pix);
 }
 
-static inline t_pix	get_pix(t_bmp *src, t_coord_f c_src)
+static inline t_pix	get_pix_complex(t_bmp *src, t_coord_f c_src)
 {
 	t_pix		corners[4];
 	t_coord_i	c_src_i;
@@ -53,7 +53,6 @@ static inline t_pix	get_pix(t_bmp *src, t_coord_f c_src)
 
 	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
 	i = src->dim.x * c_src_i.y + c_src_i.x;
-	//return (src->pix[i]); // disable interpolation
 	corners[0] = src->pix[i];
 	corners[1] = src->pix[i + 1];
 	i += src->dim.x;
@@ -66,13 +65,26 @@ static inline t_pix	get_pix(t_bmp *src, t_coord_f c_src)
 			delta.y));
 }
 
-void				rendering_layer_render(t_rendering_layer *layer)
+static inline t_pix	get_pix_simple(t_bmp *src, t_coord_f c_src)
+{
+	t_coord_i	c_src_i;
+	int			i;
+
+	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
+	i = src->dim.x * c_src_i.y + c_src_i.x;
+	return (src->pix[i]);
+}
+
+void				rendering_layer_render(t_rendering_layer *layer,
+															int interpolate)
 {
 	int		i;
 	float	fact;
 	float	dist;
 	t_pix	*result;
+	t_pix	(*get_pix)(t_bmp *, t_coord_f);
 
+	get_pix = (interpolate) ? &get_pix_complex : &get_pix_simple;
 	result = layer->result;
 	i = -1;
 	while (++i < layer->n)
@@ -91,13 +103,16 @@ void				rendering_layer_render(t_rendering_layer *layer)
 	}
 }
 
-void				rendering_layer_render_sprite(t_rendering_layer *layer)
+void				rendering_layer_render_sprite(t_rendering_layer *layer,
+															int interpolate)
 {
 	int		i;
 	float	fact;
 	float	dist;
 	t_pix	*result;
+	t_pix	(*get_pix)(t_bmp *, t_coord_f);
 
+	get_pix = (interpolate) ? &get_pix_complex : &get_pix_simple;
 	result = layer->result;
 	i = -1;
 	while (++i < layer->n)
@@ -135,7 +150,8 @@ void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer)
 	}
 }
 
-void				rendering_layer_put_sprite(t_pix *pix, t_rendering_layer *layer)
+void				rendering_layer_put_sprite(t_pix *pix,
+													t_rendering_layer *layer)
 {
 	int			i;
 	t_coord_i	*ij;
@@ -146,7 +162,8 @@ void				rendering_layer_put_sprite(t_pix *pix, t_rendering_layer *layer)
 	i = -1;
 	while (++i < layer->n)
 	{
-		pix[WIDTH * ij->y + ij->x].i = p->i * (p->c.a != 0xff) + pix[WIDTH * ij->y + ij->x].i * (p->c.a == 0xff);
+		pix[WIDTH * ij->y + ij->x].i = p->i * (p->c.a != 0xff) +
+							pix[WIDTH * ij->y + ij->x].i * (p->c.a == 0xff);
 		ij++;
 		p++;
 	}

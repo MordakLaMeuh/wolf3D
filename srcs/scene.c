@@ -47,12 +47,10 @@ void				render_scene(t_env *env)
 	while (++x < WIDTH)
 	{
 		c = &(env->scene.columns[x]);
-	//	c->angle_x = angle_on_screen(x - (WIDTH / 2)) + env->player.angle;
-
 		angle_x = env->angle_x[x] + env->player.angle;
 		c->type = find_wall(env, angle_x, &c_intersect, &(c->wall_x_tex));
-
-		c->wall_h_dist = dist(env->player.location, c_intersect) * env->cos_list[x];
+		c->wall_h_dist = dist(env->player.location, c_intersect) *
+															env->cos_list[x];
 		c->wall_min_angle = atanf(-env->player.height / c->wall_h_dist);
 		c->wall_max_angle = atanf((env->wall_height - env->player.height)
 									/ c->wall_h_dist);

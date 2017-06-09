@@ -47,8 +47,7 @@ static inline t_pix	get_pix(t_bmp *src, t_coord_f c_src)
 			delta.y));
 }
 
-
-static void		copy_img(t_bmp *dst, t_bmp *src, int new_dim_x)
+static void			copy_img(t_bmp *dst, t_bmp *src, int new_dim_x)
 {
 	t_coord_i c_dst;
 	t_coord_f c_src;
@@ -72,7 +71,7 @@ static void		copy_img(t_bmp *dst, t_bmp *src, int new_dim_x)
 	}
 }
 
-static void		paste_bout(t_pix *data)
+static void			paste_bout(t_pix *data)
 {
 	int y;
 	int x;
@@ -83,15 +82,15 @@ static void		paste_bout(t_pix *data)
 		x = RATIO * WIDTH;
 		while (x < ((RATIO + 1) * WIDTH))
 		{
-			data[y * (WIDTH * (RATIO + 1)) + x] = data[y * (WIDTH * (RATIO + 1)) +
-													(x - (RATIO * WIDTH))];
+			data[y * (WIDTH * (RATIO + 1)) + x] =
+					data[y * (WIDTH * (RATIO + 1)) + (x - (RATIO * WIDTH))];
 			x++;
 		}
 		y++;
 	}
 }
 
-void			init_sky(t_env *e, char *file_name)
+void				init_sky(t_env *e, char *file_name)
 {
 	t_bmp	*sky_bmp;
 
@@ -101,12 +100,10 @@ void			init_sky(t_env *e, char *file_name)
 		exit(EXIT_FAILURE);
 	sky_bmp = load_bitmap((char*[]){file_name}, 1);
 	sky_bmp = &sky_bmp[0];
-	//e->sky->ratio = 360 / 6;						// 2 * M_PI / VIEW_ANGLE
-//	e->sky->ratio = (2. * M_PI) / VIEW_ANGLE;
-//	printf("%f\n", e->sky->ratio);
 	e->sky->data->dim.x = WIDTH * RATIO;
 	e->sky->data->dim.y = HEIGHT;
-	if (!(e->sky->data->pix = (t_pix *)ft_memalloc(WIDTH * (RATIO + 1) * HEIGHT * sizeof(t_pix))))
+	if (!(e->sky->data->pix = (t_pix *)ft_memalloc(WIDTH * (RATIO + 1) *
+													HEIGHT * sizeof(t_pix))))
 		exit(EXIT_FAILURE);
 	copy_img(e->sky->data, sky_bmp, WIDTH * (RATIO + 1));
 	paste_bout(e->sky->data->pix);
@@ -114,7 +111,7 @@ void			init_sky(t_env *e, char *file_name)
 	free(sky_bmp);
 }
 
-void			render_sky(t_env *e, float angle)
+void				render_sky(t_env *e, float angle)
 {
 	int		i;
 	int		j;

@@ -14,14 +14,14 @@
 #include <stdlib.h>
 #include "wolf3d.h"
 
-static int		err_usage(char *cmd)
+static int			err_usage(char *cmd)
 {
 	ft_eprintf("Illegal map!\n"
 		"usage: %s [input_file]\n", cmd, cmd);
 	return (EXIT_FAILURE);
 }
 
-static int		err_msg(char *msg)
+static int			err_msg(char *msg)
 {
 	ft_eprintf("Fatal error: %s\nYou should made an other try!\n", msg);
 	return (EXIT_FAILURE);
@@ -31,7 +31,7 @@ static int		err_msg(char *msg)
 ** draw_weapon(e);
 */
 
-static int		move(t_env *e)
+static int			move(t_env *e)
 {
 	t_pix pix;
 
@@ -57,7 +57,7 @@ static inline float	angle_on_screen(int x)
 	return (angle);
 }
 
-static void		init_all(t_env *e)
+static void			init_all(t_env *e)
 {
 	int i;
 
@@ -85,7 +85,7 @@ static void		init_all(t_env *e)
 	}
 }
 
-int				main(int argc, char **argv)
+int					main(int argc, char **argv)
 {
 	t_env		env;
 
