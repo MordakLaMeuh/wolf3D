@@ -67,8 +67,8 @@ void	render_sprites(t_env *env, t_rendering_layer *layer)
 	t_coord_i	c_max;
 	t_coord_f	c_tex;
 
-	layer->n = 0;
 	i = -1;
+	layer->n = 0;
 	while (++i < env->n_sprites)
 	{
 		angle0_x = atan2f(env->sprites[i].location.y - env->player.location.y, env->sprites[i].location.x - env->player.location.x) - env->player.angle;
@@ -98,7 +98,7 @@ void	render_sprites(t_env *env, t_rendering_layer *layer)
 				continue ;
 			c.y = ((c_topleft.y >= 0) ? c_topleft.y : 0) - 1;
 			c_max.y = (c_bottomright.y < HEIGHT) ? c_bottomright.y : HEIGHT - 1;
-			while (++c.y < c_max.y)
+			while (++c.y < c_max.y && layer->n < WIDTH * HEIGHT)
 			{
 				c_tex.x = (float)(c.x - c_topleft.x) / (c_bottomright.x - c_topleft.x) * (layer->bmp[env->sprites[i].type].dim.x - 2);
 				c_tex.y = (float)(c.y - c_bottomright.y) / (c_topleft.y - c_bottomright.y) * (layer->bmp[env->sprites[i].type].dim.y - 2);

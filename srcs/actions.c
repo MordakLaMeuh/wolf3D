@@ -111,7 +111,7 @@ t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
 */
 	int side;
 
-	while (!(tiles[map.y][map.x].value))
+	while (tiles[map.y][map.x].value <= 0)
 		if (side_dist.x < side_dist.y)
 		{
 			side_dist.x += delta_dist.x;
@@ -156,7 +156,7 @@ static void		set_player_data(t_env *e, t_modify_coord type)
 	new.x += e->player.location.x;
 	new.y += e->player.location.y;
 
-	if (e->map_tiles[(int)floorf(new.y)][(int)floorf(new.x)].value == 0)
+	if (e->map_tiles[(int)floorf(new.y)][(int)floorf(new.x)].value <= 0)
 		e->player.location = new;
 
 /*

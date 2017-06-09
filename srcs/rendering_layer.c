@@ -52,13 +52,14 @@ static inline t_pix	get_pix(t_bmp *src, t_coord_f c_src)
 	int			i;
 
 	c_src_i = (t_coord_i){(int)c_src.x, (int)c_src.y};
-	delta = (t_coord_f){c_src.x - c_src_i.x, c_src.y - c_src_i.y};
 	i = src->dim.x * c_src_i.y + c_src_i.x;
+	//return (src->pix[i]); // disable interpolation
 	corners[0] = src->pix[i];
 	corners[1] = src->pix[i + 1];
 	i += src->dim.x;
 	corners[2] = src->pix[i];
 	corners[3] = src->pix[i + 1];
+	delta = (t_coord_f){c_src.x - c_src_i.x, c_src.y - c_src_i.y};
 	return (interp_pix(
 			interp_pix(corners[0], corners[1], delta.x),
 			interp_pix(corners[2], corners[3], delta.x),
@@ -145,8 +146,7 @@ void				rendering_layer_put_sprite(t_pix *pix, t_rendering_layer *layer)
 	i = -1;
 	while (++i < layer->n)
 	{
-		if (p->c.a != 0xff)
-			pix[WIDTH * ij->y + ij->x] = *p;
+		pix[WIDTH * ij->y + ij->x].i = p->i * (p->c.a != 0xff) + pix[WIDTH * ij->y + ij->x].i * (p->c.a == 0xff);
 		ij++;
 		p++;
 	}
