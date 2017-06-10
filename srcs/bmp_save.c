@@ -65,7 +65,7 @@ int				bmp_save(char *filename, int width, int height, int *data)
 	FILE		*file;
 
 	ft_bzero(buff, 512);
-	ft_sprintf(buff, "images/%lu%s", (unsigned long)time(NULL), ".bmp");
+	ft_sprintf(buff, "screenshoots/%lu%s", (unsigned long)time(NULL), ".bmp");
 	if (!(file = fopen(buff, "wb+")))
 		return (1);
 	if (!(pbitmap = (t_bitmap *)ft_memalloc(sizeof(t_bitmap))))

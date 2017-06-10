@@ -105,6 +105,7 @@ int					main(int argc, char **argv)
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	env.display_minimap = TRUE;
+	env.interpolate_state = TRUE;
 	create_mlx_image(&env);
 	init_all(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
