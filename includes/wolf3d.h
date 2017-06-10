@@ -227,7 +227,7 @@ struct					s_env
 	t_weapon			weapon;
 	t_sky				*sky;
 	t_pix				*img_string;
-	char				keyb[256];
+	unsigned long int	keyb[256];
 	float				wall_height;
 	float				sprite_height;
 	t_tile				**map_tiles;
@@ -239,6 +239,7 @@ struct					s_env
 	t_scene				scene;
 	int					interpolate_state;
 	int					n_sprites;
+	unsigned long int	time_last_move;
 	t_sprite			*sprites;
 };
 
@@ -246,8 +247,8 @@ typedef struct			s_modify_coord
 {
 	int					keycode_1;
 	int					keycode_2;
-	int					q;
-	int					l;
+	float				q;
+	float				l;
 }						t_modify_coord;
 
 t_pix					get_pix_sp(t_bmp *src, t_coord_f c_src);
@@ -316,4 +317,5 @@ void					rendering_layer_render_sprite(t_rendering_layer *layer,
 															int interpolate);
 void					rendering_layer_put_sprite(t_pix *pix,
 													t_rendering_layer *layer);
+unsigned long int		get_time(void);
 #endif

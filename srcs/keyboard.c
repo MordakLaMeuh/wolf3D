@@ -15,7 +15,7 @@
 
 #ifdef DEBUG_KEYBOARD
 
-static void	print_register(char *k)
+static void	print_register(unsigned long int *k)
 {
 	int i;
 
@@ -23,7 +23,7 @@ static void	print_register(char *k)
 	while (i < 256)
 	{
 		if (k[i])
-			ft_printf("{green}%c{eoc}", k[i] + '0');
+			ft_printf("{green}%c{eoc}", (k[i]) ? '1' : '0');
 		else
 			ft_putchar(k[i] + '0');
 		i++;
@@ -35,7 +35,7 @@ static void	print_register(char *k)
 
 int			mlx_key_release(int keycode, t_env *e)
 {
-	e->keyb[keycode & 0xFF] = FALSE;
+	e->keyb[keycode & 0xFF] = 0;
 	if (DEBUG_KEYBOARD)
 	{
 		ft_printf("keycode %3i RELEASED -> ", keycode);
@@ -46,7 +46,8 @@ int			mlx_key_release(int keycode, t_env *e)
 
 int			mlx_key_press(int keycode, t_env *e)
 {
-	e->keyb[keycode & 0xFF] = TRUE;
+	if (!e->keyb[keycode & 0xFF])
+		e->keyb[keycode & 0xFF] = get_time();
 	if (DEBUG_KEYBOARD)
 	{
 		ft_printf("keycode %3i PRESSED  -> ", keycode);

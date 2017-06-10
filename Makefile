@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/06/10 04:45:04 by bmickael         ###   ########.fr        #
+#    Updated: 2017/06/10 12:06:55 by bmickael         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -23,13 +23,13 @@ LIBFT_HEADER = $(LIBDIR)
 ifeq ($(DEBUG),yes)
 	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
 else
-	CFLAGS = -Wall -Werror -Wextra -O2 -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
+	CFLAGS = -Ofast -Wall -Werror -Wextra -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
 endif
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
 		load_config rendering_layer floor sky walls sprites scene \
 		get_next_line load ft_secure_atoi_spaces debug minimap draw_line draw \
-		lib weapon
+		lib weapon timer
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))

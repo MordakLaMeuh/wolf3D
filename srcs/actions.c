@@ -187,18 +187,18 @@ t_coord_f		test_mvt(t_wall_vector w, t_env *e, t_coord_f new)
 	return (new);
 }
 
-static void		set_player_data(t_env *e, t_modify_coord type)
+static void		set_player_data(t_env *e, float q, float l)
 {
-	t_coord_f		new;
-	t_wall_vector	w;
+	t_coord_f			new;
+	t_wall_vector		w;
 
-	e->player.angle += type.q * M_PI / 360;
+	e->player.angle += q * M_PI / 360;
 	if (e->player.angle < 0)
 		e->player.angle += 2.f * M_PI;
 	else if (e->player.angle >= 2.f * M_PI)
 		e->player.angle -= 2.f * M_PI;
-	new.x = (cosf(e->player.angle)) * type.l;
-	new.y = (sinf(e->player.angle)) * type.l;
+	new.x = (cosf(e->player.angle)) * l;
+	new.y = (sinf(e->player.angle)) * l;
 	w = get_wall_info(e->map_tiles, e->player.angle, e->player.location);
 	new = test_mvt(w, e, new);
 	w = get_wall_info(e->map_tiles, e->player.angle + M_PI, e->player.location);
@@ -212,18 +212,25 @@ int				move_player(t_env *e)
 	int							trigger;
 	int							i;
 	static t_modify_coord		types[N_CONTROL] = {
-		{KEYB_ARROW_LEFT, KEYB_MMO_A, -6, 0},
-		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +6, 0},
-		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 1},
-		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -1}
+		{KEYB_ARROW_LEFT, KEYB_MMO_A, -0.09, 0},
+		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +0.09, 0},
+		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 0.015},
+		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -0.015}
 	};
+	unsigned long int			time_elapsed;
+	float						new_q;
+	float						new_l;
 
 	trigger = FALSE;
 	i = -1;
 	while (++i < N_CONTROL)
-		if (e->keyb[types[i].keycode_1] || e->keyb[types[i].keycode_2])
+		if (e->keyb[types[i].keycode_1])
 		{
-			set_player_data(e, types[i]);
+			time_elapsed = get_time();
+			new_q = (time_elapsed - e->keyb[types[i].keycode_1]) * types[i].q;
+			new_l = (time_elapsed - e->keyb[types[i].keycode_1]) * types[i].l;
+			e->keyb[types[i].keycode_1] = time_elapsed;
+			set_player_data(e, new_q, new_l);
 			trigger = TRUE;
 		}
 	return (trigger);
