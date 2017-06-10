@@ -262,7 +262,10 @@ int				common_action(t_env *e)
 	if (event_register(e, KEYB_M, &state))
 		e->display_minimap = (e->display_minimap) ? FALSE : TRUE;
 	if (event_register(e, KEYB_HELP, &state))
+	{
+		e->interpolate_time = get_time();
 		e->interpolate_state = (e->interpolate_state) ? FALSE : TRUE;
+	}
 	if (event_register(e, KEYB_P, &state))
 		bmp_save(NULL, WIDTH, HEIGHT, (int *)e->img_string);
 	return (state);

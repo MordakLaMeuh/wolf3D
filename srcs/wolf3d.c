@@ -33,7 +33,9 @@ static int			err_msg(char *msg)
 
 static int			move(t_env *e)
 {
-	t_pix pix;
+	t_pix				pix;
+	unsigned long int	m;
+	char *s;
 
 	common_action(e);
 	move_player(e);
@@ -45,7 +47,21 @@ static int			move(t_env *e)
 	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
 	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
+	m = get_time();
+	if (e->interpolate_time)
+	{
+		if ((m - e->interpolate_time) < 1000)
+		{
+			ft_asprintf(&s, "Interpolation lineaire: %s", (e->interpolate_state) ? "ON" : "OFF");
+			mlx_string_put(e->mlx, e->win, 20, 40, 0x00FFFFFF, s);
+			free(s);
+		}
+		else
+			e->interpolate_time = 0;
+	}
 	eval_fps(e);
+
+
 	return (0);
 }
 

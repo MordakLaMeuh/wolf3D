@@ -238,8 +238,8 @@ struct					s_env
 	float				cos_list[WIDTH];
 	t_scene				scene;
 	int					interpolate_state;
+	unsigned long int	interpolate_time;
 	int					n_sprites;
-	unsigned long int	time_last_move;
 	t_sprite			*sprites;
 };
 
