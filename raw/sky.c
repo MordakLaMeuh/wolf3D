@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sky.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: erucquoy <erucquoy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 00:06:10 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/08 00:06:20 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/10 07:09:00 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ void				render_sky(t_env *env, t_rendering_layer *layer)
 			}
 		}
 	}
-	rendering_layer_render(layer);
+	rendering_layer_render(env, layer);
 }

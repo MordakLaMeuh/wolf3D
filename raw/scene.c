@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: erucquoy <erucquoy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 00:19:32 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/08 00:19:35 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/10 06:43:07 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static void		merge_layers(t_env *env)
 	i = -1;
 	while (++i < WIDTH * HEIGHT)
 		scene[i].i = 0;
-	rendering_layer_put(scene, &(env->scene.sky));
-	rendering_layer_put(scene, &(env->scene.wall));
-	rendering_layer_put(scene, &(env->scene.floor));
+	rendering_layer_put(env, scene, &(env->scene.sky));
+	rendering_layer_put(env, scene, &(env->scene.wall));
+	rendering_layer_put(env, scene, &(env->scene.floor));
 }
 
 void			render_scene(t_env *env)

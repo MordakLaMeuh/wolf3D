@@ -3,19 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:43:32 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/07 10:00:48 by stoupin          ###   ########.fr       */
+/*   Updated: 2017/06/10 12:31:16 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
+# include <stdio.h>
+
 # include <math.h>
-# include "mlx.h"
+# include "SDL.h"
 # include "libft.h"
+
 
 # define DEBUG_KEYBOARD		FALSE
 # define DEBUG_MAP			TRUE
@@ -68,6 +71,9 @@
 # define KEYB_ARROW_RIGHT	124
 
 # define N_CONTROL			4
+
+typedef uint32_t		Uint32;
+typedef uint8_t			Uint8;
 
 typedef struct			s_coord_i
 {
@@ -148,7 +154,6 @@ typedef struct			s_tile
 
 typedef struct			s_column
 {
-//	float	angle_x;
 	float	wall_h_dist;
 	float	wall_x_tex;
 	float	wall_min_angle;
@@ -184,6 +189,14 @@ typedef struct			s_sky
 
 struct					s_env
 {
+	SDL_Window			*window;
+	SDL_Event			event;
+	SDL_Renderer		*img;
+	t_pix				*img_string;
+	SDL_Texture			*texture;
+	SDL_Surface			*screen;
+	SDL_Surface			*surface;
+
 	void				*mlx;
 	void				*win;
 	void				*image;
@@ -195,7 +208,7 @@ struct					s_env
 	t_map				map;
 	t_weapon			weapon;
 	t_sky				*sky;
-	t_pix				*img_string;
+
 	char				keyb[256];
 	float				wall_height;
 	t_tile				**map_tiles;
@@ -239,7 +252,7 @@ void					eval_fps(t_env *e);
 void					init_minimap(t_env *e);
 void					draw_minimap(t_env *e);
 
-int						move_player(t_env *e);
+int						move_player(t_env *e, int key);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle,
 																float factor);
@@ -269,6 +282,13 @@ void					rendering_layer_init(t_rendering_layer *layer,
 													char **file_names, int n);
 
 void					rendering_layer_render(t_rendering_layer *layer);
-void					rendering_layer_put(t_pix *pix,
-													t_rendering_layer *layer);
+void					rendering_layer_put(t_env *e, t_rendering_layer *layer);
+
+int						sdl_key_is_pushed(t_env *env);
+int						sdl_key_is_released(t_env *env);
+void					create_sdl_image(t_env *e);
+void					set_pixel(t_env *e, int i, t_pix pix);
+void					set_pixel_coord(t_env *e, t_coord_i coord, t_pix pix);
+void					sdl_put_pixel(SDL_Surface* screen, t_coord_i c, t_pix* p);
+
 #endif

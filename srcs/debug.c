@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 01:01:36 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/06 01:01:38 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/10 11:02:43 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void			view_map(t_tile **map, int width, int height)
 	}
 }
 
+#include <stdio.h>
+
 void			eval_fps(t_env *e)
 {
 	static int				count = 0;
@@ -59,6 +61,8 @@ void			eval_fps(t_env *e)
 			count = 0;
 		}
 	}
-	mlx_string_put(e->mlx, e->win, 20, 20, 0x00FFFFFF, "FPS:");
-	mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, (s) ? s : "");
+	(void)e;
+	printf("%s\n", (s) ? s : "");
+	//mlx_string_put(e->mlx, e->win, 20, 20, 0x00FFFFFF, "FPS:");
+	//mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, (s) ? s : "");
 }

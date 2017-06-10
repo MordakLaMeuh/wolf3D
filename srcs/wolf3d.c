@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:42:11 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 16:14:38 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/10 12:36:37 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,6 @@ static int		err_msg(char *msg)
 ** draw_weapon(e);
 */
 
-static int		move(t_env *e)
-{
-	t_pix pix;
-
-	common_action(e);
-	move_player(e);
-	render_scene(e);
-	if (e->display_minimap)
-		draw_minimap(e);
-	scene_to_win(e);
-	pix.i = 0xff0000;
-	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
-	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
-	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
-	eval_fps(e);
-	return (0);
-}
 
 static inline float	angle_on_screen(int x)
 {
@@ -64,7 +47,7 @@ static void		init_all(t_env *e)
 	init_sky(e, "images/astro.bmp");
 	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
-								"images/panic.bmp", "images/brique2.bmp"}, 4);
+		"images/panic.bmp", "images/brique2.bmp"}, 4);
 	init_scene(e);
 	init_minimap(e);
 	i = 0;
@@ -82,6 +65,174 @@ static void		init_all(t_env *e)
 		e->cos_list[i] = cosf(e->angle_x[i]);
 		i++;
 	}
+}
+
+int			sdl_key_is_pushed(t_env *env)
+{
+	if (env->event.key.keysym.sym == SDLK_ESCAPE)
+		return (1);
+	if (env->event.key.keysym.sym == SDLK_UP)
+		move_player(env, SDLK_UP);
+	if (env->event.key.keysym.sym == SDLK_DOWN)
+		move_player(env, SDLK_DOWN);
+	if (env->event.key.keysym.sym == SDLK_LEFT)
+		move_player(env, SDLK_LEFT);
+	if (env->event.key.keysym.sym == SDLK_RIGHT)
+		move_player(env, SDLK_RIGHT);
+	move_player(env, env->event.key.keysym.sym);
+	return (0);
+	/*
+	if (env->event.key.keysym.sym == SDLK_a)
+		env->keyb[SDLK_a] = 1;
+	if (env->event.key.keysym.sym == SDLK_RIGHT)
+		env->keyb[SDLK_RIGHT] = 1;
+	if (env->event.key.keysym.sym == SDLK_d)
+		env->keyb[SDLK_d] = 1;
+	if (env->event.key.keysym.sym == SDLK_LEFT)
+		env->keyb[SDLK_LEFT] = 1;
+	if (env->event.key.keysym.sym == SDLK_w)
+		env->keyb[SDLK_w] = 1;
+	if (env->event.key.keysym.sym == SDLK_UP)
+		env->keyb[SDLK_UP] = 1;
+	if (env->event.key.keysym.sym == SDLK_s)
+		env->keyb[SDLK_s] = 1;
+	if (env->event.key.keysym.sym == SDLK_DOWN)
+		env->keyb[SDLK_DOWN] = 1;
+	if (env->event.key.keysym.sym == SDLK_x)
+		env->keyb[SDLK_x] = 1;
+	if (env->event.key.keysym.sym == SDLK_e)
+		SDL_SetRelativeMouseMode(1);
+	if (env->event.key.keysym.sym == SDLK_r)
+		SDL_SetRelativeMouseMode(0);
+		*/
+}
+
+int			sdl_keyhook(t_env *env)
+{
+	while (SDL_PollEvent(&(env->event)))
+	{
+		if (env->event.type == SDL_KEYDOWN && sdl_key_is_pushed(env))
+			return (1);
+		if (env->event.type == SDL_KEYDOWN)
+			sdl_key_is_pushed(env);
+		//	return (ft_key_is_released(env));
+
+		//if (env->event.type == SDL_WINDOWEVENT)
+		//	ft_win_ev(env);
+	}
+	return (0);
+}
+
+/*static int		move(t_env *e)
+{
+	t_pix pix;
+
+	common_action(e);
+	move_player(e);
+	render_scene(e);
+	if (e->display_minimap)
+		draw_minimap(e);
+	scene_to_win(e);
+	pix.i = 0xff0000;
+	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
+	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
+	//mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
+	eval_fps(e);
+	return (0);
+}*/
+
+
+
+void		sdl_main_loop(t_env *e)
+{
+	t_pix pix;
+
+	e->surface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
+	printf("%d %d %d %d\n", SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT);
+	while (TRUE)
+	{
+
+		/* TEST LINE
+		t_pix pixel_white;
+		pixel_white.c.r = (Uint8)0xff;
+		pixel_white.c.g = (Uint8)0xff;
+		pixel_white.c.b = (Uint8)0xff;
+		pixel_white.c.a = (Uint8)128;
+		int x;
+		x = 0;
+		while (++x < 200)
+			sdl_put_pixel(e->surface,x,x,&pixel_white);
+		 END TEST */
+		common_action(e);
+		render_scene(e);
+		if (e->display_minimap)
+			draw_minimap(e);
+		//e->a_time = SDL_GetTicks();
+
+		if (sdl_keyhook(e) == 1)
+			break;
+
+		//eval_fps(e);
+
+		pix.i = 0xff00ff;
+
+		draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
+						(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
+		SDL_BlitSurface(e->surface , NULL, e->screen, NULL);
+		SDL_UpdateWindowSurface(e->window);
+
+	}
+}
+
+
+
+/*
+	stop = FALSE;
+	while (stop == FALSE)
+	{
+		while (SDL_PollEvent(&(env->event)))
+		{
+
+
+		//if (ft_sdl_keyhook(env) == 1)
+		//	return ;
+
+			if (env->event.type == SDL_KEYDOWN && env->event.key.keysym.sym == SDLK_ESCAPE)
+			{
+				stop = TRUE;
+				break ;
+			}
+
+			printf("%i ", env->event.type);
+		if (env->gen_random_map == 1)
+		{
+			env->gen_random_map = 0;
+			ft_free_tab(env->map, 16);
+			env->map = random_map((int)env->player.posx, (int)env->player.posy);
+		}
+		ft_print_fps(env);
+//		create_sdl_image(env);
+		}
+	}
+	ft_printf("EXIT\n");
+}
+*/
+
+static void		f_sdl_init(t_env *env)
+{
+	SDL_Init(SDL_INIT_VIDEO);
+	env->window = SDL_CreateWindow("Wolfd3D",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE
+	);
+	env->screen = SDL_GetWindowSurface(env->window);
+	env->surface = SDL_LoadBMP("images/loading.bmp");
+    SDL_BlitSurface(env->surface , NULL, env->screen, NULL);
+    SDL_FreeSurface(env->surface );
+    SDL_UpdateWindowSurface(env->window);
+    SDL_Delay(2200);
+	SDL_ShowCursor(SDL_DISABLE);
+	create_mlx_image(env);
 }
 
 int				main(int argc, char **argv)
@@ -103,12 +254,45 @@ int				main(int argc, char **argv)
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	env.display_minimap = TRUE;
-	create_mlx_image(&env);
+	f_sdl_init(&env);
+	env.surface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
 	init_all(&env);
-	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
+	sdl_main_loop(&env);
+	/*mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
 	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);
 	mlx_hook(env.win, X11_DESTROY_NOTIFY, 0xFF, &exit_mlx, &env);
 	mlx_loop_hook(env.mlx, &move, &env);
-	mlx_loop(env.mlx);
+	mlx_loop(env.mlx);*/
 	return (0);
 }
+
+/*
+int main( void )
+{
+	SDL_Surface *screen; // even with SDL2, we can still bring ancient code back
+ SDL_Window *window;
+ SDL_Surface *image;
+
+ SDL_Init(SDL_INIT_VIDEO); // init video
+
+ // create the window like normal
+ window = SDL_CreateWindow("SDL2 Example", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+
+ // but instead of creating a renderer, we can draw directly to the screen
+ screen = SDL_GetWindowSurface(window);
+
+ // let's just show some classic code for reference
+ image = SDL_LoadBMP("images/brique.bmp"); // loads image
+ SDL_BlitSurface(image, NULL, screen, NULL); // blit it to the screen
+ SDL_FreeSurface(image);
+
+ // this works just like SDL_Flip() in SDL 1.2
+ SDL_UpdateWindowSurface(window);
+
+ // show image for 2 seconds
+ SDL_Delay(4000);
+ SDL_DestroyWindow(window);
+ SDL_Quit();
+ return 0;
+}
+*/

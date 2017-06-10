@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 11:48:10 by stoupin           #+#    #+#             */
-/*   Updated: 2017/06/08 13:46:47 by stoupin          ###   ########.fr       */
+/*   Updated: 2017/06/10 11:40:51 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,9 @@ static void			merge_layers(t_env *env)
 
 	scene = env->scene.scene;
 	render_sky(env, env->player.angle);
-	rendering_layer_put(scene, &(env->scene.wall));
-	rendering_layer_put(scene, &(env->scene.floor));
+	rendering_layer_put(env, &(env->scene.wall));
+	rendering_layer_put(env, &(env->scene.floor));
 }
-
-//(atanf((float)x / (WIDTH / 2)) * (VIEW_ANGLE / 2.f / atanf(1.f)));
 
 void				render_scene(t_env *env)
 {
@@ -48,8 +46,6 @@ void				render_scene(t_env *env)
 	while (++x < WIDTH)
 	{
 		c = &(env->scene.columns[x]);
-	//	c->angle_x = angle_on_screen(x - (WIDTH / 2)) + env->player.angle;
-
 		angle_x = env->angle_x[x] + env->player.angle;
 		c->type = find_wall(env, angle_x, &c_intersect, &(c->wall_x_tex));
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/23 18:26:21 by bmickael          #+#    #+#             */
-/*   Updated: 2017/04/23 18:26:25 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/10 11:29:42 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <math.h>
 #include "wolf3d.h"
 
+/*
 static inline void			fill_pixel(t_env *env, t_coord_i c, t_pix pix)
 {
 	int offset;
@@ -21,7 +22,26 @@ static inline void			fill_pixel(t_env *env, t_coord_i c, t_pix pix)
 	offset = (c.y * WIDTH) + c.x;
 	if (offset >= (WIDTH * HEIGHT) || offset < 0)
 		return ;
+	SDL_SetRenderDrawColor(env->img, pix.c.r, pix.c.g, pix.c.b, pix.c.a);
+	SDL_RenderDrawPoint(env->img, pix.i % WIDTH , pix.i / HEIGHT);
+
+	0 1 2 3 4 5 6 7
+	1 9 0 1 2 3 4 5
+	2
+	3
 	env->scene.scene[offset] = pix;
+}
+*/
+
+static inline void			fill_pixel(t_env *env, t_coord_i c, t_pix pix)
+{
+	int offset;
+	Uint32* 	p_screen = (Uint32*)env->surface->pixels;
+
+	offset = (c.y * WIDTH) + c.x;
+	if (offset >= (WIDTH * HEIGHT) || offset < 0)
+		return ;
+	p_screen[offset] = (Uint32)pix.i;
 }
 
 static inline t_pix			get_pix_line(t_line *p, float x,

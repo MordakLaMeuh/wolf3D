@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rendering_layer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/07 11:30:00 by stoupin           #+#    #+#             */
-/*   Updated: 2017/06/07 11:30:02 by stoupin          ###   ########.fr       */
+/*   Updated: 2017/06/10 11:38:31 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,18 +90,19 @@ void				rendering_layer_render(t_rendering_layer *layer)
 	}
 }
 
-void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer)
+void				rendering_layer_put(t_env *e, t_rendering_layer *layer)
 {
 	int			i;
 	t_coord_i	*ij;
 	t_pix		*p;
+	Uint32* p_screen = (Uint32*)e->surface->pixels;
 
 	ij = layer->ij;
 	p = layer->result;
 	i = -1;
 	while (++i < layer->n)
 	{
-		pix[WIDTH * ij->y + ij->x] = *p;
+		p_screen[ij->y * WIDTH + ij->x] = (Uint32)p->i;
 		ij++;
 		p++;
 	}
