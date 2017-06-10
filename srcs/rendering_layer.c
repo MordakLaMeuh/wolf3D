@@ -116,7 +116,7 @@ void				rendering_layer_render_sprite(t_rendering_layer *layer,
 	result = layer->result;
 	i = -1;
 	while (++i < layer->n)
-		result[i] = get_pix(&layer->bmp[layer->type[i]], layer->uv[i]);
+		result[i] = get_pix_simple(&layer->bmp[layer->type[i]], layer->uv[i]);
 	i = -1;
 	while (++i < layer->n)
 	{
