@@ -189,6 +189,30 @@ typedef struct			s_sky
 	t_bmp				*data;
 }						t_sky;
 
+typedef struct			s_vector_2
+{
+	float				dx;
+	float				dy;
+	float				module;
+}						t_vector_2;
+
+typedef struct			s_wall_vector
+{
+	t_vector_2			v;
+	t_coord_f			norm;
+}						t_wall_vector;
+
+typedef struct			s_wall_info
+{
+	t_coord_f			ray_pos;
+	t_coord_f			ray_dir;
+	t_coord_i			map;
+	t_coord_i			step;
+	t_coord_f			delta_dist;
+	t_coord_f			side_dist;
+	t_wall_vector		w;
+}						t_wall_info;
+
 struct					s_env
 {
 	void				*mlx;
