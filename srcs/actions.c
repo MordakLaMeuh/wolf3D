@@ -212,8 +212,8 @@ int				move_player(t_env *e)
 	int							trigger;
 	int							i;
 	static t_modify_coord		types[N_CONTROL] = {
-		{KEYB_ARROW_LEFT, KEYB_MMO_A, -0.09, 0},
-		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +0.09, 0},
+		{KEYB_ARROW_LEFT, KEYB_MMO_A, -0.15, 0},
+		{KEYB_ARROW_RIGHT, KEYB_MMO_D, +0.15, 0},
 		{KEYB_ARROW_UP, KEYB_MMO_W, 0, 0.015},
 		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -0.015}
 	};
