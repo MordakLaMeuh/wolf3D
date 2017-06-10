@@ -29,11 +29,12 @@
 # define VIEW_ANGLE			(2.f * M_PI / RATIO)
 # define SHADOW_LIMIT		7
 
-# define MAP_ORIGIN_X			((4.f / 5 * WIDTH) - 1)
-# define MAP_ORIGIN_Y			0
-# define MAP_TILE_N				19
-# define MAP_GLOBAL_SIZE		(1.f / 5 * WIDTH)
-# define TILE_SIZE				(MAP_GLOBAL_SIZE / MAP_TILE_N)
+# define MAP_ORIGIN_X			(WIDTH - 120)
+# define MAP_ORIGIN_Y			120
+# define MAP_RADIUS				100
+# define MAP_DEPTH				10
+# define LONG_ARROW_RADIUS		30
+# define ARROW_RADIUS			15
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -251,13 +252,15 @@ void					draw_minimap(t_env *e);
 
 int						move_player(t_env *e);
 
-void					draw_arrow(t_env *e, t_coord_i c, float angle,
-																float factor);
+void					draw_arrow(t_env *e, t_coord_i c, float angle);
 void					draw_line(t_env *env, t_line *p);
 void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
 void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
 																	t_env *e);
+void					draw_circle(t_env *e, t_coord_i position, int radius,
+																t_pix color);
+
 void					init_floor(t_env *e, char **textures, int n);
 void					render_floor(t_env *env, t_rendering_layer *layer);
 

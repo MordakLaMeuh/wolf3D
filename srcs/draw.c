@@ -14,19 +14,29 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void	draw_arrow(t_env *e, t_coord_i c, float angle, float factor)
+static inline void	plot_pixel(t_env *env, t_coord_i l, t_pix pix)
+{
+	int offset;
+
+	offset = (l.y * WIDTH) + l.x;
+	if (offset >= (WIDTH * HEIGHT) || offset < 0)
+		return ;
+	env->scene.scene[offset] = pix;
+}
+
+void				draw_arrow(t_env *e, t_coord_i c, float angle)
 {
 	t_line		line;
 	t_coord_i	l1;
 	t_coord_i	l2;
 	t_coord_i	l3;
 
-	l1.y = c.y + (int)(((sinf(angle + M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
-	l1.x = c.x + (int)(((cosf(angle + M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
-	l2.y = c.y + (int)(((sinf(angle - M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
-	l2.x = c.x + (int)(((cosf(angle - M_PI * 3 / 4)) * TILE_SIZE / 4 * factor));
-	l3.y = c.y + (int)(((sinf(angle)) * TILE_SIZE / 2 * factor));
-	l3.x = c.x + (int)(((cosf(angle)) * TILE_SIZE / 2 * factor));
+	l1.y = c.y + (int)(((sinf(angle + M_PI * 3 / 4)) * ARROW_RADIUS));
+	l1.x = c.x + (int)(((cosf(angle + M_PI * 3 / 4)) * ARROW_RADIUS));
+	l2.y = c.y + (int)(((sinf(angle - M_PI * 3 / 4)) * ARROW_RADIUS));
+	l2.x = c.x + (int)(((cosf(angle - M_PI * 3 / 4)) * ARROW_RADIUS));
+	l3.y = c.y + (int)(((sinf(angle)) * LONG_ARROW_RADIUS));
+	l3.x = c.x + (int)(((cosf(angle)) * LONG_ARROW_RADIUS));
 	line.p1 = l1;
 	line.p2 = l2;
 	line.b_pix.i = 0x0000FF;
@@ -42,7 +52,7 @@ void	draw_arrow(t_env *e, t_coord_i c, float angle, float factor)
 	draw_line(e, &line);
 }
 
-void	draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
+void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 {
 	t_line line;
 
@@ -61,7 +71,7 @@ void	draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 	draw_line(e, &line);
 }
 
-void	fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
+void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 {
 	t_line	line;
 	int		i;
@@ -77,5 +87,39 @@ void	fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 		line.p2.y = i;
 		draw_line(e, &line);
 		i++;
+	}
+}
+
+/*
+** Les equations en dessous decoulent de la formule generale d'un cercle:
+** x² + y² = r²
+*/
+
+void				draw_circle(t_env *e, t_coord_i position, int radius,
+																	t_pix color)
+{
+	t_coord_i	location;
+	float		x;
+	float		y;
+
+	x = -radius - 1;
+	while (++x <= radius)
+	{
+		y = sqrt((radius * radius) - (x * x));
+		location.x = x + position.x;
+		location.y = floor(y) + position.y;
+		plot_pixel(e, location, color);
+		location.y = -floor(y) + position.y;
+		plot_pixel(e, location, color);
+	}
+	y = -radius - 1;
+	while (++y <= radius)
+	{
+		x = sqrt((radius * radius) - (y * y));
+		location.y = y + position.y;
+		location.x = floor(x) + position.x;
+		plot_pixel(e, location, color);
+		location.x = -floor(x) + position.x;
+		plot_pixel(e, location, color);
 	}
 }
