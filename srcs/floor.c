@@ -14,9 +14,12 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void					init_floor(t_env *env, char **textures, int n)
+void					init_floor(t_env *e, char **textures, int n)
 {
-	rendering_layer_init(&(env->scene.floor), textures, n);
+	if (!(e->scene.bmp_floor = load_bitmap(textures, n)))
+		exit(EXIT_FAILURE);
+	e->scene.n_layer_floor = 0;
+	e->scene.floor = (t_rendering_layer *)ft_memalloc(sizeof(t_rendering_layer) * WIDTH * HEIGHT);
 }
 
 static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
@@ -33,10 +36,12 @@ static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
 
 void					render_floor(t_env *env, t_rendering_layer *layer)
 {
-	t_coord_i	c;
-	t_coord_f	angle;
+	t_coord_i			c;
+	t_coord_f			angle;
+	t_rendering_layer 	*origin;
 
-	layer->n = 0;
+	origin = layer;
+	env->scene.n_layer_floor = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
 	{
@@ -47,13 +52,15 @@ void					render_floor(t_env *env, t_rendering_layer *layer)
 			if (angle.y <= env->scene.columns[c.x].wall_min_angle)
 			{
 				angle.x = env->angle_x[c.x] + env->player.angle;
-				layer->ij[layer->n] = c;
-				layer->uv[layer->n] = calc_tex_coord(env->player.location,
+				layer->ij = c;
+				layer->uv = calc_tex_coord(env->player.location,
 								angle.x, env->dist_floor[c.y] /
-										env->cos_list[c.x], layer->bmp->dim);
-				layer->dist[layer->n++] = env->dist_floor[c.y];
+										env->cos_list[c.x], env->scene.bmp_floor->dim);
+				layer->dist = env->dist_floor[c.y];
+				layer++;
+				env->scene.n_layer_floor += 1;
 			}
 		}
 	}
-	rendering_layer_render(layer, env->interpolate_state);
+	rendering_layer_render(origin, env->interpolate_state, env->scene.n_layer_floor, env->scene.bmp_floor);
 }

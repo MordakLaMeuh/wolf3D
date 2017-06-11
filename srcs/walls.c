@@ -14,9 +14,12 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void			init_walls(t_env *env, char **textures, int n)
+void			init_walls(t_env *e, char **textures, int n)
 {
-	rendering_layer_init(&(env->scene.wall), textures, n);
+	if (!(e->scene.bmp_wall = load_bitmap(textures, n)))
+		exit(EXIT_FAILURE);
+	e->scene.n_layer_wall = 0;
+	e->scene.wall = (t_rendering_layer *)ft_memalloc(sizeof(t_rendering_layer) * WIDTH * HEIGHT);
 }
 
 /*
@@ -86,6 +89,8 @@ static float	square_intersection(t_coord_f origin, t_coord_f c,
 	return (1. - (intersection->x - corners[3].x));
 }
 
+#include <stdio.h>
+
 int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 																float *x_tex)
 {
@@ -110,14 +115,23 @@ int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 	}
 }
 
+/*
+** TODO Le bug des textures des murs vient de
+** (env->scene.bmp_wall->dim.x - 2), wall_y_tex * (env->scene.bmp_wall->dim.y ...
+** Toutes les dimensions de la projection sont calcule sur les dim de
+** la texture 1 !
+*/
+
 void			render_wall(t_env *env, t_rendering_layer *layer)
 {
 	t_coord_i	c;
 	float		angle_y;
 	float		wall_y_tex;
 	t_column	*cl;
+	t_rendering_layer 	*origin;
 
-	layer->n = 0;
+	origin = layer;
+	env->scene.n_layer_wall = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
 	{
@@ -129,12 +143,15 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 			{
 				wall_y_tex = (env->player.height + cl->wall_h_dist
 									* env->atan_list[c.y]) / env->wall_height;
-				layer->ij[layer->n] = c;
-				layer->uv[layer->n] = (t_coord_f){cl->wall_x_tex
-			* (layer->bmp->dim.x - 2), wall_y_tex * (layer->bmp->dim.y - 2)};
-				layer->type[layer->n] = cl->type;
-				layer->dist[layer->n++] = cl->wall_h_dist;
+				layer->ij = c;
+				layer->uv = (t_coord_f){cl->wall_x_tex
+			* (env->scene.bmp_wall->dim.x - 2), wall_y_tex * (env->scene.bmp_wall->dim.y - 2)};
+				layer->type = cl->type;
+				layer->dist = cl->wall_h_dist;
+				layer++;
+				env->scene.n_layer_wall += 1;
 			}
 	}
-	rendering_layer_render(layer, env->interpolate_state);
+	rendering_layer_render(origin, env->interpolate_state,
+							env->scene.n_layer_wall, env->scene.bmp_wall);
 }

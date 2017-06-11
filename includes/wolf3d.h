@@ -149,39 +149,70 @@ typedef struct			s_tile
 
 typedef struct			s_column
 {
-	float	wall_h_dist;
-	float	wall_x_tex;
-	float	wall_min_angle;
-	float	wall_max_angle;
-	int		type;
+	float				wall_h_dist;
+	float				wall_x_tex;
+	float				wall_min_angle;
+	float				wall_max_angle;
+	int					type;
 }						t_column;
 
 typedef struct			s_rendering_layer
 {
-	t_bmp		*bmp;
-	int			n;
-	int			*type;
-	t_coord_i	*ij;
-	t_coord_f	*uv;
-	float		*dist;
-	t_pix		*result;
+	t_coord_i			ij;
+	t_coord_f			uv;
+	int					type;
+	float				dist;
+	t_pix				result;
 }						t_rendering_layer;
 
-typedef struct			s_sprite
+typedef struct			s_scene
 {
-	int			type;
-	t_coord_f	location;
-}						t_sprite;
+	t_bmp				*bmp_wall;
+	t_bmp				*bmp_floor;
+	t_bmp				*bmp_sprite;
+
+	int					n_layer_wall;
+	int 				n_layer_floor;
+	int					n_layer_sprite;
+
+	t_column			*columns;
+
+	t_rendering_layer	*wall;
+	t_rendering_layer	*floor;
+	t_rendering_layer	*sprites;
+
+	t_pix				*scene;
+}						t_scene;
+
+
+/*
+typedef struct			s_rendering_layer
+{
+	t_bmp				*bmp;
+	int					n;
+
+	int					*type;
+	t_coord_i			*ij;
+	t_coord_f			*uv;
+	float				*dist;
+	t_pix				*result;
+}						t_rendering_layer;
 
 typedef struct			s_scene
 {
 	t_column			*columns;
-	t_rendering_layer	sky;
 	t_rendering_layer	wall;
 	t_rendering_layer	floor;
 	t_rendering_layer	sprites;
 	t_pix				*scene;
 }						t_scene;
+*/
+
+typedef struct			s_sprite
+{
+	int					type;
+	t_coord_f			location;
+}						t_sprite;
 
 typedef struct			s_sky
 {
@@ -306,16 +337,14 @@ void					scene_to_win(t_env *env);
 
 void					draw_weapon(t_env *e);
 
-void					rendering_layer_init(t_rendering_layer *layer,
-													char **file_names, int n);
-
 void					rendering_layer_render(t_rendering_layer *layer,
-															int interpolate);
-void					rendering_layer_put(t_pix *pix,
-													t_rendering_layer *layer);
+											int interpolate, int n, t_bmp *bmp);
 void					rendering_layer_render_sprite(t_rendering_layer *layer,
-															int interpolate);
+											int interpolate, int n, t_bmp *bmp);
+
+void					rendering_layer_put(t_pix *pix,
+											t_rendering_layer *layer, int n);
 void					rendering_layer_put_sprite(t_pix *pix,
-													t_rendering_layer *layer);
+											t_rendering_layer *layer, int n);
 unsigned long int		get_time(void);
 #endif

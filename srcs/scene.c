@@ -31,9 +31,9 @@ static void			merge_layers(t_env *env)
 
 	scene = env->scene.scene;
 	render_sky(env, env->player.angle);
-	rendering_layer_put(scene, &(env->scene.wall));
-	rendering_layer_put(scene, &(env->scene.floor));
-	rendering_layer_put_sprite(scene, &(env->scene.sprites));
+	rendering_layer_put(scene, (env->scene.wall), env->scene.n_layer_wall);
+	rendering_layer_put(scene, (env->scene.floor), env->scene.n_layer_floor);
+	rendering_layer_put_sprite(scene, (env->scene.sprites), env->scene.n_layer_sprite);
 }
 
 void				render_scene(t_env *env)
@@ -55,9 +55,9 @@ void				render_scene(t_env *env)
 		c->wall_max_angle = atanf((env->wall_height - env->player.height)
 									/ c->wall_h_dist);
 	}
-	render_wall(env, &(env->scene.wall));
-	render_floor(env, &(env->scene.floor));
-	render_sprites(env, &(env->scene.sprites));
+	render_wall(env, (env->scene.wall));
+	render_floor(env, (env->scene.floor));
+	render_sprites(env, (env->scene.sprites));
 	merge_layers(env);
 }
 

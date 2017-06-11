@@ -13,26 +13,6 @@
 #include <stdlib.h>
 #include "wolf3d.h"
 
-void				rendering_layer_init(t_rendering_layer *layer,
-													char **file_names, int n)
-{
-	layer->n = 0;
-	if (!(layer->bmp = load_bitmap(file_names, n)))
-		exit(EXIT_FAILURE);
-	if (!(layer->ij = (t_coord_i*)
-							ft_memalloc(sizeof(t_coord_i) * WIDTH * HEIGHT)))
-		exit(EXIT_FAILURE);
-	if (!(layer->uv = (t_coord_f*)
-							ft_memalloc(sizeof(t_coord_f) * WIDTH * HEIGHT)))
-		exit(EXIT_FAILURE);
-	if (!(layer->dist = (float*)ft_memalloc(sizeof(float) * WIDTH * HEIGHT)))
-		exit(EXIT_FAILURE);
-	if (!(layer->type = (int*)ft_memalloc(sizeof(int) * WIDTH * HEIGHT)))
-		exit(EXIT_FAILURE);
-	if (!(layer->result = (t_pix*)ft_memalloc(sizeof(t_pix) * WIDTH * HEIGHT)))
-		exit(EXIT_FAILURE);
-}
-
 static inline t_pix	interp_pix(t_pix b, t_pix f, float ratio)
 {
 	t_pix	new_pix;
@@ -76,95 +56,67 @@ static inline t_pix	get_pix_simple(t_bmp *src, t_coord_f c_src)
 }
 
 void				rendering_layer_render(t_rendering_layer *layer,
-															int interpolate)
+											int interpolate, int n, t_bmp *bmp)
 {
-	int		i;
-	float	fact;
-	float	dist;
-	t_pix	*result;
-	t_pix	(*get_pix)(t_bmp *, t_coord_f);
+	float				dist;
+	t_pix				(*get_pix)(t_bmp *, t_coord_f);
 
 	get_pix = (interpolate) ? &get_pix_complex : &get_pix_simple;
-	result = layer->result;
-	i = -1;
-	while (++i < layer->n)
-		result[i] = get_pix(&layer->bmp[layer->type[i]], layer->uv[i]);
-	i = -1;
-	while (++i < layer->n)
+	while (n--)
 	{
-		dist = layer->dist[i];
-		if (dist > SHADOW_LIMIT)
+		layer->result = get_pix(&bmp[layer->type], layer->uv);
+		if ((dist = layer->dist) > SHADOW_LIMIT)
 		{
-			fact = SHADOW_LIMIT / dist;
-			result[i].c.b *= fact;
-			result[i].c.g *= fact;
-			result[i].c.r *= fact;
+			dist =  SHADOW_LIMIT / dist;
+			layer->result.c.b *= dist;
+			layer->result.c.g *= dist;
+			layer->result.c.r *= dist;
 		}
+		layer++;
 	}
 }
 
 void				rendering_layer_render_sprite(t_rendering_layer *layer,
-															int interpolate)
+											int interpolate, int n, t_bmp *bmp)
 {
-	int		i;
-	float	fact;
 	float	dist;
-	t_pix	*result;
 	t_pix	(*get_pix)(t_bmp *, t_coord_f);
 
 	get_pix = (interpolate) ? &get_pix_complex : &get_pix_simple;
-	result = layer->result;
-	i = -1;
-	while (++i < layer->n)
-		result[i] = get_pix_simple(&layer->bmp[layer->type[i]], layer->uv[i]);
-	i = -1;
-	while (++i < layer->n)
+	while (n--)
 	{
-		dist = layer->dist[i];
-		if (result[i].i == 0xff00ff)
-			result[i].c.a = 0xff;
+		layer->result = get_pix_simple(&bmp[layer->type], layer->uv);
+		dist = layer->dist;
+		if (layer->result.i == 0xff00ff)
+			layer->result.c.a = 0xff;
 		if (dist > SHADOW_LIMIT)
 		{
-			fact = SHADOW_LIMIT / dist;
-			result[i].c.b *= fact;
-			result[i].c.g *= fact;
-			result[i].c.r *= fact;
+			dist = SHADOW_LIMIT / dist;
+			layer->result.c.b *= dist;
+			layer->result.c.g *= dist;
+			layer->result.c.r *= dist;
 		}
+		layer++;
 	}
 }
 
-void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer)
+void				rendering_layer_put(t_pix *pix, t_rendering_layer *layer,
+																		int n)
 {
-	int			i;
-	t_coord_i	*ij;
-	t_pix		*p;
-
-	ij = layer->ij;
-	p = layer->result;
-	i = -1;
-	while (++i < layer->n)
+	while (n--)
 	{
-		pix[WIDTH * ij->y + ij->x] = *p;
-		ij++;
-		p++;
+		pix[WIDTH * layer->ij.y + layer->ij.x] = layer->result;
+		layer++;
 	}
 }
 
 void				rendering_layer_put_sprite(t_pix *pix,
-													t_rendering_layer *layer)
+											t_rendering_layer *layer, int n)
 {
-	int			i;
-	t_coord_i	*ij;
-	t_pix		*p;
-
-	ij = layer->ij;
-	p = layer->result;
-	i = -1;
-	while (++i < layer->n)
+	while (n--)
 	{
-		pix[WIDTH * ij->y + ij->x].i = p->i * (p->c.a != 0xff) +
-							pix[WIDTH * ij->y + ij->x].i * (p->c.a == 0xff);
-		ij++;
-		p++;
+		pix[WIDTH * layer->ij.y + layer->ij.x].i = layer->result.i * (layer->result.c.a != 0xff) +
+							pix[WIDTH * layer->ij.y + layer->ij.x].i * (layer->result.c.a == 0xff);
+		layer++;
 	}
 }
