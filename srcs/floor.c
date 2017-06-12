@@ -39,9 +39,7 @@ void					render_floor(t_env *env, t_rendering_layer *layer)
 {
 	t_coord_i			c;
 	t_coord_f			angle;
-	t_rendering_layer	*origin;
 
-	origin = layer;
 	env->scene.n_layer_floor = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
@@ -60,6 +58,6 @@ angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
 				env->scene.n_layer_floor += 1;
 			}
 	}
-	rendering_layer_render(origin, env->inter_state,
+	rendering_layer_render(layer - env->scene.n_layer_floor, env->inter_state,
 							env->scene.n_layer_floor, env->scene.bmp_floor);
 }
