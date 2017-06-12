@@ -29,42 +29,30 @@ static void		draw_enemy(t_env *e, t_coord_i l)
 			(t_coord_i){l.x + 3, l.y + 3}, pix, e);
 }
 
-static float	get_distance(t_coord_f p1, t_coord_f p2)
-{
-	float dx;
-	float dy;
-
-	dx = p1.x - p2.x;
-	dy = p1.y - p2.y;
-	return (sqrtf((dx * dx) + (dy * dy)));
-}
-
-static void		locate_enemy(t_env *e)
+static void		locate_enemy(t_env *e, float ref_angle)
 {
 	t_coord_f	l;
 	int			i;
 	t_pix		pix;
+	float		dist;
+	float		angle;
 
-	pix.i = 0xff0000;
-	i = 0;
-	while (i < e->n_sprites)
+	pix.i = 0x800000;
+	i = -1;
+	while (++i < e->n_sprites)
 	{
-		if (get_distance(e->player.location, e->sprites[i].location) <
-															(MAP_DEPTH - 1))
+		l.x = e->player.location.x - e->sprites[i].location.x;
+		l.y = e->player.location.y - e->sprites[i].location.y;
+		if ((dist = sqrtf((l.x * l.x) + (l.y * l.y))) < (MAP_DEPTH - 1))
 		{
-			l.x = e->player.location.x - e->sprites[i].location.x;
-			l.y = e->player.location.y - e->sprites[i].location.y;
-			l.x = -l.x;
-			l.y = -l.y;
-			l.x *= (MAP_RADIUS / MAP_DEPTH);
-			l.y *= (MAP_RADIUS / MAP_DEPTH);
-			l.x += MAP_ORIGIN_X;
-			l.y += MAP_ORIGIN_Y;
+			angle = acosf(-l.x / dist);
+			pix.i = (ref_angle - angle < 0) ? 0x800000 : 0xff0000;
+			l.x = l.x * -(MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
+			l.y = l.y * -(MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
 			if (FALSE)
 				draw_enemy(e, (t_coord_i){(int)l.x, (int)l.y});
 			draw_circle(e, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
 		}
-		i++;
 	}
 }
 
@@ -95,5 +83,5 @@ void			draw_minimap(t_env *e)
 	line.b_pix.i = 0xFFFF00;
 	line.f_pix.i = 0x00FFFF;
 	draw_line(e, &line);
-	locate_enemy(e);
+	locate_enemy(e, atan2(sin(angle), cos(angle)));
 }
