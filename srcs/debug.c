@@ -62,3 +62,16 @@ void			eval_fps(t_env *e)
 	mlx_string_put(e->mlx, e->win, 20, 20, 0x00FFFFFF, "FPS:");
 	mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, (s) ? s : "");
 }
+
+int				err_usage(char *cmd)
+{
+	ft_eprintf("Illegal map!\n"
+		"usage: %s [input_file]\n", cmd, cmd);
+	return (EXIT_FAILURE);
+}
+
+int				err_msg(char *msg)
+{
+	ft_eprintf("Fatal error: %s\nYou should made an other try!\n", msg);
+	return (EXIT_FAILURE);
+}

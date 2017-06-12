@@ -14,28 +14,24 @@
 #include <stdlib.h>
 #include "wolf3d.h"
 
-static int			err_usage(char *cmd)
+static void			interpolate_switch(t_env *e, unsigned long int m)
 {
-	ft_eprintf("Illegal map!\n"
-		"usage: %s [input_file]\n", cmd, cmd);
-	return (EXIT_FAILURE);
-}
+	char *s;
 
-static int			err_msg(char *msg)
-{
-	ft_eprintf("Fatal error: %s\nYou should made an other try!\n", msg);
-	return (EXIT_FAILURE);
+	if ((m - e->inter_time) < 1000)
+	{
+		ft_asprintf(&s, "Interpolation lineaire: %s",
+									(e->inter_state) ? "ON" : "OFF");
+		mlx_string_put(e->mlx, e->win, 20, 40, 0x00FFFFFF, s);
+		free(s);
+	}
+	else
+		e->inter_time = 0;
 }
-
-/*
-** draw_weapon(e);
-*/
 
 static int			move(t_env *e)
 {
 	t_pix				pix;
-	unsigned long int	m;
-	char				*s;
 
 	common_action(e);
 	move_player(e);
@@ -47,19 +43,8 @@ static int			move(t_env *e)
 	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
 	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
-	m = get_time();
-	if (e->interpolate_time)
-	{
-		if ((m - e->interpolate_time) < 1000)
-		{
-			ft_asprintf(&s, "Interpolation lineaire: %s",
-										(e->interpolate_state) ? "ON" : "OFF");
-			mlx_string_put(e->mlx, e->win, 20, 40, 0x00FFFFFF, s);
-			free(s);
-		}
-		else
-			e->interpolate_time = 0;
-	}
+	if (e->inter_time)
+		interpolate_switch(e, get_time());
 	eval_fps(e);
 	return (0);
 }
@@ -76,6 +61,7 @@ static void			init_all(t_env *e)
 {
 	int i;
 
+	create_mlx_image(e);
 	init_sky(e, "images/astro.bmp");
 	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
@@ -112,16 +98,14 @@ int					main(int argc, char **argv)
 		return (err_msg("Error during initialisation"));
 	if (!(env.map_tiles = get_map(argv[1], &env)))
 		return (err_usage(argv[0]));
-	if (DEBUG_MAP)
-		view_map(env.map_tiles, env.map.size.x, env.map.size.y);
+	view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	env.wall_height = 3.f;
 	env.sprite_height = 2.5f;
 	env.player.angle = 6.f / 4 * M_PI;
 	env.player.height = 2.f;
 	env.player.location = (t_coord_f){env.map.size.x / 2., env.map.size.y / 2.};
 	env.display_minimap = TRUE;
-	env.interpolate_state = TRUE;
-	create_mlx_image(&env);
+	env.inter_state = TRUE;
 	init_all(&env);
 	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
 	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);

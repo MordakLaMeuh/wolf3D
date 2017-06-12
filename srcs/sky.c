@@ -110,19 +110,3 @@ void				init_sky(t_env *e, char *file_name)
 	free(sky_bmp->pix);
 	free(sky_bmp);
 }
-
-void				render_sky(t_env *e, float angle)
-{
-	int		i;
-	int		j;
-
-	e->sky->pos = (int)((RATIO * WIDTH) * (angle / (2.f * M_PI)));
-	j = 0;
-	i = e->sky->pos;
-	while (j < (SCREENSIZE >> 1))
-	{
-		e->scene.scene[j++] = e->sky->data->pix[i++];
-		if (j % WIDTH == 0)
-			i += RATIO * WIDTH;
-	}
-}

@@ -127,9 +127,7 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 	float				angle_y;
 	float				wall_y_tex;
 	t_column			*cl;
-	t_rendering_layer	*origin;
 
-	origin = layer;
 	env->scene.n_layer_wall = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
@@ -142,16 +140,12 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 			{
 				wall_y_tex = (env->player.height + cl->wall_h_dist
 									* env->atan_list[c.y]) / env->wall_height;
-				layer->ij = c;
-				layer->uv = (t_coord_f){cl->wall_x_tex
-					* (env->scene.bmp_wall->dim.x - 2), wall_y_tex *
-					(env->scene.bmp_wall->dim.y - 2)};
-				layer->type = cl->type;
-				layer->dist = cl->wall_h_dist;
-				layer++;
+				*(layer)++ = (t_rendering_layer){c, (t_coord_f){cl->wall_x_tex *
+	(env->scene.bmp_wall->dim.x - 2), wall_y_tex *
+	(env->scene.bmp_wall->dim.y - 2)}, cl->type, cl->wall_h_dist, {0}};
 				env->scene.n_layer_wall += 1;
 			}
 	}
-	rendering_layer_render(origin, env->interpolate_state,
+	rendering_layer_render(layer - env->scene.n_layer_wall, env->inter_state,
 							env->scene.n_layer_wall, env->scene.bmp_wall);
 }

@@ -29,7 +29,7 @@ endif
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
 		load_config rendering_layer floor sky walls sprites scene \
 		get_next_line load ft_secure_atoi_spaces debug minimap draw_line draw \
-		lib weapon timer
+		lib timer render_sky render_threads get_wall_infos define_mouvements
 
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))

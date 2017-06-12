@@ -18,7 +18,6 @@
 # include "libft.h"
 
 # define DEBUG_KEYBOARD		FALSE
-# define DEBUG_MAP			TRUE
 
 # define NOSTALGIA_FACTOR	1
 # define WIDTH				(1920 / NOSTALGIA_FACTOR)
@@ -240,8 +239,8 @@ struct					s_env
 	float				atan_list[HEIGHT];
 	float				cos_list[WIDTH];
 	t_scene				scene;
-	int					interpolate_state;
-	unsigned long int	interpolate_time;
+	int					inter_state;
+	unsigned long int	inter_time;
 	int					n_sprites;
 	t_sprite			*sprites;
 };
@@ -259,10 +258,10 @@ typedef struct			s_modify_coord
 typedef struct			s_thread_format
 {
 	int					n;
-	int					interpolate;
+	int					inter;
 	t_bmp				*bmp;
 	t_rendering_layer	*layer;
-}						t_thread_format;
+}						t_th_format;
 
 typedef struct			s_thread_put
 {
@@ -325,16 +324,32 @@ void					init_scene(t_env *env);
 void					render_scene(t_env *env);
 void					scene_to_win(t_env *env);
 
-void					draw_weapon(t_env *e);
-
 void					rendering_layer_render(t_rendering_layer *layer,
-											int interpolate, int n, t_bmp *bmp);
+											int inter, int n, t_bmp *bmp);
 void					rendering_layer_render_sprite(t_rendering_layer *layer,
-											int interpolate, int n, t_bmp *bmp);
+											int inter, int n, t_bmp *bmp);
 
 void					rendering_layer_put(t_pix *pix,
 											t_rendering_layer *layer, int n);
 void					rendering_layer_put_sprite(t_pix *pix,
 											t_rendering_layer *layer, int n);
 unsigned long int		get_time(void);
+
+int						err_usage(char *cmd);
+int						err_msg(char *msg);
+
+void					*thread_x_sprite(void *arg);
+void					*thread_x_base(void *arg);
+
+t_wall_vector			get_wall_info(t_tile **tiles, float angle,
+														t_coord_f location);
+
+float					mvt_right(t_tile **map, t_coord_f mvt,
+														t_coord_f location);
+float					mvt_left(t_tile **map, t_coord_f mvt,
+														t_coord_f location);
+float					mvt_top(t_tile **map, t_coord_f mvt,
+														t_coord_f location);
+float					mvt_back(t_tile **map, t_coord_f mvt,
+														t_coord_f location);
 #endif

@@ -60,6 +60,6 @@ angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
 				env->scene.n_layer_floor += 1;
 			}
 	}
-	rendering_layer_render(origin, env->interpolate_state,
+	rendering_layer_render(origin, env->inter_state,
 							env->scene.n_layer_floor, env->scene.bmp_floor);
 }
