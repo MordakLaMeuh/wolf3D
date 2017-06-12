@@ -43,12 +43,14 @@ static void		locate_enemy(t_env *e)
 {
 	t_coord_f	l;
 	int			i;
+	t_pix		pix;
 
+	pix.i = 0xff0000;
 	i = 0;
 	while (i < e->n_sprites)
 	{
 		if (get_distance(e->player.location, e->sprites[i].location) <
-											(MAP_DEPTH - 1))
+															(MAP_DEPTH - 1))
 		{
 			l.x = e->player.location.x - e->sprites[i].location.x;
 			l.y = e->player.location.y - e->sprites[i].location.y;
@@ -58,7 +60,9 @@ static void		locate_enemy(t_env *e)
 			l.y *= (MAP_RADIUS / MAP_DEPTH);
 			l.x += MAP_ORIGIN_X;
 			l.y += MAP_ORIGIN_Y;
-			draw_enemy(e, (t_coord_i){(int)l.x, (int)l.y});
+			if (FALSE)
+				draw_enemy(e, (t_coord_i){(int)l.x, (int)l.y});
+			draw_circle(e, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
 		}
 		i++;
 	}
