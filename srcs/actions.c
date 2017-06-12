@@ -209,7 +209,6 @@ static void		set_player_data(t_env *e, float q, float l)
 
 int				move_player(t_env *e)
 {
-	int							trigger;
 	int							i;
 	static t_modify_coord		types[N_CONTROL] = {
 		{KEYB_ARROW_LEFT, KEYB_MMO_A, -0.20, 0},
@@ -221,7 +220,6 @@ int				move_player(t_env *e)
 	float						new_q;
 	float						new_l;
 
-	trigger = FALSE;
 	i = -1;
 	while (++i < N_CONTROL)
 		if (e->keyb[types[i].keycode_1])
@@ -231,9 +229,8 @@ int				move_player(t_env *e)
 			new_l = (time_elapsed - e->keyb[types[i].keycode_1]) * types[i].l;
 			e->keyb[types[i].keycode_1] = time_elapsed;
 			set_player_data(e, new_q, new_l);
-			trigger = TRUE;
 		}
-	return (trigger);
+	return (0);
 }
 
 static int		event_register(t_env *e, int keycode, int *state)

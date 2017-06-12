@@ -170,43 +170,15 @@ typedef struct			s_scene
 	t_bmp				*bmp_wall;
 	t_bmp				*bmp_floor;
 	t_bmp				*bmp_sprite;
-
 	int					n_layer_wall;
-	int 				n_layer_floor;
+	int					n_layer_floor;
 	int					n_layer_sprite;
-
-	t_column			*columns;
-
 	t_rendering_layer	*wall;
 	t_rendering_layer	*floor;
 	t_rendering_layer	*sprites;
-
-	t_pix				*scene;
-}						t_scene;
-
-
-/*
-typedef struct			s_rendering_layer
-{
-	t_bmp				*bmp;
-	int					n;
-
-	int					*type;
-	t_coord_i			*ij;
-	t_coord_f			*uv;
-	float				*dist;
-	t_pix				*result;
-}						t_rendering_layer;
-
-typedef struct			s_scene
-{
 	t_column			*columns;
-	t_rendering_layer	wall;
-	t_rendering_layer	floor;
-	t_rendering_layer	sprites;
 	t_pix				*scene;
 }						t_scene;
-*/
 
 typedef struct			s_sprite
 {
@@ -281,6 +253,24 @@ typedef struct			s_modify_coord
 	float				q;
 	float				l;
 }						t_modify_coord;
+
+# define N_THREAD		4
+
+typedef struct			s_thread_format
+{
+	int					n;
+	int					interpolate;
+	t_bmp				*bmp;
+	t_rendering_layer	*layer;
+}						t_thread_format;
+
+typedef struct			s_thread_put
+{
+	int					n;
+	t_rendering_layer	*layer;
+	t_pix				*pix;
+
+}						t_thread_put;
 
 t_pix					get_pix_sp(t_bmp *src, t_coord_f c_src);
 float					dist(t_coord_f a, t_coord_f b);

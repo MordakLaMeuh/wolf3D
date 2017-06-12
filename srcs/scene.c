@@ -33,7 +33,8 @@ static void			merge_layers(t_env *env)
 	render_sky(env, env->player.angle);
 	rendering_layer_put(scene, (env->scene.wall), env->scene.n_layer_wall);
 	rendering_layer_put(scene, (env->scene.floor), env->scene.n_layer_floor);
-	rendering_layer_put_sprite(scene, (env->scene.sprites), env->scene.n_layer_sprite);
+	rendering_layer_put_sprite(scene, (env->scene.sprites),
+													env->scene.n_layer_sprite);
 }
 
 void				render_scene(t_env *env)
