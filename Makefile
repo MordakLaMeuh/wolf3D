@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/06/10 12:06:55 by bmickael         ###   ########.fr        #
+#    Updated: 2017/06/12 05:16:25 by bmickael         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -44,7 +44,11 @@ $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./minilibx_sierra/libmlx.a
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
+ifeq ($(NOSTALGIA),yes)
+	$(CC) -D NOSTALGIA -c $(CFLAGS) -o $@ $<
+else
 	$(CC) -c $(CFLAGS) -o $@ $<
+endif
 
 clean:
 	make -C minilibx_sierra/ clean

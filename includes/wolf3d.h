@@ -28,12 +28,12 @@
 # define VIEW_ANGLE			(2.f * M_PI / RATIO)
 # define SHADOW_LIMIT		7
 
-# define MAP_ORIGIN_X			(WIDTH - 120)
-# define MAP_ORIGIN_Y			120
-# define MAP_RADIUS				100
-# define MAP_DEPTH				10
-# define LONG_ARROW_RADIUS		30
-# define ARROW_RADIUS			15
+# define MAP_ORIGIN_X			(WIDTH - (120 >> (NOSTALGIA_FACTOR >> 1)))
+# define MAP_ORIGIN_Y			(120 >> (NOSTALGIA_FACTOR >> 1))
+# define MAP_RADIUS				(100 >> (NOSTALGIA_FACTOR >> 1))
+# define MAP_DEPTH				20
+# define LONG_ARROW_RADIUS		(30 >> (NOSTALGIA_FACTOR >> 1))
+# define ARROW_RADIUS			(15 >> (NOSTALGIA_FACTOR >> 1))
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -253,7 +253,7 @@ typedef struct			s_modify_coord
 	float				l;
 }						t_modify_coord;
 
-# define N_THREAD		4
+# define NB_CORES		4
 
 typedef struct			s_thread_format
 {

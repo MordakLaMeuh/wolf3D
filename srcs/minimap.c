@@ -15,12 +15,61 @@
 #include <math.h>
 #include "wolf3d.h"
 
-void		init_minimap(t_env *e)
+/*
+** TODO minimap en chantier
+** doit absolument etre optimisee !
+*/
+
+static void		draw_enemy(t_env *e, t_coord_i l)
+{
+	t_pix pix;
+
+	pix.i = 0xff0000;
+	fill_box((t_coord_i){l.x - 3, l.y - 3},
+			(t_coord_i){l.x + 3, l.y + 3}, pix, e);
+}
+
+static float	get_distance(t_coord_f p1, t_coord_f p2)
+{
+	float dx;
+	float dy;
+
+	dx = p1.x - p2.x;
+	dy = p1.y - p2.y;
+	return (sqrtf((dx * dx) + (dy * dy)));
+}
+
+static void		locate_enemy(t_env *e)
+{
+	t_coord_f	l;
+	int			i;
+
+	i = 0;
+	while (i < e->n_sprites)
+	{
+		if (get_distance(e->player.location, e->sprites[i].location) <
+											(MAP_DEPTH - 1))
+		{
+			l.x = e->player.location.x - e->sprites[i].location.x;
+			l.y = e->player.location.y - e->sprites[i].location.y;
+			l.x = -l.x;
+			l.y = -l.y;
+			l.x *= (MAP_RADIUS / MAP_DEPTH);
+			l.y *= (MAP_RADIUS / MAP_DEPTH);
+			l.x += MAP_ORIGIN_X;
+			l.y += MAP_ORIGIN_Y;
+			draw_enemy(e, (t_coord_i){(int)l.x, (int)l.y});
+		}
+		i++;
+	}
+}
+
+void			init_minimap(t_env *e)
 {
 	draw_minimap(e);
 }
 
-void		draw_minimap(t_env *e)
+void			draw_minimap(t_env *e)
 {
 	struct timespec	spec;
 	t_coord_i		l1;
@@ -42,4 +91,5 @@ void		draw_minimap(t_env *e)
 	line.b_pix.i = 0xFFFF00;
 	line.f_pix.i = 0x00FFFF;
 	draw_line(e, &line);
+	locate_enemy(e);
 }
