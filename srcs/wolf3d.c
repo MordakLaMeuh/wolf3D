@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:42:11 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/10 12:36:37 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/12 08:26:07 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,7 @@ static void		init_all(t_env *e)
 
 int			sdl_key_is_pushed(t_env *env)
 {
-	if (env->event.key.keysym.sym == SDLK_ESCAPE)
-		return (1);
-	if (env->event.key.keysym.sym == SDLK_UP)
-		move_player(env, SDLK_UP);
-	if (env->event.key.keysym.sym == SDLK_DOWN)
-		move_player(env, SDLK_DOWN);
-	if (env->event.key.keysym.sym == SDLK_LEFT)
-		move_player(env, SDLK_LEFT);
-	if (env->event.key.keysym.sym == SDLK_RIGHT)
-		move_player(env, SDLK_RIGHT);
-	move_player(env, env->event.key.keysym.sym);
+	(void)env;
 	return (0);
 	/*
 	if (env->event.key.keysym.sym == SDLK_a)
@@ -109,12 +99,14 @@ int			sdl_key_is_pushed(t_env *env)
 
 int			sdl_keyhook(t_env *env)
 {
-	while (SDL_PollEvent(&(env->event)))
+	if (SDL_PollEvent(&(env->event)))
 	{
-		if (env->event.type == SDL_KEYDOWN && sdl_key_is_pushed(env))
+		if (env->event.type == SDL_KEYDOWN && env->event.key.keysym.sym == SDLK_ESCAPE)
 			return (1);
 		if (env->event.type == SDL_KEYDOWN)
-			sdl_key_is_pushed(env);
+			sdl_key_press(env);
+		if (env->event.type == SDL_KEYUP)
+			sdl_key_release(env);
 		//	return (ft_key_is_released(env));
 
 		//if (env->event.type == SDL_WINDOWEVENT)
@@ -148,7 +140,8 @@ void		sdl_main_loop(t_env *e)
 	t_pix pix;
 
 	e->surface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
-	printf("%d %d %d %d\n", SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT);
+	printf("up=%d down=%d right=%d left=%d\n", SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_LEFT);
+	printf("SDLK_d=%d SDLK_s=%d SDLK_a=%d SDLK_w=%d\n", SDLK_d, SDLK_s, SDLK_a, SDLK_w);
 	while (TRUE)
 	{
 
@@ -164,6 +157,7 @@ void		sdl_main_loop(t_env *e)
 			sdl_put_pixel(e->surface,x,x,&pixel_white);
 		 END TEST */
 		common_action(e);
+		move_player(e);
 		render_scene(e);
 		if (e->display_minimap)
 			draw_minimap(e);
@@ -175,7 +169,8 @@ void		sdl_main_loop(t_env *e)
 		//eval_fps(e);
 
 		pix.i = 0xff00ff;
-
+		eval_fps(e);
+		SDL_BlitSurface(e->gun0, NULL, e->surface, &(SDL_Rect){900, 825, 20, 20});
 		draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
 						(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
 		SDL_BlitSurface(e->surface , NULL, e->screen, NULL);
@@ -218,9 +213,36 @@ void		sdl_main_loop(t_env *e)
 }
 */
 
+static void 	f_sdl_init_ttf(t_env *env)
+{
+	TTF_Init();
+	env->font = TTF_OpenFont("fonts/opensans.ttf", 40);
+	env->color_white = (SDL_Color){255, 255, 255, 0};
+}
+
+static void 	f_sdl_init_sounds(t_env *env)
+{
+	Mix_Init(MIX_INIT_MP3);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+	env->sound = Mix_LoadWAV("sounds/sound.wav");
+	env->fire = Mix_LoadWAV("sounds/gun.wav");
+	env->sound_channel = Mix_PlayChannel(-1, env->sound, -1);
+	Mix_Playing(env->sound_channel);
+}
+
+static void f_sdl_init_image(t_env *env)
+{
+	IMG_Init(IMG_INIT_PNG);
+	env->gun0 = IMG_Load("images/gun.png");
+	env->gun1 = IMG_Load("images/gun_fire.png");
+	env->in_fire = 0;
+}
+
 static void		f_sdl_init(t_env *env)
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	f_sdl_init_ttf(env);
+	f_sdl_init_sounds(env);
 	env->window = SDL_CreateWindow("Wolfd3D",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE
@@ -230,9 +252,10 @@ static void		f_sdl_init(t_env *env)
     SDL_BlitSurface(env->surface , NULL, env->screen, NULL);
     SDL_FreeSurface(env->surface );
     SDL_UpdateWindowSurface(env->window);
-    SDL_Delay(2200);
+    SDL_Delay(5000);
 	SDL_ShowCursor(SDL_DISABLE);
 	create_mlx_image(env);
+	f_sdl_init_image(env);
 }
 
 int				main(int argc, char **argv)

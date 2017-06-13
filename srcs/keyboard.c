@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/13 03:51:41 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 16:00:22 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/06/12 01:24:26 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,13 @@ static void	print_register(char *k)
 
 #endif
 
-int			mlx_key_release(int keycode, t_env *e)
+int			sdl_key_release(t_env *e)
 {
+	int keycode;
+
+	keycode = e->event.key.keysym.sym;
+	if (keycode > 1073741900 && keycode < 1073741910)
+		keycode -= (KEYS_ARROWS_CONST - KEYS_ARROWS_ADD);
 	e->keyb[keycode & 0xFF] = FALSE;
 	if (DEBUG_KEYBOARD)
 	{
@@ -44,8 +49,13 @@ int			mlx_key_release(int keycode, t_env *e)
 	return (keycode);
 }
 
-int			mlx_key_press(int keycode, t_env *e)
+int			sdl_key_press(t_env *e)
 {
+	int keycode;
+
+	keycode = e->event.key.keysym.sym;
+	if (keycode > 1073741900 && keycode < 1073741910)
+		keycode -= KEYS_ARROWS_CONST - KEYS_ARROWS_ADD;
 	e->keyb[keycode & 0xFF] = TRUE;
 	if (DEBUG_KEYBOARD)
 	{

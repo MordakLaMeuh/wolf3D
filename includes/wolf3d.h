@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:43:32 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/10 12:31:16 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/12 07:47:13 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 
 # include <math.h>
 # include "SDL.h"
+# include "SDL_ttf.h"
+# include "SDL_mixer.h"
+# include "SDL_image.h"
 # include "libft.h"
 
 
@@ -54,21 +57,30 @@
 # define KEYB_8				28
 # define KEYB_9				26
 # define KEYB_C				8
-# define KEYB_M				46
 # define KEYB_P				35
 # define KEYB_R				15
 # define KEYB_HELP			44
 # define KEYB_PLUS			69
 # define KEYB_MINUS			78
 # define KEYB_ESCAPE		53
-# define KEYB_MMO_W			13
-# define KEYB_MMO_S			1
-# define KEYB_MMO_A			0
-# define KEYB_MMO_D			2
+
+
+/*
+** SDL KEYS
+*/
+# define KEYS_ARROWS_CONST	1073741900
+# define KEYS_ARROWS_ADD	120
+# define KEYB_I				105
+# define KEYB_M				109
 # define KEYB_ARROW_UP		126
 # define KEYB_ARROW_DOWN	125
-# define KEYB_ARROW_LEFT	123
-# define KEYB_ARROW_RIGHT	124
+# define KEYB_ARROW_LEFT	124
+# define KEYB_ARROW_RIGHT	123
+# define KEYB_SPACE			32
+# define KEYB_MMO_W			119
+# define KEYB_MMO_S			115
+# define KEYB_MMO_A			97
+# define KEYB_MMO_D			100
 
 # define N_CONTROL			4
 
@@ -196,6 +208,17 @@ struct					s_env
 	SDL_Texture			*texture;
 	SDL_Surface			*screen;
 	SDL_Surface			*surface;
+	TTF_Font			*font;
+	SDL_Color			color_white;
+	SDL_Surface			*s_fps;
+	Mix_Chunk			*sound;
+	Mix_Chunk			*fire;
+	int					sound_channel;
+	int					fire_channel;
+	SDL_Surface			*gun0;
+	SDL_Surface			*gun1;
+	int					in_fire;
+	int					fps;
 
 	void				*mlx;
 	void				*win;
@@ -239,8 +262,6 @@ int						create_mlx_image(t_env *e);
 void					set_mlx_image_bg_color(t_env *e, t_pix color);
 int						exit_mlx(t_env *e);
 
-int						mlx_key_release(int keycode, t_env *e);
-int						mlx_key_press(int keycode, t_env *e);
 int						common_action(t_env *e);
 
 int						ft_secure_atoi_spaces(const char *nptr, int *error);
@@ -252,7 +273,7 @@ void					eval_fps(t_env *e);
 void					init_minimap(t_env *e);
 void					draw_minimap(t_env *e);
 
-int						move_player(t_env *e, int key);
+int						move_player(t_env *e);
 
 void					draw_arrow(t_env *e, t_coord_i c, float angle,
 																float factor);
@@ -286,9 +307,12 @@ void					rendering_layer_put(t_env *e, t_rendering_layer *layer);
 
 int						sdl_key_is_pushed(t_env *env);
 int						sdl_key_is_released(t_env *env);
+int						sdl_key_release(t_env *e);
+int						sdl_key_press(t_env *e);
 void					create_sdl_image(t_env *e);
 void					set_pixel(t_env *e, int i, t_pix pix);
 void					set_pixel_coord(t_env *e, t_coord_i coord, t_pix pix);
 void					sdl_put_pixel(SDL_Surface* screen, t_coord_i c, t_pix* p);
+void					sdl_gun_fire(t_env *e);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/13 06:04:12 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/10 12:24:36 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/12 08:16:54 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ static void		set_player_data(t_env *e, t_modify_coord type)
 	new.y = (sinf(e->player.angle)) * type.l;
 
 	w = get_wall_info(e->map_tiles, e->player.angle, e->player.location);
-	printf("dist: %f, normale: [%f:%f], dx: %f, dy: %f\n", w.v.module, w.norm.x, w.norm.y, w.v.dx, w.v.dy);
+	//printf("dist: %f, normale: [%f:%f], dx: %f, dy: %f\n", w.v.module, w.norm.x, w.norm.y, w.v.dx, w.v.dy);
 
 	new.x += e->player.location.x;
 	new.y += e->player.location.y;
@@ -251,7 +251,7 @@ static void		set_player_data(t_env *e, t_modify_coord type)
 */
 }
 
-int				move_player(t_env *e, int key)
+int				move_player(t_env *e)
 {
 	int							trigger;
 	int							i;
@@ -262,14 +262,6 @@ int				move_player(t_env *e, int key)
 		{KEYB_ARROW_DOWN, KEYB_MMO_S, 0, -1}
 	};
 
-	if (key == SDLK_DOWN)
-		set_player_data(e, types[3]);
-	if (key == SDLK_UP)
-		set_player_data(e, types[2]);
-	if (key == SDLK_LEFT)
-		set_player_data(e, types[0]);
-	if (key == SDLK_RIGHT)
-		set_player_data(e, types[1]);
 	trigger = FALSE;
 	i = -1;
 	while (++i < N_CONTROL)
@@ -302,9 +294,11 @@ int				common_action(t_env *e)
 	int state;
 
 	state = FALSE;
-	if (e->keyb[KEYB_ESCAPE])
-		exit_mlx(e);
+	/*if (e->keyb[KEYB_ESCAPE])
+		exit_mlx(e);*/
 	if (event_register(e, KEYB_M, &state))
 		e->display_minimap = (e->display_minimap) ? FALSE : TRUE;
+	if (event_register(e, KEYB_SPACE, &state))
+		sdl_gun_fire(e);
 	return (state);
 }

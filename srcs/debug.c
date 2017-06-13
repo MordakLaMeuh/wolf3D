@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 01:01:36 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/10 11:02:43 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/12 07:47:34 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,14 @@ void			eval_fps(t_env *e)
 			count = 0;
 		}
 	}
-	(void)e;
-	printf("%s\n", (s) ? s : "");
+	e->fps = count;
+	//printf("%s\n", (s) ? s : "");
+	e->s_fps = TTF_RenderText_Blended(e->font, "FPS :", e->color_white);
+	SDL_BlitSurface(e->s_fps, NULL, e->surface, &(SDL_Rect){20, 20, 20, 20});
+	//SDL_FreeSurface(e->s_fps);
+	e->s_fps = TTF_RenderText_Blended(e->font, s, e->color_white);
+	SDL_BlitSurface(e->s_fps, NULL, e->surface, &(SDL_Rect){120, 20, 20, 20});
+	SDL_FreeSurface(e->s_fps);
 	//mlx_string_put(e->mlx, e->win, 20, 20, 0x00FFFFFF, "FPS:");
 	//mlx_string_put(e->mlx, e->win, 70, 20, 0x00FFFFFF, (s) ? s : "");
 }

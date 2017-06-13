@@ -6,7 +6,7 @@
 /*   By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 07:18:25 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/06 09:41:36 by erucquoy         ###   ########.fr       */
+/*   Updated: 2017/06/12 06:23:12 by erucquoy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 ** "gun/weapon" de taille parfaites (genre du 100*100 300*300 on verra)
 ** Et on va load direct l'image sans interpol #appelle la police
 */
+
+void	sdl_gun_fire(t_env *e)
+{
+	e->fire_channel = Mix_PlayChannel(-1, e->fire, 0);
+	Mix_Playing(e->fire_channel);
+	e->in_fire = 1;
+}
 
 /*void		load_weapon(t_env *e)
 {

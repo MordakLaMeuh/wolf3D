@@ -6,7 +6,7 @@
 #    By: bmickael <bmickael@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/06/10 11:36:18 by erucquoy         ###   ########.fr        #
+#    Updated: 2017/06/12 05:34:54 by erucquoy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ OBJDIR = objs
 INCDIR = includes
 LIBDIR = libft/includes
 LIBFT_HEADER = $(LIBDIR)
-SDL_HEADERS = SDL2/Headers
+SDL_HEADERS = libs/inc
 
 ifeq ($(DEBUG),yes)
 	CFLAGS = -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I $(SDL_HEADERS)
@@ -42,7 +42,7 @@ all: $(NAME)
 $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
 	make -C minilibx_sierra/ all
 	make -C libft/ all DEBUG=$(DEBUG)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./SDL2/SDL2
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -Wl,-rpath ./libs -framework AppKit ./SDL2/SDL2 ./SDL2/SDL2_ttf ./SDL2/SDL2_mixer ./libs/SDL2_image.framework/SDL2_image
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
 	$(CC) -c $(CFLAGS) -o $@ $<
