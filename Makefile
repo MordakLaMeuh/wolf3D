@@ -19,7 +19,7 @@ OBJDIR = objs
 INCDIR = includes
 LIBDIR = libft/includes
 LIBFT_HEADER = $(LIBDIR)
-MINILIBX = minilibx_macos
+MINILIBX = minilibx_elcapitan
 
 ifeq ($(DEBUG),yes)
 	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
