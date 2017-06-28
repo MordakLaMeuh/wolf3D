@@ -19,11 +19,12 @@ OBJDIR = objs
 INCDIR = includes
 LIBDIR = libft/includes
 LIBFT_HEADER = $(LIBDIR)
+MINILIBX = minilibx_macos
 
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
+	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 else
-	CFLAGS = -Ofast -Wall -Werror -Wextra -I $(INCDIR) -I $(LIBFT_HEADER) -I./minilibx_sierra
+	CFLAGS = -Ofast -Wall -Werror -Wextra -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 endif
 
 SRC		= wolf3d image_mlx_tools init_mlx actions keyboard bmp_load bmp_save \
@@ -39,9 +40,9 @@ OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
-	make -C minilibx_sierra/ all
+	make -C $(MINILIBX)/ all
 	make -C libft/ all DEBUG=$(DEBUG)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./minilibx_sierra/libmlx.a
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./$(MINILIBX)/libmlx.a
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
 ifeq ($(NOSTALGIA),yes)
@@ -51,7 +52,7 @@ else
 endif
 
 clean:
-	make -C minilibx_sierra/ clean
+	make -C $(MINILIBX)/ clean
 	make -C libft/ clean
 	rm -vf $(OBJ)
 

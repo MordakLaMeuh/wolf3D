@@ -28,10 +28,20 @@
 ** clock's resolution.
 */
 
+/*
+** unsigned long int	get_time(void)
+** {
+**	struct timespec		spec;
+**
+**	clock_gettime(CLOCK_REALTIME, &spec);
+**	return ((spec.tv_sec * 1000) + spec.tv_nsec / 1.0e6);
+**}
+*/
+
 unsigned long int	get_time(void)
 {
-	struct timespec		spec;
+	struct timeval		spec;
 
-	clock_gettime(CLOCK_REALTIME, &spec);
-	return ((spec.tv_sec * 1000) + spec.tv_nsec / 1.0e6);
+	gettimeofday(&spec, NULL);
+	return ((spec.tv_sec * 1000) + spec.tv_usec / 1.0e3);
 }
