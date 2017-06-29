@@ -18,7 +18,7 @@
 ** README !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ** L'interpolation rends l'image plutot degeux. On va donc faire des images
 ** "gun/weapon" de taille parfaites (genre du 100*100 300*300 on verra)
-** Et on va load direct l'image sans interpol #appelle la police
+** Et on va load direct l'image sans interpol #appelle la font_nb
 */
 
 void		load_weapon(t_env *e)
