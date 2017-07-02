@@ -26,6 +26,7 @@ t_wall_vector	end_seq(t_tile **tiles, float angle, t_wall_info i)
 {
 	int		side;
 
+	side = 0;
 	while (tiles[i.map.y][i.map.x].value <= 0)
 		if (i.side_dist.x < i.side_dist.y)
 		{

@@ -8,9 +8,9 @@ OBJDIR	= objs
 HEADER	= libft.h
 
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I./$(INCDIR)
+	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I./$(INCDIR)
 else
-	CFLAGS = -Wall -Werror -Wextra -O2 -I./$(INCDIR)
+	CFLAGS = -Wall -Werror -Wextra -std=c99 -O2 -I./$(INCDIR)
 endif
 
 SRC_USUALS	= ft_memset ft_bzero ft_memcpy ft_memccpy ft_memmove ft_memchr ft_memcmp \

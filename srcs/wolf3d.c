@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <X11/Xlib.h>
 #include <math.h>
 #include <stdlib.h>
 #include "wolf3d.h"
@@ -107,8 +108,8 @@ int					main(int argc, char **argv)
 	env.display_minimap = TRUE;
 	env.inter_state = TRUE;
 	init_all(&env);
-	mlx_hook(env.win, X11_KEY_RELEASE, 0xFF, &mlx_key_release, &env);
-	mlx_hook(env.win, X11_KEY_PRESS, 0xFF, &mlx_key_press, &env);
+	mlx_hook(env.win, X11_KEY_RELEASE, KeyReleaseMask, &mlx_key_release, &env);
+	mlx_hook(env.win, X11_KEY_PRESS, KeyPressMask, &mlx_key_press, &env);
 	mlx_hook(env.win, X11_DESTROY_NOTIFY, 0xFF, &exit_mlx, &env);
 	mlx_loop_hook(env.mlx, &move, &env);
 	mlx_loop(env.mlx);

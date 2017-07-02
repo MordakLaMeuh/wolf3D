@@ -65,20 +65,20 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 {
 	FILE			*file;
 	char			*buff;
-	struct stat		*stat;
+	struct stat		*infos;
 	size_t			res;
 	t_bitmap		*s;
 
-	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
+	if (!(infos = (struct stat *)malloc(sizeof(struct stat))))
 		exit(EXIT_FAILURE);
-	if ((lstat(file_name, stat)) == -1 || (!(file = fopen(file_name, "rb"))))
+	if ((stat(file_name, infos)) == -1 || (!(file = fopen(file_name, "rb"))))
 	{
 		ft_eprintf("%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	if (!(buff = (char *)malloc(stat->st_size)))
+	if (!(buff = (char *)malloc(infos->st_size)))
 		exit(EXIT_FAILURE);
-	res = fread(buff, stat->st_size, 1, file);
+	res = fread(buff, infos->st_size, 1, file);
 	s = (t_bitmap *)buff;
 	paste_fileheader((t_bitmap *)buff, file_name);
 	*width = s->bitmapinfoheader.width;
@@ -87,5 +87,6 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 		return (0);
 	fill_image((uint8_t *)*data, (uint8_t *)
 			(buff + s->fileheader.fileoffset_to_pixelarray), *width, *height);
+	(void)res;
 	return (1);
 }

@@ -17,11 +17,13 @@
 # include "mlx.h"
 # include "libft.h"
 
-# define DEBUG_KEYBOARD		FALSE
+# define M_PI				3.14159265358979323846
+
+# define DEBUG_KEYBOARD		TRUE
 
 # define NOSTALGIA_FACTOR	1
-# define WIDTH				(1920 / NOSTALGIA_FACTOR)
-# define HEIGHT				(1080 / NOSTALGIA_FACTOR)
+# define WIDTH				(1024 / NOSTALGIA_FACTOR)
+# define HEIGHT				(768 / NOSTALGIA_FACTOR)
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define RATIO				4
@@ -51,21 +53,32 @@
 # define KEYB_8				28
 # define KEYB_9				26
 # define KEYB_C				8
-# define KEYB_M				46
 # define KEYB_P				35
 # define KEYB_R				15
-# define KEYB_HELP			44
 # define KEYB_PLUS			69
 # define KEYB_MINUS			78
-# define KEYB_ESCAPE		53
 # define KEYB_MMO_W			13
 # define KEYB_MMO_S			1
 # define KEYB_MMO_A			0
 # define KEYB_MMO_D			2
+
+/*
+# define KEYB_M				46
+# define KEYB_HELP			44
+# define KEYB_ESCAPE		53
 # define KEYB_ARROW_UP		126
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
+*/
+
+# define KEYB_M				109
+# define KEYB_HELP			44
+# define KEYB_ESCAPE		27
+# define KEYB_ARROW_UP		82
+# define KEYB_ARROW_DOWN	84
+# define KEYB_ARROW_LEFT	81
+# define KEYB_ARROW_RIGHT	83
 
 # define N_CONTROL			4
 

@@ -22,7 +22,7 @@ LIBFT_HEADER = $(LIBDIR)
 MINILIBX = minilibx_linux
 
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
+	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 else
 	CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 endif
@@ -42,7 +42,7 @@ all: $(NAME)
 $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
 	make -C $(MINILIBX)/ all
 	make -C libft/ all DEBUG=$(DEBUG)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./$(MINILIBX)/libmlx.a
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -lXext -lX11 -lm -lpthread ./$(MINILIBX)/libmlx.a
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
 ifeq ($(NOSTALGIA),yes)

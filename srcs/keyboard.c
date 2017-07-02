@@ -38,7 +38,7 @@ int			mlx_key_release(int keycode, t_env *e)
 	e->keyb[keycode & 0xFF] = 0;
 	if (DEBUG_KEYBOARD)
 	{
-		ft_printf("keycode %3i RELEASED -> ", keycode);
+		ft_printf("keycode %3i [mod]%3i RELEASED -> ", keycode, keycode & 0xFF);
 		print_register(e->keyb);
 	}
 	return (keycode);
@@ -50,7 +50,7 @@ int			mlx_key_press(int keycode, t_env *e)
 		e->keyb[keycode & 0xFF] = get_time();
 	if (DEBUG_KEYBOARD)
 	{
-		ft_printf("keycode %3i PRESSED  -> ", keycode);
+		ft_printf("keycode %3i [mod]%3i PRESSED -> ", keycode, keycode & 0xFF);
 		print_register(e->keyb);
 	}
 	return (keycode);
