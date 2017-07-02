@@ -44,6 +44,8 @@ static void		locate_enemy(t_env *e, float ref_angle)
 		{
 			angle = atan2f((l.y), (l.x));
 			pix.i = 0xFF * is_close(-M_PI, M_PI, angle, ref_angle);
+			if (!pix.i)
+				continue ;
 			pix.i <<= 8;
 			l.x = l.x * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
 			l.y = l.y * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
