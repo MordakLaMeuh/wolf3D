@@ -204,6 +204,7 @@ typedef struct			s_sprite
 {
 	int					type;
 	t_coord_f			location;
+	float				dist;
 }						t_sprite;
 
 typedef struct			s_sky

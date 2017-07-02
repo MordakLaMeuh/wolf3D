@@ -60,6 +60,7 @@ static inline int	angle_to_pix(float angle)
 	return (x);
 }
 
+/*
 void				render_sprites(t_env *env, t_rendering_layer *layer)
 {
 	int					i;
@@ -127,6 +128,102 @@ void				render_sprites(t_env *env, t_rendering_layer *layer)
 			}
 		}
 	}
+	(void)origin;
 	rendering_layer_render_sprite(origin, env->inter_state,
 						env->scene.n_layer_sprite, env->scene.bmp_sprite);
+}
+*/
+
+int					m_cmp(void *a, void *b)
+{
+	if (((t_sprite *)a)->dist < ((t_sprite *)b)->dist)
+		return (1);
+	return (0);
+}
+
+void				render_sprites(t_env *env, t_rendering_layer *layer)
+{
+	int					i;
+	float				angle0_x;
+	t_coord_f			angle_topleft;
+	t_coord_f			angle_bottomright;
+	//float				d;
+	t_coord_i			c;
+	t_coord_i			c_topleft;
+	t_coord_i			c_bottomright;
+	t_coord_i			c_max;
+	t_coord_f			c_tex;
+	t_rendering_layer	*origin;
+
+	t_sprite **tmp;
+
+	if (!(tmp = (t_sprite **)malloc(env->n_sprites * sizeof(t_sprite *))))
+		exit (EXIT_FAILURE);
+	i = -1;
+	while (++i < env->n_sprites)
+	{
+		env->sprites[i].dist = dist(env->player.location, env->sprites[i].location) * env->cos_list[c.x];
+		tmp[i] = &env->sprites[i];
+	}
+
+	ft_merge_tab((void ***)&tmp, env->n_sprites, &m_cmp);
+
+
+	i = -1;
+	origin = layer;
+	env->scene.n_layer_sprite = 0;
+	while (++i < env->n_sprites)
+	{
+		angle0_x = atan2f(tmp[i]->location.y - env->player.location.y,
+			tmp[i]->location.x - env->player.location.x) -
+			env->player.angle;
+		c.x = angle_to_pix(angle0_x) + WIDTH / 2;
+		if (c.x < 0)
+			c.x = 0;
+		if (c.x >= WIDTH)
+			c.x = WIDTH - 1;
+//		d = dist(env->player.location, env->sprites[i].location) *
+//														env->cos_list[c.x];
+		if (angle0_x < 0.f)
+			angle0_x += 2.f * M_PI;
+		if (cosf(angle0_x) <= 0.)
+			continue ;
+		angle_topleft.x = angle0_x - atanf(.5f / tmp[i]->dist);
+		angle_bottomright.x = angle0_x + atanf(.5f / tmp[i]->dist);
+		c_topleft.x = angle_to_pix(angle_topleft.x) + WIDTH / 2;
+		c_bottomright.x = angle_to_pix(angle_bottomright.x) + WIDTH / 2;
+		angle_topleft.y = atanf((env->sprite_height - env->player.height) / tmp[i]->dist);
+		angle_bottomright.y = atanf(-env->player.height / tmp[i]->dist);
+		c_topleft.y = HEIGHT / 2 - angle_to_pix(angle_topleft.y);
+		c_bottomright.y = HEIGHT / 2 - angle_to_pix(angle_bottomright.y);
+		c.x = ((c_topleft.x >= 0) ? c_topleft.x : 0) - 1;
+		c_max.x = (c_bottomright.x < WIDTH) ? c_bottomright.x : WIDTH - 1;
+		while (++c.x < c_max.x)
+		{
+			if (env->scene.columns[c.x].wall_h_dist <= tmp[i]->dist)
+				continue ;
+			c.y = ((c_topleft.y >= 0) ? c_topleft.y : 0) - 1;
+			c_max.y = (c_bottomright.y < HEIGHT) ? c_bottomright.y : HEIGHT - 1;
+			while (++c.y < c_max.y && env->scene.n_layer_sprite <
+																WIDTH * HEIGHT)
+			{
+				c_tex.x = (float)(c.x - c_topleft.x) /
+					(c_bottomright.x - c_topleft.x) *
+					(env->scene.bmp_sprite[tmp[i]->type].dim.x - 2);
+				c_tex.y = (float)(c.y - c_bottomright.y) /
+					(c_topleft.y - c_bottomright.y) *
+					(env->scene.bmp_sprite[tmp[i]->type].dim.y - 2);
+				layer->ij = c;
+				layer->uv = c_tex;
+				layer->type = tmp[i]->type;
+				layer->dist = tmp[i]->dist;
+				env->scene.n_layer_sprite += 1;
+				layer++;
+			}
+		}
+	}
+	(void)origin;
+	rendering_layer_render_sprite(origin, env->inter_state,
+						env->scene.n_layer_sprite, env->scene.bmp_sprite);
+	free(tmp);
 }

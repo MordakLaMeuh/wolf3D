@@ -100,7 +100,11 @@ void				*thread_x_sprite(void *arg)
 	{
 		layer->result = get_pix(&bmp[layer->type], layer->uv);
 		if (layer->result.i == 0xff00ff)
+		{
 			layer->result.c.a = 0xff;
+			layer++;
+			continue;
+		}
 		if ((dist = layer->dist) > SHADOW_LIMIT)
 		{
 			dist = SHADOW_LIMIT / dist;
