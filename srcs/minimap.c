@@ -20,13 +20,15 @@
 ** doit absolument etre optimisee !
 */
 
-static void		draw_enemy(t_env *e, t_coord_i l)
+float			is_close(float min, float max, float a, float b)
 {
-	t_pix pix;
+	float v;
+	float u;
 
-	pix.i = 0xff0000;
-	fill_box((t_coord_i){l.x - 3, l.y - 3},
-			(t_coord_i){l.x + 3, l.y + 3}, pix, e);
+	v = (a > b) ? a - b : b - a;
+	u = (max - min) - v;
+	u = (v < u) ? v : u;
+	return ((u < 1) ? (1 - (u / 1)) : 0);
 }
 
 static void		locate_enemy(t_env *e, float ref_angle)
@@ -41,16 +43,15 @@ static void		locate_enemy(t_env *e, float ref_angle)
 	i = -1;
 	while (++i < e->n_sprites)
 	{
-		l.x = e->player.location.x - e->sprites[i].location.x;
-		l.y = e->player.location.y - e->sprites[i].location.y;
+		l.x = e->sprites[i].location.x - e->player.location.x;
+		l.y = e->sprites[i].location.y - e->player.location.y;
 		if ((dist = sqrtf((l.x * l.x) + (l.y * l.y))) < (MAP_DEPTH - 1))
 		{
-			angle = acosf(-l.x / dist);
-			pix.i = (ref_angle - angle < 0) ? 0x800000 : 0xff0000;
-			l.x = l.x * -(MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
-			l.y = l.y * -(MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
-			if (FALSE)
-				draw_enemy(e, (t_coord_i){(int)l.x, (int)l.y});
+			angle = atan2f((l.y), (l.x));
+			pix.i = 0xFF * is_close(-M_PI, M_PI, angle, ref_angle);
+			pix.i <<= 8;
+			l.x = l.x * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
+			l.y = l.y * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
 			draw_circle(e, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
 		}
 	}
