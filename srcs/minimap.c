@@ -15,11 +15,6 @@
 #include <math.h>
 #include "wolf3d.h"
 
-/*
-** TODO minimap en chantier
-** doit absolument etre optimisee !
-*/
-
 float			is_close(float min, float max, float a, float b)
 {
 	float v;
