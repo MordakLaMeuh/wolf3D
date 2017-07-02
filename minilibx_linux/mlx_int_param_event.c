@@ -23,9 +23,19 @@ int	mlx_int_param_KeyPress(t_xvar *xvar, XEvent *ev, t_win_list *win)
 
 int	mlx_int_param_KeyRelease(t_xvar *xvar, XEvent *ev, t_win_list *win)
 {
-  win->hooks[KeyRelease].hook(XkbKeycodeToKeysym(xvar->display,
-						 ev->xkey.keycode, 0, 0),
-			      win->hooks[KeyRelease].param);
+	if (XEventsQueued(xvar->display, QueuedAfterReading))
+	{
+		XEvent nev;
+		XPeekEvent(xvar->display, &nev);
+
+		if (nev.type == KeyPress && nev.xkey.time == ev->xkey.time && nev.xkey.keycode == ev->xkey.keycode)
+		{
+			XNextEvent (xvar->display, ev);
+			return (0);
+		}
+	}
+	win->hooks[KeyRelease].hook(XkbKeycodeToKeysym(xvar->display, ev->xkey.keycode, 0, 0),
+	win->hooks[KeyRelease].param);
 }
 
 int	mlx_int_param_ButtonPress(t_xvar *xvar, XEvent *ev, t_win_list *win)

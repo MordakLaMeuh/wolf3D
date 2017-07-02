@@ -69,7 +69,6 @@ static void			init_all(t_env *e)
 								"images/panic.bmp", "images/brique2.bmp"}, 4);
 	init_sprites(e, (char*[]){"images/sprite_pig.bmp"}, 1);
 	init_scene(e);
-	init_minimap(e);
 	i = 0;
 	while (i < HEIGHT)
 	{

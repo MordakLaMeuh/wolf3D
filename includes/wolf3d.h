@@ -19,7 +19,7 @@
 
 # define M_PI				3.14159265358979323846
 
-# define DEBUG_KEYBOARD		TRUE
+# define DEBUG_KEYBOARD		FALSE
 
 # define NOSTALGIA_FACTOR	1
 # define WIDTH				(1024 / NOSTALGIA_FACTOR)
@@ -63,6 +63,10 @@
 # define KEYB_MMO_D			2
 
 /*
+** OSX scanCodes
+*/
+
+/*
 # define KEYB_M				46
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		53
@@ -70,6 +74,10 @@
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
+*/
+
+/*
+** Linux scanCodes
 */
 
 # define KEYB_M				109
@@ -305,7 +313,6 @@ t_tile					**get_map(char *file, t_env *env);
 void					view_map(t_tile **map, int width, int height);
 void					eval_fps(t_env *e);
 
-void					init_minimap(t_env *e);
 void					draw_minimap(t_env *e);
 
 int						move_player(t_env *e);

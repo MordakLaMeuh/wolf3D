@@ -56,11 +56,6 @@ static void		locate_enemy(t_env *e, float ref_angle)
 	}
 }
 
-void			init_minimap(t_env *e)
-{
-	draw_minimap(e);
-}
-
 /*
 ** void			draw_minimap(t_env *e)
 ** {
