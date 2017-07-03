@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/23 15:41:46 by bmickael          #+#    #+#              #
-#    Updated: 2017/07/03 12:55:27 by bmickael         ###   ########.fr        #
+#    Updated: 2017/06/12 05:16:25 by bmickael         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,10 +19,10 @@ OBJDIR = objs
 INCDIR = includes
 LIBDIR = libft/includes
 LIBFT_HEADER = $(LIBDIR)
-MINILIBX = minilibx_sierra
+MINILIBX = minilibx_linux
 
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
+	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 else
 	CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
 endif
@@ -43,7 +43,7 @@ all: $(NAME)
 $(NAME): $(OBJ) $(INCDIR)/$(HEADER)
 	make -C $(MINILIBX)/ all
 	make -C libft/ all DEBUG=$(DEBUG)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -framework openGL -framework AppKit ./$(MINILIBX)/libmlx.a
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L./libft -lft -lXext -lX11 -lm -lpthread ./$(MINILIBX)/libmlx.a
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/$(HEADER)
 ifeq ($(NOSTALGIA),yes)
