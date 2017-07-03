@@ -23,6 +23,8 @@ void					init_floor(t_env *e, char **textures, int n)
 		* WIDTH * HEIGHT);
 }
 
+
+/*
 static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
 									float dist, t_coord_i bmp_dim)
 {
@@ -30,9 +32,32 @@ static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
 
 	c_floor.x = (location.x + dist * cosf(angle_x)) / 4.f;
 	c_floor.y = (location.y + dist * sinf(angle_x)) / 4.f;
+
 	c_floor.x = (c_floor.x - floorf(c_floor.x)) * (bmp_dim.x - 1);
 	c_floor.y = (c_floor.y - floorf(c_floor.y)) * (bmp_dim.y - 1);
 	return (c_floor);
+}
+*/
+
+static inline void		calc_tex_coord(t_rendering_layer *layer, t_env *e,
+							float angle_x, float dist)
+{
+	layer->uv.x = (e->player.location.x + dist * cosf(angle_x));
+	layer->uv.y = (e->player.location.y + dist * sinf(angle_x));
+	//if ((v = -e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value) < 0)
+	//	v = 0;
+	//layer->type = v;
+
+	layer->type = -e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value;
+	if (layer->type < 0)
+		layer->type = 0;
+
+	layer->uv.x /= 4.f;
+	layer->uv.y /= 4.f;
+	layer->uv.x = (layer->uv.x - floorf(layer->uv.x)) *
+								(e->scene.bmp_floor[layer->type].dim.x - 1);
+	layer->uv.y = (layer->uv.y - floorf(layer->uv.y)) *
+								(e->scene.bmp_floor[layer->type].dim.y - 1);
 }
 
 void					render_floor(t_env *env, t_rendering_layer *layer)
@@ -51,8 +76,12 @@ void					render_floor(t_env *env, t_rendering_layer *layer)
 			{
 				angle.x = env->angle_x[c.x] + env->player.angle;
 				layer->ij = c;
-				layer->uv = calc_tex_coord(env->player.location,
-angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
+
+//				layer->uv = calc_tex_coord(env->player.location,
+//angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
+
+				calc_tex_coord(layer, env, angle.x, env->dist_floor[c.y] / env->cos_list[c.x]);
+
 				layer->dist = env->dist_floor[c.y];
 				layer++;
 				env->scene.n_layer_floor += 1;
