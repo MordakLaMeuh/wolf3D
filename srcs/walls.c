@@ -115,10 +115,22 @@ int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 }
 
 /*
-** TODO Le bug des textures des murs vient de
-** (env->scene.bmp_wall->dim.x - 2), wall_y_tex * (env->scene.bmp_wall->dim.y
+** IMPORTANT: Le bug des textures des murs vient de:
+** *(layer)++ = (t_rendering_layer){c, (t_coord_f){cl->wall_x_tex *
+** (env->scene.bmp_wall->dim.x - 2), wall_y_tex *
+** (env->scene.bmp_wall->dim.y - 2)}, cl->type, cl->wall_h_dist, {0}};
 ** Toutes les dimensions de la projection sont calcule sur les dim de
 ** la texture 1 !
+** Remplace par:
+** *(layer)++ = (t_rendering_layer){c, (t_coord_f){cl->wall_x_tex *
+** (env->scene.bmp_wall[cl->type].dim.x - 2), wall_y_tex *
+** (env->scene.bmp_wall[cl->type].dim.y - 2)}, cl->type, cl->wall_h_dist, {0}};
+** IMPORTANT: Les textures s'affichaient a l'envers
+** *(layer)++ = (t_rendering_layer){c, (t_coord_f){cl->wall_x_tex *
+** (env->scene.bmp_wall[cl->type].dim.x - 2), (wall_y_tex) *
+** DEVIENT
+** (env->scene.bmp_wall[cl->type].dim.x - 2), (1 - wall_y_tex) *
+** (env->scene.bmp_wall[cl->type].dim.x - 2), (1 - wall_y_tex) *
 */
 
 void			render_wall(t_env *env, t_rendering_layer *layer)
@@ -138,11 +150,14 @@ void			render_wall(t_env *env, t_rendering_layer *layer)
 			if ((cl = &(env->scene.columns[c.x])) &&
 				angle_y > cl->wall_min_angle && angle_y < cl->wall_max_angle)
 			{
+
 				wall_y_tex = (env->player.height + cl->wall_h_dist
 									* env->atan_list[c.y]) / env->wall_height;
-				*(layer)++ = (t_rendering_layer){c, (t_coord_f){cl->wall_x_tex *
-	(env->scene.bmp_wall->dim.x - 2), wall_y_tex *
-	(env->scene.bmp_wall->dim.y - 2)}, cl->type, cl->wall_h_dist, {0}};
+
+				*(layer)++ = (t_rendering_layer){c, (t_coord_f)
+	{(1 - cl->wall_x_tex) * (env->scene.bmp_wall[cl->type].dim.x - 2),
+	(1 - wall_y_tex) * (env->scene.bmp_wall[cl->type].dim.y - 2)},
+	cl->type, cl->wall_h_dist, {0}};
 				env->scene.n_layer_wall += 1;
 			}
 	}

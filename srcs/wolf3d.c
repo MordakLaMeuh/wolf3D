@@ -6,11 +6,10 @@
 /*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:42:11 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 16:14:38 by bmickael         ###   ########.fr       */
+/*   Updated: 2017/07/03 12:56:08 by bmickael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <X11/Xlib.h>
 #include <math.h>
 #include <stdlib.h>
 #include "wolf3d.h"
@@ -34,6 +33,7 @@ static int			move(t_env *e)
 {
 	t_pix				pix;
 
+	animate_sprites(e);
 	common_action(e);
 	move_player(e);
 	render_scene(e);
@@ -64,9 +64,10 @@ static void			init_all(t_env *e)
 
 	create_mlx_image(e);
 	init_sky(e, "images/astro.bmp");
-	init_floor(e, (char*[]){"images/parquet.bmp"}, 1);
+	init_floor(e, (char*[]){"images/parquet.bmp",
+										"images/seamless_carpet.bmp"}, 2);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/pig.bmp",
-								"images/panic.bmp", "images/brique2.bmp"}, 4);
+								"images/panic.bmp", "images/Brick2.bmp"}, 4);
 	init_sprites(e, (char*[]){"images/sprite_pig.bmp"}, 1);
 	init_scene(e);
 	i = 0;
@@ -107,8 +108,8 @@ int					main(int argc, char **argv)
 	env.display_minimap = TRUE;
 	env.inter_state = TRUE;
 	init_all(&env);
-	mlx_hook(env.win, X11_KEY_RELEASE, KeyReleaseMask, &mlx_key_release, &env);
-	mlx_hook(env.win, X11_KEY_PRESS, KeyPressMask, &mlx_key_press, &env);
+	mlx_hook(env.win, X11_KEY_RELEASE, KEYRELEASEMASK, &mlx_key_release, &env);
+	mlx_hook(env.win, X11_KEY_PRESS, KEYPRESSMASK, &mlx_key_press, &env);
 	mlx_hook(env.win, X11_DESTROY_NOTIFY, 0xFF, &exit_mlx, &env);
 	mlx_loop_hook(env.mlx, &move, &env);
 	mlx_loop(env.mlx);

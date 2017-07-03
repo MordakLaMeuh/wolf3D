@@ -17,13 +17,15 @@
 # include "mlx.h"
 # include "libft.h"
 
+#ifndef M_PI
 # define M_PI				3.14159265358979323846
+#endif
 
 # define DEBUG_KEYBOARD		FALSE
 
 # define NOSTALGIA_FACTOR	1
-# define WIDTH				(1024 / NOSTALGIA_FACTOR)
-# define HEIGHT				(768 / NOSTALGIA_FACTOR)
+# define WIDTH				(1920 / NOSTALGIA_FACTOR)
+# define HEIGHT				(1024 / NOSTALGIA_FACTOR)
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define RATIO				4
@@ -36,6 +38,9 @@
 # define MAP_DEPTH				20
 # define LONG_ARROW_RADIUS		(30 >> (NOSTALGIA_FACTOR >> 1))
 # define ARROW_RADIUS			(15 >> (NOSTALGIA_FACTOR >> 1))
+
+# define KEYRELEASEMASK			0xFF
+# define KEYPRESSMASK			0xFF
 
 # define X11_KEY_RELEASE		3
 # define X11_KEY_PRESS			2
@@ -66,7 +71,6 @@
 ** OSX scanCodes
 */
 
-/*
 # define KEYB_M				46
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		53
@@ -74,12 +78,12 @@
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
-*/
 
 /*
 ** Linux scanCodes
 */
 
+/*
 # define KEYB_M				109
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		27
@@ -87,6 +91,7 @@
 # define KEYB_ARROW_DOWN	84
 # define KEYB_ARROW_LEFT	81
 # define KEYB_ARROW_RIGHT	83
+*/
 
 # define N_CONTROL			4
 
@@ -134,6 +139,7 @@ typedef struct			s_player
 	t_coord_f			location;
 	float				angle;
 	float				height;
+	int					lives;
 }						t_player;
 
 /*
@@ -200,11 +206,23 @@ typedef struct			s_scene
 	t_pix				*scene;
 }						t_scene;
 
+/*
+** AI rudimentaire Roaming
+** last_time -> moment ou a ete prise la derniere decision.
+** goal -> coordonnes ou amenent la derniere decision.
+*/
+
 typedef struct			s_sprite
 {
 	int					type;
 	t_coord_f			location;
 	float				dist;
+	float				angle0_x;
+
+
+	long int			last_time;
+	t_coord_f			origin;
+	t_coord_f			goal;
 }						t_sprite;
 
 typedef struct			s_sky
@@ -373,4 +391,7 @@ float					mvt_top(t_tile **map, t_coord_f mvt,
 														t_coord_f location);
 float					mvt_back(t_tile **map, t_coord_f mvt,
 														t_coord_f location);
+
+void					init_sprite_ai(t_env *e);
+void					animate_sprites(t_env *e);
 #endif

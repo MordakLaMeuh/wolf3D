@@ -27,7 +27,7 @@ t_wall_vector	end_seq(t_tile **tiles, float angle, t_wall_info i)
 	int		side;
 
 	side = 0;
-	while (tiles[i.map.y][i.map.x].value <= 0)
+	while (tiles[i.map.y][i.map.x].value == 0)
 		if (i.side_dist.x < i.side_dist.y)
 		{
 			i.side_dist.x += i.delta_dist.x;
@@ -90,7 +90,7 @@ t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
 	if (i.ray_dir.y == 0.)
 	{
 		i.step.x = (i.ray_dir.x > 0) ? 1 : -1;
-		while (tiles[i.map.y][i.map.x].value <= 0)
+		while (tiles[i.map.y][i.map.x].value == 0)
 			i.map.x += i.step.x;
 		i.w.norm = (t_coord_f){(i.ray_dir.x > 0) ? -1 : 1, 0};
 		i.w.v = create_vector(angle, fabs((float)i.map.x - i.ray_pos.x));
@@ -99,7 +99,7 @@ t_wall_vector	get_wall_info(t_tile **tiles, float angle, t_coord_f location)
 	if (i.ray_dir.x == 0.)
 	{
 		i.step.y = (i.ray_dir.y > 0) ? 1 : -1;
-		while (tiles[i.map.y][i.map.x].value <= 0)
+		while (tiles[i.map.y][i.map.x].value == 0)
 			i.map.y += i.step.y;
 		i.w.norm = (t_coord_f){0, (i.ray_dir.y > 0) ? -1 : 1};
 		i.w.v = create_vector(angle, fabs((float)i.map.y - i.ray_pos.y));
