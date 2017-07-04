@@ -44,14 +44,8 @@ static inline void		calc_tex_coord(t_rendering_layer *layer, t_env *e,
 {
 	layer->uv.x = (e->player.location.x + dist * cosf(angle_x));
 	layer->uv.y = (e->player.location.y + dist * sinf(angle_x));
-	//if ((v = -e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value) < 0)
-	//	v = 0;
-	//layer->type = v;
-
-	layer->type = -e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value;
-	if (layer->type < 0)
+	if ((layer->type = -e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value) < 0)
 		layer->type = 0;
-
 	layer->uv.x /= 4.f;
 	layer->uv.y /= 4.f;
 	layer->uv.x = (layer->uv.x - floorf(layer->uv.x)) *
@@ -80,7 +74,8 @@ void					render_floor(t_env *env, t_rendering_layer *layer)
 //				layer->uv = calc_tex_coord(env->player.location,
 //angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
 
-				calc_tex_coord(layer, env, angle.x, env->dist_floor[c.y] / env->cos_list[c.x]);
+				calc_tex_coord(layer, env, angle.x, env->dist_floor[c.y] /
+														env->cos_list[c.x]);
 
 				layer->dist = env->dist_floor[c.y];
 				layer++;
