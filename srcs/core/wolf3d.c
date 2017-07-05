@@ -70,8 +70,8 @@ static void			init_all(t_env *e)
 						"images/seamless_carpet.bmp", "images/Brick2.bmp"}, 3);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/Brick2.bmp",
 								"images/pig.bmp", "images/panic.bmp"}, 4);
-	init_sprites(e, (char*[]){"images/sprite_pig.bmp", "images/sprite_pig.bmp",
-						"images/sprite_pig.bmp", "images/sprite_pig.bmp"}, 4);
+	init_sprites(e, (char*[]){"images/pig_2.bmp", "images/pig_2.bmp",
+						"images/pig_2.bmp", "images/pig_2.bmp"}, 4);
 	init_scene(e);
 	i = 0;
 	while (i < HEIGHT)

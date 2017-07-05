@@ -83,6 +83,7 @@ void				render_sprites(t_env *env, t_rendering_layer *layer)
 	origin = layer;
 	env->scene.n_layer_sprite = 0;
 	i = 0;
+	env->sprite_height = 1.2;
 	while (i < env->n_sprites)
 	{
 		if ((*tmp)->angle0_x < 0.f)
