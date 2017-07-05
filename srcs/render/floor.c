@@ -24,21 +24,6 @@ void					init_floor(t_env *e, char **textures, int n)
 }
 
 
-/*
-static inline t_coord_f	calc_tex_coord(t_coord_f location, float angle_x,
-									float dist, t_coord_i bmp_dim)
-{
-	t_coord_f	c_floor;
-
-	c_floor.x = (location.x + dist * cosf(angle_x)) / 4.f;
-	c_floor.y = (location.y + dist * sinf(angle_x)) / 4.f;
-
-	c_floor.x = (c_floor.x - floorf(c_floor.x)) * (bmp_dim.x - 1);
-	c_floor.y = (c_floor.y - floorf(c_floor.y)) * (bmp_dim.y - 1);
-	return (c_floor);
-}
-*/
-
 static inline void		calc_tex_coord(t_rendering_layer *layer, t_env *e,
 							float angle_x, float dist)
 {
@@ -70,13 +55,8 @@ void					render_floor(t_env *env, t_rendering_layer *layer)
 			{
 				angle.x = env->angle_x[c.x] + env->player.angle;
 				layer->ij = c;
-
-//				layer->uv = calc_tex_coord(env->player.location,
-//angle.x, env->dist_floor[c.y] / env->cos_list[c.x], env->scene.bmp_floor->dim);
-
 				calc_tex_coord(layer, env, angle.x, env->dist_floor[c.y] /
 														env->cos_list[c.x]);
-
 				layer->dist = env->dist_floor[c.y];
 				layer++;
 				env->scene.n_layer_floor += 1;

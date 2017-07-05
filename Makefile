@@ -11,20 +11,20 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = wolf3d image_mlx_tools init_mlx actions keyboard \
-		load_config rendering_layer floor sky walls sprites scene \
-		debug lib timer render_sky render_threads get_wall_infos define_mouvements \
-		move_sprites
+SRC_CORE = wolf3d image_mlx_tools init_mlx actions keyboard load_config \
+		debug timer get_wall_infos define_mouvements move_sprites
+SRC_RENDER =  rendering_layer floor sky walls sprites scene render_sky render_threads lib 
 SRC_PARSE = constructor load_map get_next_line get_player_location get_sprites get_map_struct verif_texture_range
 SRC_OVERLAY = draw_line draw minimap
 SRC_BMP = bmp_load bmp_save
 
-SRC_LIST = $(SRC_CORE) $(SRC_PARSE) $(SRC_BMP) $(SRC_OVERLAY)
-VPATH = srcs/core srcs/parse srcs/bmp srcs/overlay
+
+SRC_LIST = $(SRC_CORE) $(SRC_PARSE) $(SRC_BMP) $(SRC_OVERLAY) $(SRC_RENDER)
+VPATH = srcs/core srcs/parse srcs/bmp srcs/overlay srcs/render
 
 ## HEADERS
 
-HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h internal_overlay.h
+HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h internal_overlay.h render.h internal_render.h
 
 ### LIBRAIRIES ###
 
