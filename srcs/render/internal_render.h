@@ -15,37 +15,11 @@
 
 # include "graphic_types.h"
 
-typedef struct			s_column
+typedef struct			s_floor_uv_format
 {
-	float				wall_h_dist;
-	float				wall_x_tex;
-	float				wall_min_angle;
-	float				wall_max_angle;
-	int					type;
-}						t_column;
-
-typedef struct			s_rendering_layer
-{
-	t_coord_i			ij;
-	t_coord_f			uv;
-	int					type;
-	float				dist;
-	t_pix				result;
-}						t_rendering_layer;
-
-typedef struct			s_scene
-{
-	t_bmp				*bmp_wall;
-	t_bmp				*bmp_floor;
-	t_bmp				*bmp_sprite;
-	int					n_layer_wall;
-	int					n_layer_floor;
-	int					n_layer_sprite;
-	t_rendering_layer	*wall;
-	t_rendering_layer	*floor;
-	t_rendering_layer	*sprites;
-	t_column			*columns;
-	t_pix				*scene;
-}						t_scene;
+	t_rendering_layer	*layer;
+	int					n;
+	t_env				*e;
+}						t_floor_uv_format;
 
 #endif
