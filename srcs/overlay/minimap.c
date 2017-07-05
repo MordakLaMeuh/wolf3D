@@ -36,8 +36,7 @@ static void		locate_enemy(t_env *e, float ref_angle)
 
 	pix.i = 0x800000;
 	i = -1;
-//	while (++i < e->n_sprites)
-		while (++i < 0)
+	while (++i < e->n_sprites)
 	{
 		l.x = e->sprites[i].location.x - e->player.location.x;
 		l.y = e->sprites[i].location.y - e->player.location.y;
