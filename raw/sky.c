@@ -27,8 +27,8 @@ static t_coord_f	calc_tex_coord(t_coord_f angle)
 {
 	t_coord_f	c_sky;
 
-	c_sky.x = angle.x / (2.f * M_PI);
-	c_sky.y = angle.y / M_PI;
+	c_sky.x = angle.x / (2.f * PI);
+	c_sky.y = angle.y / PI;
 	if (c_sky.x < 0.f)
 		c_sky.x += 1.f;
 	if (c_sky.x >= 1.f)

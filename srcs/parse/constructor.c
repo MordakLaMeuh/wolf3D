@@ -13,17 +13,17 @@
 #include <stdlib.h>
 #include "parse/internal_parse.h"
 
-static t_map_content	*content = NULL;
+static t_map_content	*g_content = NULL;
 
 void					alloc_map_content(void)
 {
-	if (content != NULL)
+	if (g_content != NULL)
 	{
 		ft_eprintf("{green}parse:{eoc} content already allocated\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
-	if (!(content = (t_map_content *)ft_memalloc(sizeof(t_map_content))))
-		exit (EXIT_FAILURE);
+	if (!(g_content = (t_map_content *)ft_memalloc(sizeof(t_map_content))))
+		exit(EXIT_FAILURE);
 }
 
 void					free_map_content(void)
@@ -31,14 +31,14 @@ void					free_map_content(void)
 	t_list		*lst;
 	t_list		*next;
 
-	if (content == NULL)
+	if (g_content == NULL)
 	{
 		ft_eprintf("{green}parse:{eoc} content wasn't allocated\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
-	if (content->data)
+	if (g_content->data)
 	{
-		lst = content->data;
+		lst = g_content->data;
 		while (lst)
 		{
 			next = lst->next;
@@ -48,15 +48,15 @@ void					free_map_content(void)
 			lst = next;
 		}
 	}
-	free(content);
+	free(g_content);
 }
 
 t_map_content			*get_map_content(void)
 {
-	if (content == NULL)
+	if (g_content == NULL)
 	{
 		ft_eprintf("{green}parse:{eoc} cannot get content of NULL\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
-	return (content);
+	return (g_content);
 }

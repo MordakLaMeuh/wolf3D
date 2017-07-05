@@ -133,34 +133,32 @@ int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 ** (env->scene.bmp_wall[cl->type].dim.x - 2), (1 - wall_y_tex) *
 */
 
-void			render_wall(t_env *env, t_rendering_layer *layer)
+void			render_wall(t_env *e, t_rendering_layer *layer)
 {
 	t_coord_i			c;
 	float				angle_y;
 	float				wall_y_tex;
 	t_column			*cl;
 
-	env->scene.n_layer_wall = 0;
+	e->scene.n_layer_wall = 0;
 	c.y = -1;
 	while (++c.y < HEIGHT)
 	{
-		angle_y = env->angle_y[c.y];
+		angle_y = e->angle_y[c.y];
 		c.x = -1;
 		while (++c.x < WIDTH)
-			if ((cl = &(env->scene.columns[c.x])) &&
+			if ((cl = &(e->scene.columns[c.x])) &&
 				angle_y > cl->wall_min_angle && angle_y < cl->wall_max_angle)
 			{
-
-				wall_y_tex = (env->player.height + cl->wall_h_dist
-									* env->atan_list[c.y]) / env->wall_height;
-
+				wall_y_tex = (e->player.height + cl->wall_h_dist
+									* e->atan_list[c.y]) / e->wall_height;
 				*(layer)++ = (t_rendering_layer){c, (t_coord_f)
-	{(1 - cl->wall_x_tex) * (env->scene.bmp_wall[cl->type].dim.x - 2),
-	(1 - wall_y_tex) * (env->scene.bmp_wall[cl->type].dim.y - 2)},
+	{(1 - cl->wall_x_tex) * (e->scene.bmp_wall[cl->type].dim.x - 2),
+	(1 - wall_y_tex) * (e->scene.bmp_wall[cl->type].dim.y - 2)},
 	cl->type, cl->wall_h_dist, {0}};
-				env->scene.n_layer_wall += 1;
+				e->scene.n_layer_wall += 1;
 			}
 	}
-	rendering_layer_render(layer - env->scene.n_layer_wall, env->inter_state,
-							env->scene.n_layer_wall, env->scene.bmp_wall);
+	rendering_layer_render(layer - e->scene.n_layer_wall, e->inter_state,
+							e->scene.n_layer_wall, e->scene.bmp_wall);
 }

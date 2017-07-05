@@ -49,16 +49,16 @@ static void		set_player_data(t_env *e, float q, float l)
 	t_coord_f			new;
 	t_wall_vector		w;
 
-	e->player.angle += q * M_PI / 360;
+	e->player.angle += q * PI / 360;
 	if (e->player.angle < 0)
-		e->player.angle += 2.f * M_PI;
-	else if (e->player.angle >= 2.f * M_PI)
-		e->player.angle -= 2.f * M_PI;
+		e->player.angle += 2.f * PI;
+	else if (e->player.angle >= 2.f * PI)
+		e->player.angle -= 2.f * PI;
 	new.x = (cosf(e->player.angle)) * l;
 	new.y = (sinf(e->player.angle)) * l;
 	w = get_wall_info(e->map_tiles, e->player.angle, e->player.location);
 	new = test_mvt(w, e, new);
-	w = get_wall_info(e->map_tiles, e->player.angle + M_PI, e->player.location);
+	w = get_wall_info(e->map_tiles, e->player.angle + PI, e->player.location);
 	new = test_mvt(w, e, new);
 	e->player.location.x += new.x;
 	e->player.location.y += new.y;

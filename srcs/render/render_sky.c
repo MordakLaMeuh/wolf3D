@@ -17,7 +17,7 @@ void				render_sky(t_env *e, float angle)
 	int		i;
 	int		j;
 
-	e->sky->pos = (int)((RATIO * WIDTH) * (angle / (2.f * M_PI)));
+	e->sky->pos = (int)((RATIO * WIDTH) * (angle / (2.f * PI)));
 	j = 0;
 	i = e->sky->pos;
 	while (j < (SCREENSIZE >> 1))

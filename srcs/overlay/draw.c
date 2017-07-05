@@ -32,10 +32,10 @@ void				draw_arrow(t_pix *scene, t_coord_i c, float angle)
 	t_coord_i	l2;
 	t_coord_i	l3;
 
-	l1.y = c.y + (int)(((sinf(angle + M_PI * 3 / 4)) * ARROW_RADIUS));
-	l1.x = c.x + (int)(((cosf(angle + M_PI * 3 / 4)) * ARROW_RADIUS));
-	l2.y = c.y + (int)(((sinf(angle - M_PI * 3 / 4)) * ARROW_RADIUS));
-	l2.x = c.x + (int)(((cosf(angle - M_PI * 3 / 4)) * ARROW_RADIUS));
+	l1.y = c.y + (int)(((sinf(angle + PI * 3 / 4)) * ARROW_RADIUS));
+	l1.x = c.x + (int)(((cosf(angle + PI * 3 / 4)) * ARROW_RADIUS));
+	l2.y = c.y + (int)(((sinf(angle - PI * 3 / 4)) * ARROW_RADIUS));
+	l2.x = c.x + (int)(((cosf(angle - PI * 3 / 4)) * ARROW_RADIUS));
 	l3.y = c.y + (int)(((sinf(angle)) * LONG_ARROW_RADIUS));
 	l3.x = c.x + (int)(((cosf(angle)) * LONG_ARROW_RADIUS));
 	line.p1 = l1;
@@ -53,7 +53,8 @@ void				draw_arrow(t_pix *scene, t_coord_i c, float angle)
 	draw_line(scene, &line);
 }
 
-void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
+void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
+																t_pix *scene)
 {
 	t_line line;
 
@@ -72,7 +73,8 @@ void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
 	draw_line(scene, &line);
 }
 
-void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
+void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
+																t_pix *scene)
 {
 	t_line	line;
 	int		i;
@@ -96,7 +98,7 @@ void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
 ** x² + y² = r²
 */
 
-void			draw_circle(t_pix *scene, t_coord_i position, int radius,
+void				draw_circle(t_pix *scene, t_coord_i position, int radius,
 																	t_pix color)
 {
 	t_coord_i	location;

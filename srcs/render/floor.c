@@ -23,13 +23,13 @@ void					init_floor(t_env *e, char **textures, int n)
 		* WIDTH * HEIGHT);
 }
 
-
 static inline void		calc_tex_coord(t_rendering_layer *layer, t_env *e,
 							float angle_x, float dist)
 {
 	layer->uv.x = (e->player.location.x + dist * cosf(angle_x));
 	layer->uv.y = (e->player.location.y + dist * sinf(angle_x));
-	if ((layer->type = e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value) >= 50)
+	if ((layer->type =
+			e->map_tiles[(int)layer->uv.y][(int)layer->uv.x].value) >= 50)
 		layer->type = 0;
 	layer->uv.x /= 4.f;
 	layer->uv.y /= 4.f;

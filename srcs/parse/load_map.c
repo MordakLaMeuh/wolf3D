@@ -21,7 +21,7 @@ static int				check_part(char *s)
 	if (!(s[0]) || !(s[1]))
 		return (-1);
 	if (!(s[0] == '_' || (s[0] >= '1' && s[0] <= '9') |
-	 	(s[0] >= 'a' && s[0] <= 'z')))
+		(s[0] >= 'a' && s[0] <= 'z')))
 		return (-1);
 	if (!(s[1] == '_' || (s[1] >= '0' && s[1] <= '9') || s[1] == '%'))
 		return (-1);
@@ -52,7 +52,7 @@ static int				check_all_map(t_map_content *content)
 		}
 		content->width = (!trigger) ? width : content->width;
 		if (trigger && content->width != width)
-			return (ft_eprintf("{green}parse:{eoc} different width on lines\n"));
+			return (ft_eprintf("{green}parse:{eoc} diff width on lines\n"));
 		trigger = TRUE;
 		lst = lst->next;
 	}
@@ -77,7 +77,7 @@ int						load_map(char *filename)
 	{
 		content->height += 1;
 		if (!(ft_lst_push_front(&content->data, line, ret + 1)))
-			exit (EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 	}
 	if (ret == -1 || content->height == 0)
 		return (-1);

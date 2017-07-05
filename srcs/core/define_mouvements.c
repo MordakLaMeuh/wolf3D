@@ -28,7 +28,7 @@ float			mvt_left(t_tile **map, t_coord_f mvt, t_coord_f location)
 {
 	t_wall_vector	w;
 
-	w = get_wall_info(map, M_PI, (t_coord_f){location.x,
+	w = get_wall_info(map, PI, (t_coord_f){location.x,
 										location.y + mvt.y});
 	if (mvt.x < (w.v.dx + 0.4))
 		return (w.v.dx + 0.4);
@@ -40,7 +40,7 @@ float			mvt_top(t_tile **map, t_coord_f mvt, t_coord_f location)
 {
 	t_wall_vector	w;
 
-	w = get_wall_info(map, M_PI * 3 / 2,
+	w = get_wall_info(map, PI * 3 / 2,
 								(t_coord_f){location.x + mvt.x, location.y});
 	if ((w.v.dy + 0.4) > mvt.y)
 		return (w.v.dy + 0.4);
@@ -52,7 +52,7 @@ float			mvt_back(t_tile **map, t_coord_f mvt, t_coord_f location)
 {
 	t_wall_vector	w;
 
-	w = get_wall_info(map, M_PI * 1 / 2,
+	w = get_wall_info(map, PI * 1 / 2,
 								(t_coord_f){location.x + mvt.x, location.y});
 	if (mvt.y > (w.v.dy - 0.4))
 		return (w.v.dy - 0.4);

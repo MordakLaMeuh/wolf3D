@@ -18,11 +18,9 @@
 # include "libft.h"
 # include "graphic_types.h"
 
-#ifndef M_PI
-# define M_PI				3.14159265358979323846
-#endif
-
 # define DEBUG_KEYBOARD		FALSE
+
+# define PI					3.14159265358979323846
 
 # define NOSTALGIA_FACTOR	1
 # define WIDTH				(1920 / NOSTALGIA_FACTOR)
@@ -30,7 +28,7 @@
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define RATIO				4
-# define VIEW_ANGLE			(2.f * M_PI / RATIO)
+# define VIEW_ANGLE			(2.f * PI / RATIO)
 # define SHADOW_LIMIT		7
 
 # define MAP_ORIGIN_X			(WIDTH - (120 >> (NOSTALGIA_FACTOR >> 1)))
@@ -85,13 +83,13 @@
 */
 
 /*
-# define KEYB_M				109
-# define KEYB_HELP			44
-# define KEYB_ESCAPE		27
-# define KEYB_ARROW_UP		82
-# define KEYB_ARROW_DOWN	84
-# define KEYB_ARROW_LEFT	81
-# define KEYB_ARROW_RIGHT	83
+** # define KEYB_M				109
+** # define KEYB_HELP			44
+** # define KEYB_ESCAPE			27
+** # define KEYB_ARROW_UP		82
+** # define KEYB_ARROW_DOWN		84
+** # define KEYB_ARROW_LEFT		81
+** # define KEYB_ARROW_RIGHT	83
 */
 
 # define N_CONTROL			4
@@ -186,7 +184,6 @@ typedef struct			s_sprite
 	t_coord_f			location;
 	float				dist;
 	float				angle0_x;
-
 
 	long int			last_time;
 	t_coord_f			origin;
@@ -294,7 +291,6 @@ int						mlx_key_release(int keycode, t_env *e);
 int						mlx_key_press(int keycode, t_env *e);
 int						common_action(t_env *e);
 
-
 void					view_map(t_tile **map, int width, int height);
 void					eval_fps(t_env *e);
 
@@ -339,7 +335,6 @@ void					*thread_x_base(void *arg);
 
 t_wall_vector			get_wall_info(t_tile **tiles, float angle,
 														t_coord_f location);
-
 float					mvt_right(t_tile **map, t_coord_f mvt,
 														t_coord_f location);
 float					mvt_left(t_tile **map, t_coord_f mvt,
@@ -348,7 +343,6 @@ float					mvt_top(t_tile **map, t_coord_f mvt,
 														t_coord_f location);
 float					mvt_back(t_tile **map, t_coord_f mvt,
 														t_coord_f location);
-
 void					init_sprite_ai(t_env *e);
 void					animate_sprites(t_env *e);
 #endif

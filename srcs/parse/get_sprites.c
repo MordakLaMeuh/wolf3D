@@ -40,7 +40,7 @@ int						get_nbr_sprites(void)
 
 static void				fill_sprite_list(t_sprite_info *s_info, t_list *lst)
 {
-	t_coord_f 		l;
+	t_coord_f		l;
 	int				i;
 	char			*content;
 
@@ -69,10 +69,10 @@ static void				fill_sprite_list(t_sprite_info *s_info, t_list *lst)
 
 t_sprite_info			*get_sprites(int n)
 {
-	t_sprite_info 	*s_info;
+	t_sprite_info	*s_info;
 
 	if (!(s_info = (t_sprite_info *)malloc(n * sizeof(t_sprite_info))))
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	fill_sprite_list(s_info, get_map_content()->data);
 	return (s_info);
 }

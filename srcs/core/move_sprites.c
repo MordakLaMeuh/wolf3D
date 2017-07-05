@@ -21,7 +21,7 @@
 
 static void		make_decision(t_sprite *sprite, t_tile **tile, long int t)
 {
-	t_coord_f 	res[5];
+	t_coord_f	res[5];
 	int			i;
 
 	sprite->last_time = t;
@@ -68,14 +68,17 @@ void			animate_sprites(t_env *e)
 		{
 			e->sprites[i].location.x = e->sprites[i].goal.x;
 			e->sprites[i].location.y = e->sprites[i].goal.y;
-			make_decision(&e->sprites[i], e->map_tiles, nev + (nev - e->sprites[i].last_time) - 500);
+			make_decision(&e->sprites[i], e->map_tiles, nev +
+									(nev - e->sprites[i].last_time) - 500);
 		}
 		else
 		{
 			e->sprites[i].location.x = e->sprites[i].origin.x +
-(nev - e->sprites[i].last_time) * (e->sprites[i].goal.x - e->sprites[i].origin.x) / 500;
+				(nev - e->sprites[i].last_time) * (e->sprites[i].goal.x -
+				e->sprites[i].origin.x) / 500;
 			e->sprites[i].location.y = e->sprites[i].origin.y +
-(nev - e->sprites[i].last_time) * (e->sprites[i].goal.y - e->sprites[i].origin.y) / 500;
+				(nev - e->sprites[i].last_time) * (e->sprites[i].goal.y -
+				e->sprites[i].origin.y) / 500;
 		}
 		i++;
 	}

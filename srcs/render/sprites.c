@@ -31,21 +31,21 @@ static inline int	angle_to_pix(float angle)
 	return (x);
 }
 
-static int				m_cmp(void *a, void *b)
+static int			m_cmp(void *a, void *b)
 {
 	if (((t_sprite *)a)->dist < ((t_sprite *)b)->dist)
 		return (1);
 	return (0);
 }
 
-t_sprite 				**create_z_buffer_order(t_env *env)
+t_sprite			**create_z_buffer_order(t_env *env)
 {
 	int			i;
 	int			l;
 	t_sprite	**tmp;
 
 	if (!(tmp = (t_sprite **)malloc((env->n_sprites) * sizeof(t_sprite *))))
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	i = 0;
 	while (i < env->n_sprites)
 	{
@@ -66,7 +66,7 @@ t_sprite 				**create_z_buffer_order(t_env *env)
 	return (tmp);
 }
 
-void					render_sprites(t_env *env, t_rendering_layer *layer)
+void				render_sprites(t_env *env, t_rendering_layer *layer)
 {
 	t_coord_f			angle_topleft;
 	t_coord_f			angle_bottomright;
@@ -77,15 +77,16 @@ void					render_sprites(t_env *env, t_rendering_layer *layer)
 	t_coord_f			c_tex;
 	t_rendering_layer	*origin;
 	t_sprite			**tmp;
+	int					i;
 
 	tmp = create_z_buffer_order(env);
 	origin = layer;
 	env->scene.n_layer_sprite = 0;
-	int i = 0;
+	i = 0;
 	while (i < env->n_sprites)
 	{
 		if ((*tmp)->angle0_x < 0.f)
-			(*tmp)->angle0_x += 2.f * M_PI;
+			(*tmp)->angle0_x += 2.f * PI;
 		if (cosf((*tmp)->angle0_x) <= 0.)
 		{
 			tmp++;
@@ -96,13 +97,13 @@ void					render_sprites(t_env *env, t_rendering_layer *layer)
 		angle_bottomright.x = (*tmp)->angle0_x + atanf(.5f / (*tmp)->dist);
 		c_topleft.x = angle_to_pix(angle_topleft.x) + WIDTH / 2;
 		c_bottomright.x = angle_to_pix(angle_bottomright.x) + WIDTH / 2;
-		angle_topleft.y = atanf((env->sprite_height - env->player.height) / (*tmp)->dist);
+		angle_topleft.y = atanf((env->sprite_height - env->player.height) /
+																(*tmp)->dist);
 		angle_bottomright.y = atanf(-env->player.height / (*tmp)->dist);
 		c_topleft.y = HEIGHT / 2 - angle_to_pix(angle_topleft.y);
 		c_bottomright.y = HEIGHT / 2 - angle_to_pix(angle_bottomright.y);
 		c.x = ((c_topleft.x >= 0) ? c_topleft.x : 0) - 1;
 		c_max.x = (c_bottomright.x < WIDTH) ? c_bottomright.x : WIDTH - 1;
-
 		while (++c.x < c_max.x)
 		{
 			if (env->scene.columns[c.x].wall_h_dist <= (*tmp)->dist)
@@ -118,7 +119,6 @@ void					render_sprites(t_env *env, t_rendering_layer *layer)
 				c_tex.y = (float)(c.y - c_topleft.y) /
 					(c_bottomright.y - c_topleft.y) *
 					(env->scene.bmp_sprite[(*tmp)->type].dim.y - 2);
-
 				layer->ij = c;
 				layer->uv = c_tex;
 				layer->type = (*tmp)->type;

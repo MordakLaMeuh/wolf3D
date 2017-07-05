@@ -45,13 +45,14 @@ static void		locate_enemy(t_env *e, float ref_angle)
 		if ((dist = sqrtf((l.x * l.x) + (l.y * l.y))) < (MAP_DEPTH - 1))
 		{
 			angle = atan2f((l.y), (l.x));
-			pix.i = 0xFF * is_close(-M_PI, M_PI, angle, ref_angle);
+			pix.i = 0xFF * is_close(-PI, PI, angle, ref_angle);
 			if (!pix.i)
 				continue ;
 			pix.i <<= 8;
 			l.x = l.x * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
 			l.y = l.y * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
-			draw_circle(e->scene.scene, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
+			draw_circle(e->scene.scene,
+									(t_coord_i){(int)l.x, (int)l.y}, 4, pix);
 		}
 	}
 }
@@ -70,7 +71,7 @@ void			draw_minimap(t_env *e)
 	draw_circle(e->scene.scene, l1, MAP_RADIUS, color);
 	gettimeofday(&spec, NULL);
 	angle = (float)((((((int)spec.tv_sec & 0x0F) * 1000) +
-		round(spec.tv_usec / 1.0e3)) / 2000) * M_PI * 2);
+		round(spec.tv_usec / 1.0e3)) / 2000) * PI * 2);
 	line.p1 = l1;
 	line.p2.x = (floor)(cosf(angle) * MAP_RADIUS) + MAP_ORIGIN_X;
 	line.p2.y = (floor)(sinf(angle) * MAP_RADIUS) + MAP_ORIGIN_Y;

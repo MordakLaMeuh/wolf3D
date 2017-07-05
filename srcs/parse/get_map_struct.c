@@ -19,12 +19,12 @@ static int			**allocate_tab(int *height, int *width)
 	int				i;
 
 	if (!(tab = (int **)ft_memalloc(*height * sizeof(int *))))
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	i = 0;
 	while (i < *height)
 	{
 		if (!(tab[i] = (int *)ft_memalloc(*width * sizeof(int))))
-			exit (EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		i++;
 	}
 	return (tab);
@@ -32,8 +32,8 @@ static int			**allocate_tab(int *height, int *width)
 
 static void			fill_values(t_list *lst, int **tab)
 {
-	int 			i;
-	int 			j;
+	int				i;
+	int				j;
 	char			*line;
 
 	i = 0;

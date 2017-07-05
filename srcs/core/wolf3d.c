@@ -62,7 +62,7 @@ static inline float	angle_on_screen(int x)
 
 static void			init_all(t_env *e)
 {
-	int i;
+	int		i;
 
 	create_mlx_image(e);
 	init_sky(e, "images/astro.bmp");
@@ -70,7 +70,8 @@ static void			init_all(t_env *e)
 						"images/seamless_carpet.bmp", "images/Brick2.bmp"}, 3);
 	init_walls(e, (char*[]){"images/mur.bmp", "images/Brick2.bmp",
 								"images/pig.bmp", "images/panic.bmp"}, 4);
-	init_sprites(e, (char*[]){"images/sprite_pig.bmp", "images/sprite_pig.bmp", "images/sprite_pig.bmp", "images/sprite_pig.bmp"}, 4);
+	init_sprites(e, (char*[]){"images/sprite_pig.bmp", "images/sprite_pig.bmp",
+						"images/sprite_pig.bmp", "images/sprite_pig.bmp"}, 4);
 	init_scene(e);
 	i = 0;
 	while (i < HEIGHT)
@@ -80,13 +81,41 @@ static void			init_all(t_env *e)
 		e->atan_list[i] = tanf(e->angle_y[i]);
 		i++;
 	}
-	i = 0;
-	while (i < WIDTH)
+	i = -1;
+	while (++i < WIDTH)
 	{
 		e->angle_x[i] = angle_on_screen(i - (WIDTH / 2));
 		e->cos_list[i] = cosf(e->angle_x[i]);
-		i++;
 	}
+}
+
+static int			get_parse(t_env *e, char *filename)
+{
+	t_sprite_info	*s_l;
+	int				i;
+
+	if (load_map(filename) != 0)
+		return (err_msg("bad file"));
+	if (get_player_location(&e->player.location, '%') != 0)
+		return (err_msg("no player in the map !"));
+	ft_printf("location_player.x = %i, location_player.y = %i\n",
+					(int)e->player.location.x, (int)e->player.location.y);
+	e->n_sprites = get_nbr_sprites();
+	s_l = get_sprites(e->n_sprites);
+	if (!(e->sprites = (t_sprite*)malloc(sizeof(t_sprite) * e->n_sprites)))
+		exit(EXIT_FAILURE);
+	i = -1;
+	while (++i < e->n_sprites)
+	{
+		ft_printf("sprite type %i: x = %i && y = %i\n", s_l->type,
+							(int)s_l->location.x, (int)s_l->location.y);
+		e->sprites[i].location = s_l->location;
+		e->sprites[i].type = (s_l++)->type;
+	}
+	ft_printf("verif = %i\n", verif_texture_range(3, 4, 3) ? "KO" : "OK");
+	e->map_tiles = (t_tile **)get_map_struct(&e->map.size.y, &e->map.size.x);
+	free_map_content();
+	return (0);
 }
 
 int					main(int argc, char **argv)
@@ -99,38 +128,13 @@ int					main(int argc, char **argv)
 	if ((init_mlx(&env, "Wolf3D -^^,--,~", WIDTH * NOSTALGIA_FACTOR,
 											HEIGHT * NOSTALGIA_FACTOR)))
 		return (err_msg("Error during initialisation"));
-
-
-	t_sprite_info	*s_l;
-	int				i;
-
-	if (load_map(argv[1]) != 0)
-		return (err_msg("bad file"));
-	if (get_player_location(&env.player.location, '%') != 0)
-		return (err_msg("no player in the map !"));
-	ft_printf("location_player.x = %i, location_player.y = %i\n", (int)env.player.location.x, (int)env.player.location.y);
-	env.n_sprites = get_nbr_sprites();
-	s_l = get_sprites(env.n_sprites);
-	if (!(env.sprites = (t_sprite*)malloc(sizeof(t_sprite) * env.n_sprites)))
-		exit(EXIT_FAILURE);
-	i = -1;
-	while (++i < env.n_sprites)
-	{
-		ft_printf("sprite type %i: x = %i && y = %i\n", s_l->type, (int)s_l->location.x, (int)s_l->location.y);
-		env.sprites[i].location = s_l->location;
-		env.sprites[i].type = s_l->type;
-		s_l++;
-	}
-	ft_printf("verif = %i\n", verif_texture_range(3, 4, 3));
-	env.map_tiles = (t_tile **)get_map_struct(&env.map.size.y, &env.map.size.x);
-	free_map_content();
-
+	if (get_parse(&env, argv[1]))
+		return (-1);
 	view_map(env.map_tiles, env.map.size.x, env.map.size.y);
 	init_sprite_ai(&env);
-
 	env.wall_height = 3.f;
 	env.sprite_height = 2.5f;
-	env.player.angle = 6.f / 4 * M_PI;
+	env.player.angle = 6.f / 4 * PI;
 	env.player.height = 2.f;
 	env.display_minimap = TRUE;
 	env.inter_state = TRUE;
