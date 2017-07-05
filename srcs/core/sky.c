@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include "core/wolf3d.h"
 #include "bmp/bmp.h"
 

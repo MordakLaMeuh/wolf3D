@@ -10,8 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
-#include "bmp/bmp.h"
+#include "libft.h"
+#include "bmp/internal_bmp.h"
 
 static void		paste_fileheader(t_bitmap *pbitmap, int width, int height)
 {

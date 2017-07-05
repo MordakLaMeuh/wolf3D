@@ -10,13 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include "bmp/bmp.h"
+#include "libft.h"
+#include "bmp/internal_bmp.h"
 
-static void		paste_fileheader(t_bitmap *s, char *file_name)
+static void		paste_fileheader(t_bitmap *s, char *filename)
 {
-	ft_printf("{green}Chargement de l'image %s:{eoc}\n", file_name);
+	ft_printf("{green}Chargement de l'image %s:{eoc}\n", filename);
 	ft_printf("%s %c%c\n", "signature", s->fileheader.signature[0],
 												s->fileheader.signature[1]);
 	ft_printf("%s: %i\n", "filesize", s->fileheader.filesize);
@@ -61,7 +64,7 @@ static void		fill_image(uint8_t *data, uint8_t *pixelbuffer, int width,
 	}
 }
 
-int				bmp_load(char *file_name, int *width, int *height, int **data)
+int				bmp_load(char *filename, int *width, int *height, int **data)
 {
 	FILE			*file;
 	char			*buff;
@@ -71,7 +74,7 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 
 	if (!(infos = (struct stat *)malloc(sizeof(struct stat))))
 		exit(EXIT_FAILURE);
-	if ((stat(file_name, infos)) == -1 || (!(file = fopen(file_name, "rb"))))
+	if ((stat(filename, infos)) == -1 || (!(file = fopen(filename, "rb"))))
 	{
 		ft_eprintf("%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
@@ -80,7 +83,7 @@ int				bmp_load(char *file_name, int *width, int *height, int **data)
 		exit(EXIT_FAILURE);
 	res = fread(buff, infos->st_size, 1, file);
 	s = (t_bitmap *)buff;
-	paste_fileheader((t_bitmap *)buff, file_name);
+	paste_fileheader((t_bitmap *)buff, filename);
 	*width = s->bitmapinfoheader.width;
 	*height = s->bitmapinfoheader.height;
 	if (!(*data = (int *)ft_memalloc(sizeof(int) * (*width) * (*height))))

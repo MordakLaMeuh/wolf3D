@@ -13,15 +13,17 @@
 #include <stdlib.h>
 #include <math.h>
 #include "core/wolf3d.h"
+#include "overlay/overlay.h"
+#include "overlay/internal_overlay.h"
 
-static inline void			fill_pixel(t_env *env, t_coord_i c, t_pix pix)
+static inline void			fill_pixel(t_pix *scene, t_coord_i c, t_pix pix)
 {
 	int offset;
 
 	offset = (c.y * WIDTH) + c.x;
 	if (offset >= (WIDTH * HEIGHT) || offset < 0)
 		return ;
-	env->scene.scene[offset] = pix;
+	scene[offset] = pix;
 }
 
 static inline t_pix			get_pix_line(t_line *p, float x,
@@ -42,7 +44,7 @@ static inline t_pix			get_pix_line(t_line *p, float x,
 	return (new_pix);
 }
 
-static void					horizontal_line(t_env *env, t_line *p,
+static void					horizontal_line(t_pix *scene, t_line *p,
 											t_coord_i inc)
 {
 	int			cumul;
@@ -61,13 +63,13 @@ static void					horizontal_line(t_env *env, t_line *p,
 			cumul -= p->d.x;
 		}
 		pix = get_pix_line(p, c.x, p->p1.x, p->p2.x);
-		fill_pixel(env, c, pix);
+		fill_pixel(scene, c, pix);
 		if (c.x == p->p2.x)
 			break ;
 	}
 }
 
-static void					vertical_line(t_env *env, t_line *p,
+static void					vertical_line(t_pix *scene, t_line *p,
 											t_coord_i inc)
 {
 	int			cumul;
@@ -86,24 +88,24 @@ static void					vertical_line(t_env *env, t_line *p,
 			cumul -= p->d.y;
 		}
 		pix = get_pix_line(p, c.y, p->p1.y, p->p2.y);
-		fill_pixel(env, c, pix);
+		fill_pixel(scene, c, pix);
 		if (c.y == p->p2.y)
 			break ;
 	}
 }
 
-void						draw_line(t_env *env, t_line *p)
+void						draw_line(t_pix *scene, t_line *p)
 {
 	t_coord_i	inc;
 
 	p->d = (t_coord_i){p->p2.x - p->p1.x, p->p2.y - p->p1.y};
 	inc = (t_coord_i){(p->d.x < 0) ? -1 : 1, (p->d.y < 0) ? -1 : 1};
 	p->d = (t_coord_i){abs(p->d.x), abs(p->d.y)};
-	fill_pixel(env, p->p1, p->b_pix);
+	fill_pixel(scene, p->p1, p->b_pix);
 	if (p->d.x == 0 && p->d.y == 0)
 		return ;
 	if (p->d.x > p->d.y)
-		horizontal_line(env, p, inc);
+		horizontal_line(scene, p, inc);
 	else
-		vertical_line(env, p, inc);
+		vertical_line(scene, p, inc);
 }

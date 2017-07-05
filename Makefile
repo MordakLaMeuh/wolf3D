@@ -24,7 +24,7 @@ VPATH = srcs/core srcs/parse srcs/bmp srcs/overlay
 
 ## HEADERS
 
-HEADERS = wolf3d.h parse.h
+HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h internal_overlay.h
 
 ### LIBRAIRIES ###
 

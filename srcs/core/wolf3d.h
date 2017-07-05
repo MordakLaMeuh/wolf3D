@@ -16,7 +16,7 @@
 # include <math.h>
 # include "mlx.h"
 # include "libft.h"
-# include "coord_types.h"
+# include "graphic_types.h"
 
 #ifndef M_PI
 # define M_PI				3.14159265358979323846
@@ -95,27 +95,6 @@
 */
 
 # define N_CONTROL			4
-
-typedef union			u_pix
-{
-	unsigned int		i;
-	struct				s_c
-	{
-		unsigned char	b;
-		unsigned char	g;
-		unsigned char	r;
-		unsigned char	a;
-	}					c;
-}						t_pix;
-
-typedef struct			s_line
-{
-	t_coord_i			p1;
-	t_coord_i			p2;
-	t_coord_i			d;
-	t_pix				b_pix;
-	t_pix				f_pix;
-}						t_line;
 
 typedef struct			s_bmp
 {
@@ -315,24 +294,13 @@ int						mlx_key_release(int keycode, t_env *e);
 int						mlx_key_press(int keycode, t_env *e);
 int						common_action(t_env *e);
 
-int						extract_map_char(const char *nptr);
-t_tile					**get_map(char *file, t_env *env);
 
 void					view_map(t_tile **map, int width, int height);
 void					eval_fps(t_env *e);
 
-void					draw_minimap(t_env *e);
-
 int						move_player(t_env *e);
 
-void					draw_arrow(t_env *e, t_coord_i c, float angle);
-void					draw_line(t_env *env, t_line *p);
-void					draw_box(t_coord_i p1, t_coord_i p2, t_pix pix,
-																	t_env *e);
-void					fill_box(t_coord_i p1, t_coord_i p2, t_pix pix,
-																	t_env *e);
-void					draw_circle(t_env *e, t_coord_i position, int radius,
-																t_pix color);
+void					draw_minimap(t_env *e);
 
 void					init_floor(t_env *e, char **textures, int n);
 void					render_floor(t_env *env, t_rendering_layer *layer);

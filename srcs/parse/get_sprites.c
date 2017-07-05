@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "core/coord_types.h"
+#include "graphic_types.h"
 #include "parse/internal_parse.h"
 #include "parse/parse.h"
 

@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "core/wolf3d.h"
 #include "parse/parse.h"
+#include "overlay/overlay.h"
 
 static void			interpolate_switch(t_env *e, unsigned long int m)
 {
@@ -43,7 +44,7 @@ static int			move(t_env *e)
 	scene_to_win(e);
 	pix.i = 0xff0000;
 	draw_box((t_coord_i){WIDTH / 2 - 10, HEIGHT / 2 - 10},
-	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e);
+	(t_coord_i){WIDTH / 2 + 10, HEIGHT / 2 + 10}, pix, e->scene.scene);
 	mlx_put_image_to_window(e->mlx, e->win, e->image, 0, 0);
 	if (e->inter_time)
 		interpolate_switch(e, get_time());

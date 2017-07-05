@@ -13,18 +13,19 @@
 #include <stdlib.h>
 #include <math.h>
 #include "core/wolf3d.h"
+#include "overlay/internal_overlay.h"
 
-static inline void	plot_pixel(t_env *env, t_coord_i l, t_pix pix)
+static inline void	plot_pixel(t_pix *scene, t_coord_i l, t_pix pix)
 {
 	int offset;
 
 	offset = (l.y * WIDTH) + l.x;
 	if (offset >= (WIDTH * HEIGHT) || offset < 0)
 		return ;
-	env->scene.scene[offset] = pix;
+	scene[offset] = pix;
 }
 
-void				draw_arrow(t_env *e, t_coord_i c, float angle)
+void				draw_arrow(t_pix *scene, t_coord_i c, float angle)
 {
 	t_line		line;
 	t_coord_i	l1;
@@ -41,18 +42,18 @@ void				draw_arrow(t_env *e, t_coord_i c, float angle)
 	line.p2 = l2;
 	line.b_pix.i = 0x0000FF;
 	line.f_pix.i = 0x00FF00;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 	line.p1 = l2;
 	line.p2 = l3;
 	line.b_pix.i = 0x00FF00;
 	line.f_pix.i = 0xFF0000;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 	line.p1 = l1;
 	line.b_pix.i = 0x0000FF;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 }
 
-void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
+void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
 {
 	t_line line;
 
@@ -61,17 +62,17 @@ void				draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 	line.p1 = p1;
 	line.p2.y = p1.y;
 	line.p2.x = p2.x;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 	line.p1 = p2;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 	line.p2.x = p1.x;
 	line.p2.y = p2.y;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 	line.p1 = p1;
-	draw_line(e, &line);
+	draw_line(scene, &line);
 }
 
-void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
+void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene)
 {
 	t_line	line;
 	int		i;
@@ -85,7 +86,7 @@ void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 	{
 		line.p1.y = i;
 		line.p2.y = i;
-		draw_line(e, &line);
+		draw_line(scene, &line);
 		i++;
 	}
 }
@@ -95,7 +96,7 @@ void				fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_env *e)
 ** x² + y² = r²
 */
 
-void				draw_circle(t_env *e, t_coord_i position, int radius,
+void			draw_circle(t_pix *scene, t_coord_i position, int radius,
 																	t_pix color)
 {
 	t_coord_i	location;
@@ -108,9 +109,9 @@ void				draw_circle(t_env *e, t_coord_i position, int radius,
 		y = sqrt((radius * radius) - (x * x));
 		location.x = x + position.x;
 		location.y = floor(y) + position.y;
-		plot_pixel(e, location, color);
+		plot_pixel(scene, location, color);
 		location.y = -floor(y) + position.y;
-		plot_pixel(e, location, color);
+		plot_pixel(scene, location, color);
 	}
 	y = -radius - 1;
 	while (++y <= radius)
@@ -118,8 +119,8 @@ void				draw_circle(t_env *e, t_coord_i position, int radius,
 		x = sqrt((radius * radius) - (y * y));
 		location.y = y + position.y;
 		location.x = floor(x) + position.x;
-		plot_pixel(e, location, color);
+		plot_pixel(scene, location, color);
 		location.x = -floor(x) + position.x;
-		plot_pixel(e, location, color);
+		plot_pixel(scene, location, color);
 	}
 }

@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bmp.h                                              :+:      :+:    :+:   */
+/*   overlay.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/18 21:54:53 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 15:58:23 by bmickael         ###   ########.fr       */
+/*   Created: 2017/07/05 09:04:09 by bmickael          #+#    #+#             */
+/*   Updated: 2017/07/05 09:04:10 by bmickael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BMP_H
-# define BMP_H
+#ifndef OVERLAY_H
+# define OVERLAY_H
 
-int			bmp_load(char *filename, int *width, int *height, int **data);
+# include "graphic_types.h"
 
-int			bmp_save(char *filename, int width, int height, int *data);
+void			draw_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene);
+
+void			fill_box(t_coord_i p1, t_coord_i p2, t_pix pix, t_pix *scene);
+
+void			draw_circle(t_pix *scene, t_coord_i position, int radius,
+																t_pix color);
+
+void			draw_arrow(t_pix *scene, t_coord_i c, float angle);
 
 #endif

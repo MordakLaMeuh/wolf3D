@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bmp.h                                              :+:      :+:    :+:   */
+/*   internal_overlay.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/18 21:54:53 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 15:58:23 by bmickael         ###   ########.fr       */
+/*   Created: 2017/07/05 09:04:16 by bmickael          #+#    #+#             */
+/*   Updated: 2017/07/05 09:04:18 by bmickael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BMP_H
-# define BMP_H
+#ifndef INTERNAL_OVERLAY_H
+# define INTERNAL_OVERLAY_H
 
-int			bmp_load(char *filename, int *width, int *height, int **data);
+typedef struct	s_line
+{
+	t_coord_i	p1;
+	t_coord_i	p2;
+	t_coord_i	d;
+	t_pix		b_pix;
+	t_pix		f_pix;
+}				t_line;
 
-int			bmp_save(char *filename, int width, int height, int *data);
+void			draw_line(t_pix *scene, t_line *p);
 
 #endif

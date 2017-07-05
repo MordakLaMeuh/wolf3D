@@ -14,7 +14,7 @@
 # define PARSE_H
 
 # include "libft.h"
-# include "core/coord_types.h"
+# include "graphic_types.h"
 
 typedef struct	s_sprite_info
 {

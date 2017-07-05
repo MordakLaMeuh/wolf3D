@@ -14,8 +14,10 @@
 #include <stdio.h>
 #include <math.h>
 #include "core/wolf3d.h"
+#include "overlay/overlay.h"
+#include "overlay/internal_overlay.h"
 
-float			is_close(float min, float max, float a, float b)
+static float	is_close(float min, float max, float a, float b)
 {
 	float v;
 	float u;
@@ -49,37 +51,10 @@ static void		locate_enemy(t_env *e, float ref_angle)
 			pix.i <<= 8;
 			l.x = l.x * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_X;
 			l.y = l.y * (MAP_RADIUS / MAP_DEPTH) + MAP_ORIGIN_Y;
-			draw_circle(e, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
+			draw_circle(e->scene.scene, (t_coord_i){(int)l.x, (int)l.y}, 4, pix);
 		}
 	}
 }
-
-/*
-** void			draw_minimap(t_env *e)
-** {
-**	struct timespec	spec;
-**	t_coord_i		l1;
-**	t_pix			color;
-**	float			angle;
-**	t_line			line;
-**
-**	l1 = (t_coord_i){MAP_ORIGIN_X, MAP_ORIGIN_Y};
-**	draw_arrow(e, l1, e->player.angle);
-**	color.i = 0xffffff;
-**	draw_circle(e, l1, MAP_RADIUS, color);
-**	clock_gettime(CLOCK_REALTIME, &spec);
-**	angle = e->player.angle + (float)(
-**		(((((int)spec.tv_sec & 0x0F) * 1000) +
-**		round(spec.tv_nsec / 1.0e6)) / 2000) * M_PI * 2);
-**	line.p1 = l1;
-**	line.p2.x = (floor)(cosf(angle) * MAP_RADIUS) + MAP_ORIGIN_X;
-**	line.p2.y = (floor)(sinf(angle) * MAP_RADIUS) + MAP_ORIGIN_Y;
-**	line.b_pix.i = 0xFFFF00;
-**	line.f_pix.i = 0x00FFFF;
-**	draw_line(e, &line);
-**	locate_enemy(e, atan2(sin(angle), cos(angle)));
-** }
-*/
 
 void			draw_minimap(t_env *e)
 {
@@ -90,18 +65,17 @@ void			draw_minimap(t_env *e)
 	t_line			line;
 
 	l1 = (t_coord_i){MAP_ORIGIN_X, MAP_ORIGIN_Y};
-	draw_arrow(e, l1, e->player.angle);
+	draw_arrow(e->scene.scene, l1, e->player.angle);
 	color.i = 0xffffff;
-	draw_circle(e, l1, MAP_RADIUS, color);
+	draw_circle(e->scene.scene, l1, MAP_RADIUS, color);
 	gettimeofday(&spec, NULL);
-	angle = e->player.angle + (float)(
-		(((((int)spec.tv_sec & 0x0F) * 1000) +
+	angle = (float)((((((int)spec.tv_sec & 0x0F) * 1000) +
 		round(spec.tv_usec / 1.0e3)) / 2000) * M_PI * 2);
 	line.p1 = l1;
 	line.p2.x = (floor)(cosf(angle) * MAP_RADIUS) + MAP_ORIGIN_X;
 	line.p2.y = (floor)(sinf(angle) * MAP_RADIUS) + MAP_ORIGIN_Y;
 	line.b_pix.i = 0xFFFF00;
 	line.f_pix.i = 0x00FFFF;
-	draw_line(e, &line);
+	draw_line(e->scene.scene, &line);
 	locate_enemy(e, atan2(sin(angle), cos(angle)));
 }
