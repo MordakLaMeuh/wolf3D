@@ -126,6 +126,7 @@ void						render_scene(t_env *e)
 	int						i;
 
 	e->sky->pos = (int)((RATIO * WIDTH) * (e->player.angle / (2.f * PI)));
+//	render_sky(e, e->player.angle);
 	calc_columns(e);
 	i = -1;
 	while (++i < 4)

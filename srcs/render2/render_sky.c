@@ -77,6 +77,7 @@ void				init_sky(t_env *e, char *file_name)
 	free(sky_bmp);
 }
 
+
 void				render_sky(t_env *e, t_coord_i c, t_coord_f angle)
 {
 	int i;
@@ -85,3 +86,21 @@ void				render_sky(t_env *e, t_coord_i c, t_coord_f angle)
 	i = e->sky->pos + c.y * RATIO * WIDTH + c.x;
 	e->scene.scene[c.y * WIDTH + c.x] = e->sky->data->pix[i];
 }
+
+/*
+void					render_sky(t_env *e, float angle)
+{
+	int		i;
+	int		j;
+
+	e->sky->pos = (int)((RATIO * WIDTH) * (angle / (2.f * PI)));
+	j = 0;
+	i = e->sky->pos;
+	while (j < (SCREENSIZE >> 1))
+	{
+		e->scene.scene[j++] = e->sky->data->pix[i++];
+		if (j % WIDTH == 0)
+			i += RATIO * WIDTH;
+	}
+}
+*/
