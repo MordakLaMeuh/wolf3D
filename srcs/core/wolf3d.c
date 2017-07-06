@@ -15,6 +15,7 @@
 #include "core/wolf3d.h"
 #include "parse/parse.h"
 #include "overlay/overlay.h"
+#include "render2/render.h"
 
 static void			interpolate_switch(t_env *e, unsigned long int m)
 {

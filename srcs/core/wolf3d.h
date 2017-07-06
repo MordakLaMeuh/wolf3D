@@ -277,7 +277,6 @@ typedef struct			s_thread_put
 }						t_thread_put;
 
 t_pix					get_pix_sp(t_bmp *src, t_coord_f c_src);
-float					dist(t_coord_f a, t_coord_f b);
 
 t_bmp					*load_bitmap(char **name, int n);
 
@@ -298,33 +297,6 @@ int						move_player(t_env *e);
 
 void					draw_minimap(t_env *e);
 
-void					init_floor(t_env *e, char **textures, int n);
-void					render_floor(t_env *env, t_rendering_layer *layer);
-
-void					init_sky(t_env *e, char *file_name);
-void					render_sky(t_env *env, float angle);
-
-void					init_walls(t_env *e, char **textures, int n);
-int						find_wall(t_env *env, float angle_x,
-											t_coord_f *intersect, float *x_tex);
-void					render_wall(t_env *env, t_rendering_layer *layer);
-
-void					init_sprites(t_env *e, char **textures, int n);
-void					render_sprites(t_env *env, t_rendering_layer *layer);
-
-void					init_scene(t_env *env);
-void					render_scene(t_env *env);
-void					scene_to_win(t_env *env);
-
-void					rendering_layer_render(t_rendering_layer *layer,
-											int inter, int n, t_bmp *bmp);
-void					rendering_layer_render_sprite(t_rendering_layer *layer,
-											int inter, int n, t_bmp *bmp);
-
-void					rendering_layer_put(t_pix *pix,
-											t_rendering_layer *layer, int n);
-void					rendering_layer_put_sprite(t_pix *pix,
-											t_rendering_layer *layer, int n);
 unsigned long int		get_time(void);
 
 int						err_usage(char *cmd);
