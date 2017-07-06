@@ -52,6 +52,44 @@ void		init_scene(t_env *e)
 		exit(EXIT_FAILURE);
 }
 
+#include <pthread.h>
+
+typedef struct			s_TH
+{
+	int					n;
+	t_env				*e;
+}						t_TH;
+
+void					*thread_TH(void *arg)
+{
+	t_env				*e;
+	t_coord_f			angle;
+	t_coord_i			c;
+	int					limit;
+
+	e = ((t_TH *)arg)->e;
+	c.y = ((((t_TH *)arg)->n) < 1) ? -1 : (HEIGHT / 2) +
+								((((t_TH *)arg)->n - 1) * (floor(HEIGHT / 6)) - 1);
+	limit = ((((t_TH *)arg)->n) < 1) ? HEIGHT / 2 : c.y + (HEIGHT / 6) + 1;
+	while (++c.y < limit)
+	{
+		angle.y = e->angle_y[c.y];
+		c.x = 0;
+		while (c.x < WIDTH)
+		{
+			angle.x = e->angle_x[c.x] + e->player.angle;
+			if (angle.y <= e->scene.columns[c.x].wall_min_angle)
+				render_floor(e, c, angle);
+			else if (angle.y <= e->scene.columns[c.x].wall_max_angle)
+				render_wall(e, c, angle);
+			else
+				render_sky(e, c, angle);
+			c.x++;
+		}
+	}
+	pthread_exit(NULL);
+}
+/*
 void		render_scene(t_env *e)
 {
 	t_coord_i	c;
@@ -77,6 +115,28 @@ void		render_scene(t_env *e)
 		}
 		c.y++;
 	}
+	render_sprites(e);
+}
+*/
+
+void						render_scene(t_env *e)
+{
+	t_TH					format[NB_CORES];
+	pthread_t				thread[NB_CORES];
+	int						i;
+
+	e->sky->pos = (int)((RATIO * WIDTH) * (e->player.angle / (2.f * PI)));
+	calc_columns(e);
+	i = -1;
+	while (++i < 4)
+	{
+		format[i].n = i;
+		format[i].e = e;
+		pthread_create(&thread[i], NULL, thread_TH, &format[i]);
+	}
+	i = -1;
+	while (++i < NB_CORES)
+		pthread_join(thread[i], NULL);
 	render_sprites(e);
 }
 
