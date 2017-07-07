@@ -14,6 +14,12 @@
 # define RENDER_H
 # include "core/wolf3d.h"
 
+typedef struct			s_render
+{
+	int					n;
+	t_env				*e;
+}						t_render;
+
 /*
 ** render_pix.c
 */
