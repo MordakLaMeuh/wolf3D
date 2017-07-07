@@ -78,15 +78,6 @@ void				init_sky(t_env *e, char *file_name)
 }
 
 
-void				render_sky(t_env *e, t_coord_i c, t_coord_f angle)
-{
-	int i;
-
-	(void)angle;
-	i = e->sky->pos + c.y * RATIO * WIDTH + c.x;
-	e->scene.scene[c.y * WIDTH + c.x] = e->sky->data->pix[i];
-}
-
 /*
 void					render_sky(t_env *e, float angle)
 {

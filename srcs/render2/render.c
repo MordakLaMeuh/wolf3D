@@ -74,8 +74,8 @@ void					*thread_TH(void *arg)
 	while (++c.y < limit)
 	{
 		angle.y = e->angle_y[c.y];
-		c.x = 0;
-		while (c.x < WIDTH)
+		c.x = -1;
+		while (++c.x < WIDTH)
 		{
 			angle.x = e->angle_x[c.x] + e->player.angle;
 			if (angle.y <= e->scene.columns[c.x].wall_min_angle)
@@ -83,8 +83,8 @@ void					*thread_TH(void *arg)
 			else if (angle.y <= e->scene.columns[c.x].wall_max_angle)
 				render_wall(e, c, angle);
 			else
-				render_sky(e, c, angle);
-			c.x++;
+				e->scene.scene[c.y * WIDTH + c.x] =
+	e->sky->data->pix[e->sky->pos + c.y * ((RATIO + 1) * WIDTH) + c.x];
 		}
 	}
 	pthread_exit(NULL);
@@ -126,7 +126,7 @@ void						render_scene(t_env *e)
 	int						i;
 
 	e->sky->pos = (int)((RATIO * WIDTH) * (e->player.angle / (2.f * PI)));
-//	render_sky(e, e->player.angle);
+	//render_sky(e, e->player.angle);
 	calc_columns(e);
 	i = -1;
 	while (++i < 4)
