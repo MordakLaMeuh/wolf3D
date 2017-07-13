@@ -30,7 +30,7 @@ HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h inter
 ### LIBRAIRIES ###
 
 LIB_DIR = libs
-_MLX = minilibx_elcapitan
+_MLX = minilibx_linux
 MLX = $(addprefix $(LIB_DIR)/, $(_MLX))
 _LIBFT = libft
 LIBFT = $(addprefix $(LIB_DIR)/, $(_LIBFT))

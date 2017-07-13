@@ -70,6 +70,7 @@ int				bmp_load(char *filename, int *width, int *height, int **data)
 	char			*buff;
 	struct stat		*infos;
 	t_bitmap		*s;
+	int			res;
 
 	if (!(infos = (struct stat *)malloc(sizeof(struct stat))))
 		exit(EXIT_FAILURE);
@@ -80,7 +81,8 @@ int				bmp_load(char *filename, int *width, int *height, int **data)
 	}
 	if (!(buff = (char *)malloc(infos->st_size)))
 		exit(EXIT_FAILURE);
-	fread(buff, infos->st_size, 1, file);
+	res = fread(buff, infos->st_size, 1, file);
+	(void)res;
 	s = (t_bitmap *)buff;
 	paste_fileheader((t_bitmap *)buff, filename);
 	*width = s->bitmapinfoheader.width;
