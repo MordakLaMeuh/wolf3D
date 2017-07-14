@@ -24,7 +24,7 @@
 
 # define NOSTALGIA_FACTOR	1
 # define WIDTH				(1920 / NOSTALGIA_FACTOR)
-# define HEIGHT				(1024 / NOSTALGIA_FACTOR)
+# define HEIGHT				(1080 / NOSTALGIA_FACTOR)
 # define SCREENSIZE			(WIDTH * HEIGHT)
 
 # define RATIO				4
@@ -70,6 +70,7 @@
 ** OSX scanCodes
 */
 
+/*
 # define KEYB_M				46
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		53
@@ -77,20 +78,19 @@
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
+*/
 
 /*
 ** Linux scanCodes
 */
 
-/*
-** # define KEYB_M				109
-** # define KEYB_HELP			44
-** # define KEYB_ESCAPE			27
-** # define KEYB_ARROW_UP		82
-** # define KEYB_ARROW_DOWN		84
-** # define KEYB_ARROW_LEFT		81
-** # define KEYB_ARROW_RIGHT	83
-*/
+# define KEYB_M				109
+# define KEYB_HELP			44
+# define KEYB_ESCAPE		27
+# define KEYB_ARROW_UP		82
+# define KEYB_ARROW_DOWN	84
+# define KEYB_ARROW_LEFT	81
+# define KEYB_ARROW_RIGHT	83
 
 # define N_CONTROL			4
 
