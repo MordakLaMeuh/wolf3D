@@ -70,7 +70,6 @@
 ** OSX scanCodes
 */
 
-/*
 # define KEYB_M				46
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		53
@@ -78,12 +77,12 @@
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
-*/
 
 /*
 ** Linux scanCodes
 */
 
+/*
 # define KEYB_M				109
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		27
@@ -91,6 +90,7 @@
 # define KEYB_ARROW_DOWN	84
 # define KEYB_ARROW_LEFT	81
 # define KEYB_ARROW_RIGHT	83
+*/
 
 # define N_CONTROL			4
 
