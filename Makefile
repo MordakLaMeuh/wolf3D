@@ -30,7 +30,7 @@ HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h inter
 ### LIBRAIRIES ###
 
 LIB_DIR = libs
-_MLX = minilibx_sierra
+_MLX = minilibx_linux
 MLX = $(addprefix $(LIB_DIR)/, $(_MLX))
 _LIBFT = libft
 LIBFT = $(addprefix $(LIB_DIR)/, $(_LIBFT))
@@ -44,7 +44,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 
 IFLAGS = -Isrcs -I$(LIBFT)/includes -I$(MLX)
-LDFLAGS = -L$(LIBFT) -lft -framework openGL -framework AppKit $(MLX)/libmlx.a
+LDFLAGS = -L$(LIBFT) -lft $(MLX)/libmlx.a -lXext -lX11 -lm -lpthread
 
 .PHONY: all clean fclean re help
 
