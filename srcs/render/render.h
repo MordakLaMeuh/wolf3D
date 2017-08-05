@@ -20,6 +20,17 @@ typedef struct	s_render
 	t_env		*e;
 }				t_render;
 
+typedef struct	s_sprite_env
+{
+	t_coord_f	angle_topleft;
+	t_coord_f	angle_bottomright;
+	t_coord_i	c;
+	t_coord_i	c_topleft;
+	t_coord_i	c_bottomright;
+	t_coord_i	c_max;
+	t_coord_f	c_tex;
+}				t_sprite_env;
+
 /*
 ** render_pix.c
 */
@@ -61,6 +72,7 @@ void			init_sky(t_env *e, char *file_name);
 void			init_sprites(t_env *env, char **textures, int n);
 t_sprite		**create_z_buffer_order(t_env *env);
 void			render_sprites(t_env *env);
+int				m_cmp(void *a, void *b);
 
 /*
 ** render.c

@@ -13,25 +13,12 @@
 #include <stdlib.h>
 #include "render.h"
 
-void				init_sprites(t_env *env, char **textures, int n)
-{
-	if (!(env->scene.bmp_sprite = load_bitmap(textures, n)))
-		exit(EXIT_FAILURE);
-}
-
 static inline int	angle_to_pix(float angle)
 {
 	int x;
 
 	x = (int)(tanf(angle) / tanf((float)VIEW_ANGLE / 2.f) * (WIDTH / 2));
 	return (x);
-}
-
-static int			m_cmp(void *a, void *b)
-{
-	if (((t_sprite *)a)->dist < ((t_sprite *)b)->dist)
-		return (1);
-	return (0);
 }
 
 t_sprite			**create_z_buffer_order(t_env *env)
@@ -62,23 +49,59 @@ t_sprite			**create_z_buffer_order(t_env *env)
 	return (tmp);
 }
 
-void				render_sprites(t_env *env)
+inline static void	loop(t_env *e, t_sprite_env *s, t_sprite **tmp)
 {
-	t_coord_f			angle_topleft;
-	t_coord_f			angle_bottomright;
-	t_coord_i			c;
-	t_coord_i			c_topleft;
-	t_coord_i			c_bottomright;
-	t_coord_i			c_max;
-	t_coord_f			c_tex;
+	t_pix			pix;
+
+	while (++s->c.x < s->c_max.x)
+	{
+		if (e->scene.columns[s->c.x].wall_h_dist <= (*tmp)->dist)
+			continue ;
+		s->c.y = ((s->c_topleft.y >= 0) ? s->c_topleft.y : 0) - 1;
+		s->c_max.y = (s->c_bottomright.y < HEIGHT) ? s->c_bottomright.y :
+															HEIGHT - 1;
+		while (++s->c.y < s->c_max.y && e->scene.n_layer_sprite <
+															WIDTH * HEIGHT)
+		{
+			s->c_tex.x = (float)(s->c.x - s->c_topleft.x) /
+				(s->c_bottomright.x - s->c_topleft.x) *
+				(e->scene.bmp_sprite[(*tmp)->type].dim.x - 2);
+			s->c_tex.y = (float)(s->c.y - s->c_topleft.y) /
+				(s->c_bottomright.y - s->c_topleft.y) *
+				(e->scene.bmp_sprite[(*tmp)->type].dim.y - 2);
+			pix = get_pix(&(e->scene.bmp_sprite[(*tmp)->type]),
+								s->c_tex, (*tmp)->dist, e->inter_state);
+			if (pix.c.a != 0xff)
+				e->scene.scene[s->c.y * WIDTH + s->c.x] = pix;
+		}
+	}
+}
+
+inline static void	mass_init(t_env *e, t_sprite_env *s, t_sprite **tmp)
+{
+	s->angle_topleft.x = (*tmp)->angle0_x - atanf(.5f / (*tmp)->dist);
+	s->angle_bottomright.x = (*tmp)->angle0_x + atanf(.5f / (*tmp)->dist);
+	s->c_topleft.x = angle_to_pix(s->angle_topleft.x) + WIDTH / 2;
+	s->c_bottomright.x = angle_to_pix(s->angle_bottomright.x) + WIDTH / 2;
+	s->angle_topleft.y = atanf((e->sprite_height - e->player.height) /
+															(*tmp)->dist);
+	s->angle_bottomright.y = atanf(-e->player.height / (*tmp)->dist);
+	s->c_topleft.y = HEIGHT / 2 - angle_to_pix(s->angle_topleft.y);
+	s->c_bottomright.y = HEIGHT / 2 - angle_to_pix(s->angle_bottomright.y);
+	s->c.x = ((s->c_topleft.x >= 0) ? s->c_topleft.x : 0) - 1;
+	s->c_max.x = (s->c_bottomright.x < WIDTH) ? s->c_bottomright.x : WIDTH - 1;
+}
+
+void				render_sprites(t_env *e)
+{
+	t_sprite_env		s;
 	t_sprite			**tmp;
 	int					i;
-	t_pix				pix;
 
-	tmp = create_z_buffer_order(env);
+	tmp = create_z_buffer_order(e);
 	i = 0;
-	env->sprite_height = 1.2;
-	while (i < env->n_sprites)
+	e->sprite_height = 1.2;
+	while (i < e->n_sprites)
 	{
 		if ((*tmp)->angle0_x < 0.f)
 			(*tmp)->angle0_x += 2.f * PI;
@@ -88,40 +111,10 @@ void				render_sprites(t_env *env)
 			i++;
 			continue ;
 		}
-		angle_topleft.x = (*tmp)->angle0_x - atanf(.5f / (*tmp)->dist);
-		angle_bottomright.x = (*tmp)->angle0_x + atanf(.5f / (*tmp)->dist);
-		c_topleft.x = angle_to_pix(angle_topleft.x) + WIDTH / 2;
-		c_bottomright.x = angle_to_pix(angle_bottomright.x) + WIDTH / 2;
-		angle_topleft.y = atanf((env->sprite_height - env->player.height) /
-																(*tmp)->dist);
-		angle_bottomright.y = atanf(-env->player.height / (*tmp)->dist);
-		c_topleft.y = HEIGHT / 2 - angle_to_pix(angle_topleft.y);
-		c_bottomright.y = HEIGHT / 2 - angle_to_pix(angle_bottomright.y);
-		c.x = ((c_topleft.x >= 0) ? c_topleft.x : 0) - 1;
-		c_max.x = (c_bottomright.x < WIDTH) ? c_bottomright.x : WIDTH - 1;
-		while (++c.x < c_max.x)
-		{
-			if (env->scene.columns[c.x].wall_h_dist <= (*tmp)->dist)
-				continue ;
-			c.y = ((c_topleft.y >= 0) ? c_topleft.y : 0) - 1;
-			c_max.y = (c_bottomright.y < HEIGHT) ? c_bottomright.y : HEIGHT - 1;
-			while (++c.y < c_max.y && env->scene.n_layer_sprite <
-																WIDTH * HEIGHT)
-			{
-				c_tex.x = (float)(c.x - c_topleft.x) /
-					(c_bottomright.x - c_topleft.x) *
-					(env->scene.bmp_sprite[(*tmp)->type].dim.x - 2);
-				c_tex.y = (float)(c.y - c_topleft.y) /
-					(c_bottomright.y - c_topleft.y) *
-					(env->scene.bmp_sprite[(*tmp)->type].dim.y - 2);
-				pix = get_pix(&(env->scene.bmp_sprite[(*tmp)->type]),
-										c_tex, (*tmp)->dist, env->inter_state);
-				if (pix.c.a != 0xff)
-					env->scene.scene[c.y * WIDTH + c.x] = pix;
-			}
-		}
+		mass_init(e, &s, tmp);
+		loop(e, &s, tmp);
 		tmp++;
 		i++;
 	}
-	free(tmp -= env->n_sprites);
+	free(tmp -= e->n_sprites);
 }
