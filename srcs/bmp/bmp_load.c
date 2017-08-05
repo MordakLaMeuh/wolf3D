@@ -66,10 +66,10 @@ static void		fill_image(uint8_t *data, uint8_t *pixelbuffer, int width,
 
 int				bmp_load(char *filename, int *width, int *height, int **data)
 {
-	FILE			*file;
-	char			*buff;
-	struct stat		*infos;
-	t_bitmap		*s;
+	FILE		*file;
+	char		*buff;
+	struct stat	*infos;
+	t_bitmap	*s;
 	int			res;
 
 	if (!(infos = (struct stat *)malloc(sizeof(struct stat))))
@@ -82,13 +82,12 @@ int				bmp_load(char *filename, int *width, int *height, int **data)
 	if (!(buff = (char *)malloc(infos->st_size)))
 		exit(EXIT_FAILURE);
 	res = fread(buff, infos->st_size, 1, file);
-	(void)res;
 	s = (t_bitmap *)buff;
 	paste_fileheader((t_bitmap *)buff, filename);
 	*width = s->bitmapinfoheader.width;
 	*height = s->bitmapinfoheader.height;
 	if (!(*data = (int *)ft_memalloc(sizeof(int) * (*width) * (*height))))
-		return (0);
+		exit(EXIT_FAILURE);
 	fill_image((uint8_t *)*data, (uint8_t *)
 			(buff + s->fileheader.fileoffset_to_pixelarray), *width, *height);
 	return (1);

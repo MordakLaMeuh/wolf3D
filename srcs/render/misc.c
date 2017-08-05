@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   internal_render.h                                  :+:      :+:    :+:   */
+/*   find_wall.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/05 11:57:54 by bmickael          #+#    #+#             */
-/*   Updated: 2017/07/05 11:57:56 by bmickael         ###   ########.fr       */
+/*   Created: 2017/07/06 11:43:04 by stoupin           #+#    #+#             */
+/*   Updated: 2017/07/06 11:43:05 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INTERNAL_RENDER_H
-# define INTERNAL_RENDER_H
+#include "render.h"
 
-# include "graphic_types.h"
-
-typedef struct			s_floor_uv_format
+float						dist(t_coord_f a, t_coord_f b)
 {
-	t_rendering_layer	*layer;
-	int					n;
-	t_env				*e;
-}						t_floor_uv_format;
+	t_coord_f				delta;
 
-#endif
+	delta.x = b.x - a.x;
+	delta.y = b.y - a.y;
+	return (sqrtf(delta.x * delta.x + delta.y * delta.y));
+}

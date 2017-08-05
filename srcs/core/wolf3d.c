@@ -15,22 +15,9 @@
 #include "core/wolf3d.h"
 #include "parse/parse.h"
 #include "overlay/overlay.h"
-#include "render2/render.h"
+#include "render/render.h"
 
-static void			interpolate_switch(t_env *e, unsigned long int m)
-{
-	char *s;
-
-	if ((m - e->inter_time) < 1000)
-	{
-		ft_asprintf(&s, "Interpolation lineaire: %s",
-									(e->inter_state) ? "ON" : "OFF");
-		mlx_string_put(e->mlx, e->win, 20, 40, 0x00FFFFFF, s);
-		free(s);
-	}
-	else
-		e->inter_time = 0;
-}
+#include "AudioToolbox/AudioToolbox.h"
 
 static int			move(t_env *e)
 {

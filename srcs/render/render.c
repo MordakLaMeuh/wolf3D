@@ -14,15 +14,6 @@
 #include <stdlib.h>
 #include "render.h"
 
-float						dist(t_coord_f a, t_coord_f b)
-{
-	t_coord_f				delta;
-
-	delta.x = b.x - a.x;
-	delta.y = b.y - a.y;
-	return (sqrtf(delta.x * delta.x + delta.y * delta.y));
-}
-
 static void					calc_columns(t_env *e)
 {
 	int						x;

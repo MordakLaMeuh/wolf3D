@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdlib.h>
 #include "core/wolf3d.h"
 
 #ifdef DEBUG_KEYBOARD
@@ -54,4 +55,19 @@ int			mlx_key_press(int keycode, t_env *e)
 		print_register(e->keyb);
 	}
 	return (keycode);
+}
+
+void		interpolate_switch(t_env *e, unsigned long int m)
+{
+	char *s;
+
+	if ((m - e->inter_time) < 1000)
+	{
+		ft_asprintf(&s, "Interpolation lineaire: %s",
+									(e->inter_state) ? "ON" : "OFF");
+		mlx_string_put(e->mlx, e->win, 20, 40, 0x00FFFFFF, s);
+		free(s);
+	}
+	else
+		e->inter_time = 0;
 }

@@ -70,7 +70,6 @@
 ** OSX scanCodes
 */
 
-/*
 # define KEYB_M				46
 # define KEYB_HELP			44
 # define KEYB_ESCAPE		53
@@ -78,19 +77,20 @@
 # define KEYB_ARROW_DOWN	125
 # define KEYB_ARROW_LEFT	123
 # define KEYB_ARROW_RIGHT	124
-*/
 
 /*
 ** Linux scanCodes
 */
 
-# define KEYB_M				109
-# define KEYB_HELP			44
-# define KEYB_ESCAPE		27
-# define KEYB_ARROW_UP		82
-# define KEYB_ARROW_DOWN	84
-# define KEYB_ARROW_LEFT	81
-# define KEYB_ARROW_RIGHT	83
+/*
+** # define KEYB_M				109
+** # define KEYB_HELP			44
+** # define KEYB_ESCAPE			27
+** # define KEYB_ARROW_UP		82
+** # define KEYB_ARROW_DOWN		84
+** # define KEYB_ARROW_LEFT		81
+** # define KEYB_ARROW_RIGHT	83
+*/
 
 # define N_CONTROL			4
 
@@ -289,6 +289,7 @@ int						exit_mlx(t_env *e);
 int						mlx_key_release(int keycode, t_env *e);
 int						mlx_key_press(int keycode, t_env *e);
 int						common_action(t_env *e);
+void					interpolate_switch(t_env *e, unsigned long int m);
 
 void					view_map(t_tile **map, int width, int height);
 void					eval_fps(t_env *e);
