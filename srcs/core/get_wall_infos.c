@@ -17,8 +17,8 @@ t_vector_2		create_vector(float angle, float dist)
 	t_vector_2	s;
 
 	s.module = dist;
-	s.dx = cos(angle) * dist;
-	s.dy = sin(angle) * dist;
+	s.dx = cosf(angle) * dist;
+	s.dy = sinf(angle) * dist;
 	return (s);
 }
 

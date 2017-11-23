@@ -78,5 +78,5 @@ void			draw_minimap(t_env *e)
 	line.b_pix.i = 0xFFFF00;
 	line.f_pix.i = 0x00FFFF;
 	draw_line(e->scene.scene, &line);
-	locate_enemy(e, atan2(sin(angle), cos(angle)));
+	locate_enemy(e, atan2f(sinf(angle), cosf(angle)));
 }
