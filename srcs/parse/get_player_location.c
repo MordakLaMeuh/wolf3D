@@ -12,18 +12,19 @@
 
 #include "graphic_types.h"
 #include "parse/internal_parse.h"
+#include "core/wolf3d.h"
 
-int						get_player_location(t_coord_f *l, char c)
+int						get_player_location(t_env *e, t_coord_f *l, char c)
 {
 	t_list	*tmp;
 	char	*content;
 
-	tmp = get_map_content()->data;
-	l->y = 0;
+	tmp = e->content->data;
+	l->y = .5;
 	while (tmp)
 	{
 		content = tmp->content;
-		l->x = 0;
+		l->x = .5;
 		while (*content)
 		{
 			if (content[1] == c)
