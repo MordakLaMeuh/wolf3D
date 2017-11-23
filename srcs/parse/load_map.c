@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h>
+#include "core/wolf3d.h"
 #include "parse/get_next_line.h"
 #include "parse/internal_parse.h"
 
@@ -59,15 +60,13 @@ static int				check_all_map(t_map_content *content)
 	return (0);
 }
 
-int						load_map(char *filename)
+int						load_map(t_env *e, char *filename)
 {
 	char			*line;
 	int				fd;
 	int				ret;
-	t_map_content	*content;
 
-	alloc_map_content();
-	content = get_map_content();
+	alloc_map_content(&(e->content));
 	if ((fd = open(filename, O_RDONLY)) < 0)
 	{
 		ft_eprintf("Could not open %s : %s\n", filename, strerror(errno));
@@ -75,14 +74,14 @@ int						load_map(char *filename)
 	}
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		content->height += 1;
-		if (!(ft_lst_push_front(&content->data, line, ret + 1)))
+		e->content->height += 1;
+		if (!(ft_lst_push_front(&(e->content->data), line, ret + 1)))
 			exit(EXIT_FAILURE);
 	}
-	if (ret == -1 || content->height == 0)
+	if (ret == -1 || e->content->height == 0)
 		return (-1);
-	ft_lst_invert_it(&content->data);
-	if (check_all_map(content) != 0)
+	ft_lst_invert_it(&(e->content->data));
+	if (check_all_map(e->content) != 0)
 		return (-1);
 	close(fd);
 	return (0);

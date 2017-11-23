@@ -17,6 +17,7 @@
 # include "mlx.h"
 # include "libft.h"
 # include "graphic_types.h"
+# include "parse/internal_parse.h"
 
 # define DEBUG_KEYBOARD		FALSE
 
@@ -248,6 +249,7 @@ struct					s_env
 	unsigned long int	inter_time;
 	int					n_sprites;
 	t_sprite			*sprites;
+	t_map_content		*content;
 };
 
 typedef struct			s_modify_coord

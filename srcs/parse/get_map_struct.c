@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include "parse/internal_parse.h"
+#include "core/wolf3d.h"
 
 static int			**allocate_tab(int *height, int *width)
 {
@@ -30,16 +31,37 @@ static int			**allocate_tab(int *height, int *width)
 	return (tab);
 }
 
+static void			fill_border(int **tab, int height, int width)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < height)
+	{
+		tab[i][0] = 50;
+		tab[i][width - 1] = 50;
+		i++;
+	}
+	j = 0;
+	while (j < width)
+	{
+		tab[0][j] = 50;
+		tab[height - 1][j] = 50;
+		j++;
+	}
+}
+
 static void			fill_values(t_list *lst, int **tab)
 {
 	int				i;
 	int				j;
 	char			*line;
 
-	i = 0;
+	i = 1;
 	while (lst)
 	{
-		j = 0;
+		j = 1;
 		line = lst->content;
 		while (*line)
 		{
@@ -57,15 +79,16 @@ static void			fill_values(t_list *lst, int **tab)
 	}
 }
 
-int					**get_map_struct(int *height, int *width)
+int					**get_map_struct(t_env *e, int *height, int *width)
 {
 	t_map_content	*content;
 	int				**tab;
 
-	content = get_map_content();
-	*height = content->height;
-	*width = content->width;
+	content = e->content;
+	*height = content->height + 2;
+	*width = content->width + 2;
 	tab = allocate_tab(height, width);
+	fill_border(tab, *height, *width);
 	fill_values(content->data, tab);
 	return (tab);
 }

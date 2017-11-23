@@ -22,7 +22,6 @@ typedef struct	s_map_content
 	int			height;
 }				t_map_content;
 
-void			alloc_map_content(void);
-t_map_content	*get_map_content(void);
+void			alloc_map_content(t_map_content **content);
 
 #endif

@@ -11,15 +11,16 @@
 /* ************************************************************************** */
 
 #include "parse/internal_parse.h"
+#include "core/wolf3d.h"
 
-int				verif_texture_range(int n_floor, int n_wall, int n_sprite)
+int				verif_texture_range(t_env *e, int n_floor, int n_wall, int n_sprite)
 {
 	t_list		*lst;
 	char		*content;
 
 	if (n_floor <= 0 || n_wall <= 0 || n_sprite <= 0)
 		return (-1);
-	lst = get_map_content()->data;
+	lst = e->content->data;
 	while (lst)
 	{
 		content = lst->content;

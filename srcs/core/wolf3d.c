@@ -82,14 +82,14 @@ static int			get_parse(t_env *e, char *filename)
 	t_sprite_info	*s_l;
 	int				i;
 
-	if (load_map(filename) != 0)
+	if (load_map(e, filename) != 0)
 		return (err_msg("bad file"));
-	if (get_player_location(&e->player.location, '%') != 0)
+	if (get_player_location(e, &e->player.location, '%') != 0)
 		return (err_msg("no player in the map !"));
 	ft_printf("location_player.x = %i, location_player.y = %i\n",
 					(int)e->player.location.x, (int)e->player.location.y);
-	e->n_sprites = get_nbr_sprites();
-	s_l = get_sprites(e->n_sprites);
+	e->n_sprites = get_nbr_sprites(e);
+	s_l = get_sprites(e, e->n_sprites);
 	if (!(e->sprites = (t_sprite*)malloc(sizeof(t_sprite) * e->n_sprites)))
 		exit(EXIT_FAILURE);
 	i = -1;
@@ -100,9 +100,9 @@ static int			get_parse(t_env *e, char *filename)
 		e->sprites[i].location = s_l->location;
 		e->sprites[i].type = (s_l++)->type;
 	}
-	ft_printf("verif = %i\n", verif_texture_range(3, 4, 3) ? "KO" : "OK");
-	e->map_tiles = (t_tile **)get_map_struct(&e->map.size.y, &e->map.size.x);
-	free_map_content();
+	ft_printf("verif = %i\n", verif_texture_range(e, 3, 4, 3) ? "KO" : "OK");
+	e->map_tiles = (t_tile **)get_map_struct(e, &e->map.size.y, &e->map.size.x);
+	free_map_content(&(e->content));
 	return (0);
 }
 

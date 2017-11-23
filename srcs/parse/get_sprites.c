@@ -15,14 +15,14 @@
 #include "parse/internal_parse.h"
 #include "parse/parse.h"
 
-int						get_nbr_sprites(void)
+int						get_nbr_sprites(t_env *e)
 {
 	t_list	*tmp;
 	char	*content;
 	int		n;
 
 	n = 0;
-	tmp = get_map_content()->data;
+	tmp = e->content->data;
 	while (tmp)
 	{
 		content = tmp->content;
@@ -67,12 +67,12 @@ static void				fill_sprite_list(t_sprite_info *s_info, t_list *lst)
 	}
 }
 
-t_sprite_info			*get_sprites(int n)
+t_sprite_info			*get_sprites(t_env *e, int n)
 {
 	t_sprite_info	*s_info;
 
 	if (!(s_info = (t_sprite_info *)malloc(n * sizeof(t_sprite_info))))
 		exit(EXIT_FAILURE);
-	fill_sprite_list(s_info, get_map_content()->data);
+	fill_sprite_list(s_info, e->content->data);
 	return (s_info);
 }
