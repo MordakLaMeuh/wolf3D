@@ -20,19 +20,19 @@ int						get_player_location(t_env *e, t_coord_f *l, char c)
 	char	*content;
 
 	tmp = e->content->data;
-	l->y = .5;
+	l->y = 1.5f;
 	while (tmp)
 	{
 		content = tmp->content;
-		l->x = .5;
+		l->x = 1.5f;
 		while (*content)
 		{
 			if (content[1] == c)
 				return (0);
 			content += (content[2] != '\0') ? 3 : 2;
-			l->x += 1;
+			l->x += 1.f;
 		}
-		l->y += 1;
+		l->y += 1.f;
 		tmp = tmp->next;
 	}
 	return (-1);
