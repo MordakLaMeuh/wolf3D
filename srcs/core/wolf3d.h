@@ -67,31 +67,35 @@
 # define KEYB_MMO_A			0
 # define KEYB_MMO_D			2
 
-/*
-** OSX scanCodes
-*/
-
-# define KEYB_M				46
-# define KEYB_HELP			44
-# define KEYB_ESCAPE		53
-# define KEYB_ARROW_UP		126
-# define KEYB_ARROW_DOWN	125
-# define KEYB_ARROW_LEFT	123
-# define KEYB_ARROW_RIGHT	124
+# ifdef LINUX
 
 /*
 ** Linux scanCodes
 */
 
+#  define KEYB_M				109
+#  define KEYB_HELP			44
+#  define KEYB_ESCAPE			27
+#  define KEYB_ARROW_UP		82
+#  define KEYB_ARROW_DOWN		84
+#  define KEYB_ARROW_LEFT		81
+#  define KEYB_ARROW_RIGHT	83
+
+# else
+
 /*
-** # define KEYB_M				109
-** # define KEYB_HELP			44
-** # define KEYB_ESCAPE			27
-** # define KEYB_ARROW_UP		82
-** # define KEYB_ARROW_DOWN		84
-** # define KEYB_ARROW_LEFT		81
-** # define KEYB_ARROW_RIGHT	83
+** OSX scanCodes
 */
+
+#  define KEYB_M				46
+#  define KEYB_HELP			44
+#  define KEYB_ESCAPE		53
+#  define KEYB_ARROW_UP		126
+#  define KEYB_ARROW_DOWN	125
+#  define KEYB_ARROW_LEFT	123
+#  define KEYB_ARROW_RIGHT	124
+
+# endif
 
 # define N_CONTROL			4
 

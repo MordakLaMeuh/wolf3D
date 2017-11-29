@@ -4,9 +4,9 @@ CC = gcc
 ### MAIN FLAGS ###
 
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
+	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
 else
-	CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX)
+	CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
 endif
 
 ### SOURCES ###
