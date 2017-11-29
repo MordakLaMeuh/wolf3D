@@ -17,8 +17,6 @@
 #include "overlay/overlay.h"
 #include "render/render.h"
 
-#include "AudioToolbox/AudioToolbox.h"
-
 static int			move(t_env *e)
 {
 	t_pix				pix;
