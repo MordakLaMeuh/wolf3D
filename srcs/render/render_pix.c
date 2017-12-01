@@ -60,7 +60,8 @@ t_pix				get_pix(t_bmp *src, t_coord_f c_src, float dist,
 	t_pix	(*get_pix)(t_bmp *, t_coord_f);
 	t_pix	pix;
 
-	get_pix = bilinear_interpolation ? &get_pix_complex : &get_pix_simple;
+	get_pix = bilinear_interpolation && dist < 3 ?
+				&get_pix_complex : &get_pix_simple;
 	pix = get_pix(src, c_src);
 	if (pix.i == 0xff00ff)
 		pix.c.a = 0xff;
