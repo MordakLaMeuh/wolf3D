@@ -3,10 +3,22 @@ CC = gcc
 
 ### MAIN FLAGS ###
 
-ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address
-else
-	CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	_MLX = minilibx_linux
+	ifeq ($(DEBUG),yes)
+		CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
+	else
+		CFLAGS = -pg -Ofast -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
+	endif
+endif
+ifeq ($(UNAME_S),Darwin)
+	_MLX = minilibx_elcapitan
+	ifeq ($(DEBUG),yes)
+		CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address
+	else
+		CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99
+	endif
 endif
 
 ### SOURCES ###
@@ -29,7 +41,6 @@ HEADERS = wolf3d.h parse.h internal_parse.h bmp.h internal_bmp.h overlay.h inter
 ### LIBRAIRIES ###
 
 LIB_DIR = libs
-_MLX = minilibx_elcapitan
 MLX = $(addprefix $(LIB_DIR)/, $(_MLX))
 _LIBFT = libft
 LIBFT = $(addprefix $(LIB_DIR)/, $(_LIBFT))
@@ -43,7 +54,12 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 
 IFLAGS = -Isrcs -I$(LIBFT)/includes -I$(MLX)
-LDFLAGS = -L$(LIBFT) -lft -framework openGL -framework AppKit $(MLX)/libmlx.a
+ifeq ($(UNAME_S),Linux)
+	LDFLAGS = -L$(LIBFT) -lft -lXext -lX11 -lm -lpthread ./$(MLX)/libmlx_x86_64.a
+endif
+ifeq ($(UNAME_S),Darwin)
+	LDFLAGS = -L$(LIBFT) -lft -framework openGL -framework AppKit $(MLX)/libmlx.a
+endif
 
 .PHONY: all clean fclean re help
 
