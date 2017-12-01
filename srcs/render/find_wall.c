@@ -12,6 +12,93 @@
 
 #include <math.h>
 #include "core/wolf3d.h"
+#include "render.h"
+
+static void	wall_finder_init(t_wall_finder *wf)
+{
+	wf->ray_dir = (t_coord_f){cosf(wf->angle), sinf(wf->angle)};
+	wf->c_i = (t_coord_i){(int)(wf->player.x), (int)(wf->player.y)};
+	wf->d_dist = (t_coord_f){0.f, 0.f};
+	if (wf->ray_dir.x != 0.f)
+		wf->d_dist.x = fabs(1.f / wf->ray_dir.x);
+	if (wf->ray_dir.y != 0.f)
+		wf->d_dist.y = fabs(1.f / wf->ray_dir.y);
+}
+
+static void	wall_finder_init_step(t_wall_finder *wf)
+{
+	wf->step = (t_coord_i){0, 0};
+	wf->side_dist = (t_coord_f){0.f, 0.f};
+	if (wf->ray_dir.x < 0.f)
+	{
+		wf->step.x = -1;
+		wf->side_dist.x = (wf->player.x - (float)(wf->c_i.x)) * wf->d_dist.x;
+	}
+	else if (wf->ray_dir.x > 0.f)
+	{
+		wf->step.x = 1;
+		wf->side_dist.x = ((float)(wf->c_i.x) + 1.f - wf->player.x)
+							* wf->d_dist.x;
+	}
+	if (wf->ray_dir.y < 0.f)
+	{
+		wf->step.y = -1;
+		wf->side_dist.y = (wf->player.y - (float)(wf->c_i.y))
+												* wf->d_dist.y;
+	}
+	else if (wf->ray_dir.y > 0.f)
+	{
+		wf->step.y = 1;
+		wf->side_dist.y = ((float)(wf->c_i.y) + 1.f - wf->player.y)
+												* wf->d_dist.y;
+	}
+}
+
+static int	wall_finder_exec(t_wall_finder *wf)
+{
+	int	hit;
+	int	side;
+
+	hit = 0;
+	while (hit == 0)
+	{
+		if (wf->ray_dir.y == 0.f || wf->side_dist.x < wf->side_dist.y)
+		{
+			wf->side_dist.x += wf->d_dist.x;
+			wf->c_i.x += wf->step.x;
+			side = 0;
+		}
+		else
+		{
+			wf->side_dist.y += wf->d_dist.y;
+			wf->c_i.y += wf->step.y;
+			side = 1;
+		}
+		if (wf->tiles[wf->c_i.y][wf->c_i.x].value >= 50)
+			hit = 1;
+	}
+	return (side);
+}
+
+static void	wall_finder_intersect(t_wall_finder *wf, int side,
+									t_coord_f *intersect, float *x_tex)
+{
+	double wall_dist;
+
+	if (side == 0)
+		wall_dist = ((float)(wf->c_i.x) - wf->player.x +
+							(1.f - (float)(wf->step.x)) / 2.f) / wf->ray_dir.x;
+	else
+		wall_dist = ((float)(wf->c_i.y) - wf->player.y +
+							(1.f - (float)(wf->step.y)) / 2.f) / wf->ray_dir.y;
+	intersect->x = wf->player.x + wall_dist * wf->ray_dir.x;
+	intersect->y = wf->player.y + wall_dist * wf->ray_dir.y;
+	*x_tex = 0.f;
+	if (side == 1)
+		*x_tex = (intersect->x - (float)wf->c_i.x) * wf->step.y;
+	else
+		*x_tex = (1.f - intersect->y + (float)wf->c_i.y) * wf->step.x;
+}
 
 /*
 ** This function finds the intersection between a ray and the first wall
@@ -27,76 +114,18 @@
 **		x_tex: x uv coordinate of the ray on the texture
 */
 
-int				find_wall(t_env *env, float angle_x, t_coord_f *intersect,
+int			find_wall(t_env *env, float angle_x, t_coord_f *intersect,
 																float *x_tex)
 {
-	t_coord_f	ray_dir;
-	t_coord_i	c_i;
-	t_coord_f	delta_dist;
-	t_coord_f	side_dist;
-	t_coord_i	step;
-	int			hit;
-	int			side;
-	float		wall_dist;
+	t_wall_finder	wf;
+	int				side;
 
-	ray_dir = (t_coord_f){cosf(angle_x), sinf(angle_x)};
-	c_i = (t_coord_i){(int)(env->player.location.x),
-						(int)(env->player.location.y)};
-	delta_dist = (t_coord_f){0.f, 0.f};
-	if (ray_dir.x != 0.f)
-		delta_dist.x = fabs(1.f / ray_dir.x);
-	if (ray_dir.y != 0.f)
-		delta_dist.y = fabs(1.f / ray_dir.y);
-	step = (t_coord_i){0, 0};
-	side_dist = (t_coord_f){0.f, 0.f};
-	if (ray_dir.x < 0.f)
-	{
-		step.x = -1;
-		side_dist.x = (env->player.location.x - (float)(c_i.x)) * delta_dist.x;
-	}
-	else if (ray_dir.x > 0.f)
-	{
-		step.x = 1;
-		side_dist.x = ((float)(c_i.x) + 1.f - env->player.location.x) * delta_dist.x;
-	}
-	if (ray_dir.y < 0.f)
-	{
-		step.y = -1;
-		side_dist.y = (env->player.location.y - (float)(c_i.y)) * delta_dist.y;
-	}
-	else if (ray_dir.y > 0.f)
-	{
-		step.y = 1;
-		side_dist.y = ((float)(c_i.y) + 1.f - env->player.location.y) * delta_dist.y;
-	}
-	hit = 0;
-	while (hit == 0)
-	{
-		if (ray_dir.y == 0.f || side_dist.x < side_dist.y)
-		{
-			side_dist.x += delta_dist.x;
-			c_i.x += step.x;
-			side = 0;
-		}
-		else
-		{
-			side_dist.y += delta_dist.y;
-			c_i.y += step.y;
-			side = 1;
-		}
-		if (env->map_tiles[c_i.y][c_i.x].value >= 50)
-			hit = 1;
-	}
-	if (side == 0)
-		wall_dist = ((float)(c_i.x) - env->player.location.x + (1.f - (float)(step.x)) / 2.f) / ray_dir.x;
-	else
-		wall_dist = ((float)(c_i.y) - env->player.location.y + (1.f - (float)(step.y)) / 2.f) / ray_dir.y;
-	intersect->x = env->player.location.x + wall_dist * ray_dir.x;
-	intersect->y = env->player.location.y + wall_dist * ray_dir.y;
-	*x_tex = 0.f;
-	if (side == 1)
-		*x_tex = (intersect->x - (float)c_i.x) * step.y;
-	else
-		*x_tex = (1.f - intersect->y + (float)c_i.y) * step.x;
-	return (env->map_tiles[c_i.y][c_i.x].value - 50);
+	wf.tiles = env->map_tiles;
+	wf.angle = angle_x;
+	wf.player = env->player.location;
+	wall_finder_init(&wf);
+	wall_finder_init_step(&wf);
+	side = wall_finder_exec(&wf);
+	wall_finder_intersect(&wf, side, intersect, x_tex);
+	return (env->map_tiles[wf.c_i.y][wf.c_i.x].value - 50);
 }

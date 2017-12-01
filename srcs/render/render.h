@@ -31,6 +31,18 @@ typedef struct	s_sprite_env
 	t_coord_f	c_tex;
 }				t_sprite_env;
 
+typedef struct	s_wall_finder
+{
+	t_tile		**tiles;
+	float		angle;
+	t_coord_f	player;
+	t_coord_f	ray_dir;
+	t_coord_i	c_i;
+	t_coord_f	d_dist;
+	t_coord_f	side_dist;
+	t_coord_i	step;
+}				t_wall_finder;
+
 /*
 ** render_pix.c
 */

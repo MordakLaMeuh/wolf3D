@@ -29,6 +29,7 @@ int				get_nbr_sprites(t_env *e);
 t_sprite_info	*get_sprites(t_env *e, int n);
 int				**get_map_struct(t_env *e, int *height, int *width);
 void			free_map_content(t_map_content **content);
-int				verif_texture_range(t_env *e, int n_floor, int n_wall, int n_sprite);
+int				verif_texture_range(t_env *e, int n_floor,
+									int n_wall, int n_sprite);
 
 #endif

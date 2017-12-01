@@ -13,7 +13,8 @@
 #include "parse/internal_parse.h"
 #include "core/wolf3d.h"
 
-int				verif_texture_range(t_env *e, int n_floor, int n_wall, int n_sprite)
+int				verif_texture_range(t_env *e, int n_floor,
+									int n_wall, int n_sprite)
 {
 	t_list		*lst;
 	char		*content;
