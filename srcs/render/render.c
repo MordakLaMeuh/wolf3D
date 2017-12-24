@@ -53,7 +53,7 @@ void						*thread_render(void *arg)
 
 	e = ((t_render *)arg)->e;
 	c.y = ((t_render *)arg)->n;
-	limit = ((((t_render *)arg)->n) < 1) ? HEIGHT / 2 : c.y + (HEIGHT / 6) + 1;
+	limit = c.y + 1 + HEIGHT / NB_CORES;
 	while (++c.y < limit)
 	{
 		angle.y = e->angle_y[c.y];
@@ -82,10 +82,9 @@ void						render_scene(t_env *e)
 	e->sky->pos = (int)((RATIO * WIDTH) * (e->player.angle / (2.f * PI)));
 	calc_columns(e);
 	i = -1;
-	while (++i < 4)
+	while (++i < NB_CORES)
 	{
-		format[i].n = (i < 1) ? -1 : (HEIGHT / 2) + (i - 1) *
-													(floor(HEIGHT / 6)) - 1;
+		format[i].n = i * HEIGHT / NB_CORES - 1;
 		format[i].e = e;
 		pthread_create(&thread[i], NULL, thread_render, &format[i]);
 	}
