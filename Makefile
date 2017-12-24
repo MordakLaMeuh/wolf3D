@@ -9,7 +9,7 @@ ifeq ($(UNAME_S),Linux)
 	ifeq ($(DEBUG),yes)
 		CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
 	else
-		CFLAGS = -Ofast -march=native -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
+		CFLAGS = -Ofast -march=native -fomit-frame-pointer -Wall -Werror -Wextra -std=c99 -I $(INCDIR) -I $(LIBFT_HEADER) -I./$(MINILIBX) -DLINUX
 	endif
 endif
 ifeq ($(UNAME_S),Darwin)
@@ -17,7 +17,7 @@ ifeq ($(UNAME_S),Darwin)
 	ifeq ($(DEBUG),yes)
 		CFLAGS = -Wall -Werror -Wextra -std=c99 -g -O0 -fsanitize=address
 	else
-		CFLAGS = -Ofast -Wall -Werror -Wextra -std=c99
+		CFLAGS = -Ofast -fomit-frame-pointer -Wall -Werror -Wextra -std=c99
 	endif
 endif
 
