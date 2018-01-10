@@ -264,7 +264,7 @@ typedef struct			s_modify_coord
 	float				l;
 }						t_modify_coord;
 
-# define NB_CORES		4
+# define NB_CORES		8
 
 typedef struct			s_thread_format
 {
