@@ -6,7 +6,7 @@
 /*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:42:11 by bmickael          #+#    #+#             */
-/*   Updated: 2018/02/01 14:09:53 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 14:25:00 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ static void			init_all(t_env *e)
 	create_mlx_image(e);
 	init_sky(e, "images/astro.bmp");
 	init_floor(e, (char*[]){"images/parquet.bmp",
-						"images/seamless_carpet.bmp", "images/Brick2.bmp"}, N_FLOOR_BMP);
+			"images/seamless_carpet.bmp", "images/Brick2.bmp"}, N_FLOOR_BMP);
 	init_walls(e, (char*[]){"images/4murs.bmp", "images/4murs2.bmp",
-								"images/pig.bmp", "images/aperture.bmp"}, N_WALL_BMP);
-	init_sprites(e, (char*[]){"images/pig_2.bmp", "images/dog.bmp", "images/sadirac.bmp", "images/pig_2.bmp"}, N_SPRITE_BMP);
+						"images/pig.bmp", "images/aperture.bmp"}, N_WALL_BMP);
+	init_sprites(e, (char*[]){"images/pig_2.bmp", "images/dog.bmp",
+						"images/sadirac.bmp"}, N_SPRITE_BMP);
 	init_scene(e);
 	i = 0;
 	while (i < HEIGHT)

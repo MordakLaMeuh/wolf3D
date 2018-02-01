@@ -6,7 +6,7 @@
 /*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/10 01:46:12 by bmickael          #+#    #+#             */
-/*   Updated: 2018/02/01 14:10:02 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 14:23:36 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 # define N_FLOOR_BMP		3
 # define N_WALL_BMP			4
-# define N_SPRITE_BMP		4
+# define N_SPRITE_BMP		3
 
 # define MAP_ORIGIN_X			(WIDTH - (120 >> (NOSTALGIA_FACTOR >> 1)))
 # define MAP_ORIGIN_Y			(120 >> (NOSTALGIA_FACTOR >> 1))
