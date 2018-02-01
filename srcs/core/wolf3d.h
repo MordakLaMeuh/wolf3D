@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/10 01:46:12 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/10 01:46:37 by bmickael         ###   ########.fr       */
+/*   Updated: 2018/02/01 11:21:31 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@
 ** Linux scanCodes
 */
 
-#  define KEYB_M				109
+#  define KEYB_M			109
 #  define KEYB_HELP			44
-#  define KEYB_ESCAPE			27
+#  define KEYB_ESCAPE		27
 #  define KEYB_ARROW_UP		82
-#  define KEYB_ARROW_DOWN		84
-#  define KEYB_ARROW_LEFT		81
+#  define KEYB_ARROW_DOWN	84
+#  define KEYB_ARROW_LEFT	81
 #  define KEYB_ARROW_RIGHT	83
 
 # else
@@ -87,7 +87,7 @@
 ** OSX scanCodes
 */
 
-#  define KEYB_M				46
+#  define KEYB_M			46
 #  define KEYB_HELP			44
 #  define KEYB_ESCAPE		53
 #  define KEYB_ARROW_UP		126

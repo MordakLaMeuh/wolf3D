@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/03 15:42:11 by bmickael          #+#    #+#             */
-/*   Updated: 2017/07/03 12:56:08 by bmickael         ###   ########.fr       */
+/*   Updated: 2018/02/01 13:49:18 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@ static void			init_all(t_env *e)
 	init_sky(e, "images/astro.bmp");
 	init_floor(e, (char*[]){"images/parquet.bmp",
 						"images/seamless_carpet.bmp", "images/Brick2.bmp"}, 3);
-	init_walls(e, (char*[]){"images/mur.bmp", "images/Brick2.bmp",
-								"images/pig.bmp", "images/panic.bmp"}, 4);
-	init_sprites(e, (char*[]){"images/pig_2.bmp", "images/pig_2.bmp",
-						"images/pig_2.bmp", "images/pig_2.bmp"}, 4);
+	init_walls(e, (char*[]){"images/4murs.bmp", "images/4murs2.bmp",
+								"images/pig.bmp", "images/aperture.bmp"}, 4);
+	init_sprites(e, (char*[]){"images/pig_2.bmp", "images/dog.bmp", "images/sadirac.bmp", "images/pig_2.bmp"}, 4);
 	init_scene(e);
 	i = 0;
 	while (i < HEIGHT)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_wall.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/06 11:10:18 by stoupin           #+#    #+#             */
-/*   Updated: 2017/07/06 11:10:19 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 12:08:19 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	render_wall(t_env *e, t_coord_i c, t_coord_f angle)
 	type = cl->type;
 	uv.y = (e->player.height + cl->wall_h_dist
 									* e->atan_list[c.y]) / e->wall_height;
-	uv.x = (1.f - cl->wall_x_tex) * (e->scene.bmp_wall[type].dim.x - 2);
-	uv.y = (1.f - uv.y) * (e->scene.bmp_wall[type].dim.y - 2);
+	uv.x = (1.f - cl->wall_x_tex / 4.f) * (e->scene.bmp_wall[type].dim.x - 1);
+	uv.y = (1.f - uv.y) * (e->scene.bmp_wall[type].dim.y - 1);
 	dist = cl->wall_h_dist;
 	e->scene.scene[c.y * WIDTH + c.x] = get_pix(&(e->scene.bmp_wall[type]),
 													uv, dist, e->inter_state);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_wall.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stoupin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/06 11:43:04 by stoupin           #+#    #+#             */
-/*   Updated: 2017/07/06 11:43:05 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 11:56:38 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ static int	wall_finder_exec(t_wall_finder *wf)
 	return (side);
 }
 
+/*
+** This function has been modified for the new wolf3d subject (circa late 2017)
+** x_tex is now in the range [0, 4[ instead of [0, 1[
+** Meanwhile, wall textures are now 4 times larger, the new range binding to
+** the four sides of the wall blocks.
+*/
+
 static void	wall_finder_intersect(t_wall_finder *wf, int side,
 									t_coord_f *intersect, float *x_tex)
 {
@@ -95,9 +102,17 @@ static void	wall_finder_intersect(t_wall_finder *wf, int side,
 	intersect->y = wf->player.y + wall_dist * wf->ray_dir.y;
 	*x_tex = 0.f;
 	if (side == 1)
+	{
 		*x_tex = (intersect->x - (float)wf->c_i.x) * wf->step.y;
+		if ((float)wf->c_i.y >= intersect->y)
+			*x_tex += 1.;
+	}
 	else
+	{
 		*x_tex = (1.f - intersect->y + (float)wf->c_i.y) * wf->step.x;
+		if ((float)wf->c_i.x < intersect->x)
+			*x_tex += 3.;
+	}
 }
 
 /*
@@ -115,7 +130,7 @@ static void	wall_finder_intersect(t_wall_finder *wf, int side,
 */
 
 int			find_wall(t_env *env, float angle_x, t_coord_f *intersect,
-																float *x_tex)
+						float *x_tex)
 {
 	t_wall_finder	wf;
 	int				side;
