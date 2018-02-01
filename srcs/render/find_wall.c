@@ -6,7 +6,7 @@
 /*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/06 11:43:04 by stoupin           #+#    #+#             */
-/*   Updated: 2018/02/01 11:56:38 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 14:21:21 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,13 @@ static void	wall_finder_intersect(t_wall_finder *wf, int side,
 	{
 		*x_tex = (intersect->x - (float)wf->c_i.x) * wf->step.y;
 		if ((float)wf->c_i.y >= intersect->y)
-			*x_tex += 1.;
+			*x_tex -= 3.;
 	}
 	else
 	{
 		*x_tex = (1.f - intersect->y + (float)wf->c_i.y) * wf->step.x;
 		if ((float)wf->c_i.x < intersect->x)
-			*x_tex += 3.;
+			*x_tex -= 1.;
 	}
 }
 
