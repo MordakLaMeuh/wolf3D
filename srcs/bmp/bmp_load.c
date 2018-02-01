@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp_load.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 22:13:29 by bmickael          #+#    #+#             */
-/*   Updated: 2017/06/03 15:57:05 by bmickael         ###   ########.fr       */
+/*   Updated: 2018/02/01 16:50:35 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ static void		fill_image(uint8_t *data, uint8_t *pixelbuffer, int width,
 int				bmp_load(char *filename, int *width, int *height, int **data)
 {
 	FILE		*file;
-	char		*buff;
 	struct stat	*infos;
 	t_bitmap	*s;
 
@@ -78,16 +77,18 @@ int				bmp_load(char *filename, int *width, int *height, int **data)
 		ft_eprintf("%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	if (!(buff = (char *)malloc(infos->st_size)))
+	if (!(s = (t_bitmap *)malloc(infos->st_size)))
 		exit(EXIT_FAILURE);
-	fread(buff, infos->st_size, 1, file);
-	s = (t_bitmap *)buff;
-	paste_fileheader((t_bitmap *)buff, filename);
+	fread(s, infos->st_size, 1, file);
+	paste_fileheader((t_bitmap *)s, filename);
 	*width = s->bitmapinfoheader.width;
 	*height = s->bitmapinfoheader.height;
 	if (!(*data = (int *)ft_memalloc(sizeof(int) * (*width) * (*height))))
 		exit(EXIT_FAILURE);
 	fill_image((uint8_t *)*data, (uint8_t *)
-			(buff + s->fileheader.fileoffset_to_pixelarray), *width, *height);
+			((char*)s + s->fileheader.fileoffset_to_pixelarray),
+				*width, *height);
+	free(infos);
+	free(s);
 	return (1);
 }
