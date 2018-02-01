@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/11 01:37:54 by bmickael          #+#    #+#             */
-/*   Updated: 2017/04/11 02:19:51 by bmickael         ###   ########.fr       */
+/*   Updated: 2018/02/01 17:42:40 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,29 @@ static char		*s_concat(char **str, const char *buff, size_t *l, size_t n)
 	return (output);
 }
 
-static int		s_exec(t_buffer *index, char **line)
+static void		init_line_l_size(char **line, size_t *l_size)
+{
+	*line = NULL;
+	*l_size = 0;
+}
+
+static void		finalize(t_buffer *index, char *jump_location, size_t i)
+{
+	ft_memmove(index->buffer, jump_location + 1, BUFF_SIZE - (i + 1));
+	index->buffer[(index->buff_size -= i + 1)] = '\0';
+}
+
+static int		s_exec(t_buffer *index, char **line, size_t max_len)
 {
 	char		*jump_location;
 	size_t		l_size;
 	size_t		i;
 
-	*line = NULL;
-	l_size = 0;
+	init_line_l_size(line, &l_size);
 	while (TRUE)
 	{
+		if (l_size >= max_len && max_len > 0)
+			return (-2);
 		if ((index->buff_size < 1) &&
 		(index->buff_size = read(index->fd, index->buffer, BUFF_SIZE)) <= 0)
 			return ((index->buff_size == 0 && *line) ? 1 : index->buff_size);
@@ -52,33 +65,11 @@ static int		s_exec(t_buffer *index, char **line)
 	if (!s_concat(line, index->buffer, &l_size,
 		(i = jump_location - index->buffer)))
 		return (-1);
-	ft_memmove(index->buffer, jump_location + 1, BUFF_SIZE - (i + 1));
-	index->buffer[(index->buff_size -= i + 1)] = '\0';
+	finalize(index, jump_location, i);
 	return (1);
 }
 
-static char		*swiss_add_line(char *s1, char *s2, int *n)
-{
-	char	*output;
-	size_t	len1;
-	size_t	len2;
-	size_t	i;
-
-	(*n)++;
-	len1 = (s1) ? ft_strlen(s1) : 0;
-	len2 = ft_strlen(s2);
-	i = len1 + len2;
-	if (!(output = (char *)malloc((i + 2) * sizeof(char))))
-		return (NULL);
-	ft_strncpy(output, s1, len1);
-	ft_strncpy(output + len1, s2, len2);
-	output[i] = '\n';
-	output[i + 1] = '\0';
-	free(s1);
-	return (output);
-}
-
-int				get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line, size_t max_len)
 {
 	static t_buffer	*index[MAX_DESCRIPTORS];
 	int				i;
@@ -98,34 +89,5 @@ int				get_next_line(const int fd, char **line)
 		index[i]->buff_size = 0;
 		index[i]->fd = fd;
 	}
-	return (s_exec(index[i], line));
-}
-
-int				swiss_line(const int fd, char **line, t_swiss p, char *needdle)
-{
-	char	*tmp;
-	int		i;
-	int		n;
-
-	*line = NULL;
-	while (p.a-- > 0)
-	{
-		if ((i = get_next_line(fd, &tmp)) <= 0)
-			return (i);
-		free(tmp);
-	}
-	n = 0;
-	while (p.b-- > 0)
-	{
-		if ((i = get_next_line(fd, &tmp)) < 0)
-			return (i);
-		if (i != 0 && (!needdle || ft_strstr(tmp, needdle)))
-			if (!(*line = swiss_add_line(*line, tmp, &n)))
-				return (-1);
-		if (tmp)
-			free(tmp);
-	}
-	if (*line && (tmp = ft_strrchr(*line, '\n')))
-		*tmp = '\0';
-	return ((*line) ? n : 0);
+	return (s_exec(index[i], line, max_len));
 }

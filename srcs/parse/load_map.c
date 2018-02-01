@@ -6,7 +6,7 @@
 /*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/05 04:33:21 by bmickael          #+#    #+#             */
-/*   Updated: 2018/02/01 14:27:51 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 17:33:36 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,29 @@ static int				check_all_map(t_map_content *content)
 	return (0);
 }
 
+static void				map_too_big_error(void)
+{
+	ft_putstr_fd("Error: map too big\n", 2);
+	exit(EXIT_FAILURE);
+}
+
+static void				add_line(t_env *e, char *line, size_t *total_len,
+									int ret)
+{
+	*total_len += ft_strlen(line);
+	if (*total_len >= MAX_MAP_SIZE)
+		map_too_big_error();
+	e->content->height++;
+	if (!(ft_lst_push_front(&(e->content->data), line, ret + 1)))
+		exit(EXIT_FAILURE);
+}
+
 int						load_map(t_env *e, char *filename)
 {
 	char			*line;
 	int				fd;
 	int				ret;
+	size_t			total_len;
 
 	alloc_map_content(&(e->content));
 	if ((fd = open(filename, O_RDONLY)) < 0)
@@ -73,12 +91,11 @@ int						load_map(t_env *e, char *filename)
 		ft_eprintf("Could not open %s : %s\n", filename, strerror(errno));
 		return (-1);
 	}
-	while ((ret = get_next_line(fd, &line)) > 0)
-	{
-		e->content->height += 1;
-		if (!(ft_lst_push_front(&(e->content->data), line, ret + 1)))
-			exit(EXIT_FAILURE);
-	}
+	total_len = 0;
+	while ((ret = get_next_line(fd, &line, MAX_MAP_SIZE)) > 0)
+		add_line(e, line, &total_len, ret);
+	if (ret == -2)
+		map_too_big_error();
 	if (ret == -1 || e->content->height == 0)
 		return (-1);
 	ft_lst_invert_it(&(e->content->data));

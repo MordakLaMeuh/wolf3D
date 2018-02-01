@@ -6,7 +6,7 @@
 /*   By: stoupin <stoupin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/10 01:46:12 by bmickael          #+#    #+#             */
-/*   Updated: 2018/02/01 14:23:36 by stoupin          ###   ########.fr       */
+/*   Updated: 2018/02/01 17:16:52 by stoupin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@
 # define MAP_DEPTH				20
 # define LONG_ARROW_RADIUS		(30 >> (NOSTALGIA_FACTOR >> 1))
 # define ARROW_RADIUS			(15 >> (NOSTALGIA_FACTOR >> 1))
+
+/*
+** maximum size of the map files in bytes
+*/
+
+# define MAX_MAP_SIZE			(4*1024*1024)
 
 # define KEYRELEASEMASK			0xFF
 # define KEYPRESSMASK			0xFF
