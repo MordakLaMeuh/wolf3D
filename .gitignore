@@ -10,3 +10,4 @@
 /libs/minilibx_elcapitan/libmlx.a
 /libs/minilibx_elcapitan/*.o
 /.vscode
+.*
